@@ -981,3 +981,182 @@ def non_repeat(line):
 # print(non_repeat("wq"))
 # print(non_repeat("dfghj"))
 
+def checkio(words_set):
+    for x in words_set:
+        res = 0
+        for y in words_set:
+            if x in y and x[-1]==y[-1]:
+                res += 1
+        if res>1:
+            return True
+    return False
+
+# print(checkio(["hello","la","hellow","cow"]))
+
+def highest_building(*b):
+    n = len(b)
+    m = len(b[0])
+    a = []
+    for x in range(m):
+        z = 0
+        for y in range(n):
+            z += b[y][x]
+        a.append(z)
+
+    return [a.index(max(a))+1, max(a)]
+
+# print(highest_building([0,0,1,0],[1,0,1,0],[1,1,1,0],[1,1,1,1]))
+# print(highest_building([0,0,0,1,0,0,0],[0,0,1,1,1,0,0],[0,1,1,1,1,1,0],[1,1,1,1,1,1,1],[1,1,1,1,1,1,1],[1,1,1,1,1,1,1]))
+# print(highest_building([0,0,1,0],[1,0,1,0],[1,1,1,0],[1,1,1,1]))
+
+
+
+
+
+def checkio(s, s2=''):
+    a = [s.count('(') - s.count(')'), s.count('[') - s.count(']'), s.count('{') - s.count('}')]
+    b = ['(', '[', '{']
+    c = [')', ']', '}']
+    d = c + b
+
+    if s2!='':
+        s = s2
+
+    zuzuka = True
+    for x in d:
+        if x in s:
+            zuzuka = False
+            break
+    if zuzuka == True:
+        return True
+
+    for x in range(len(a)):
+        if a[x] != 0:
+            return False
+
+    res = True
+    for x in range(len(s)):
+        if s[x] in b:
+            z = b.index(s[x])
+            n = s.rfind(c[z])
+            s2 = s[x + 1:n]
+            res = checkio(s, s2)
+
+    return res
+
+# print(checkio("((5+3)*2+1)"))
+# print(checkio("(3+{1-1)}"))
+
+
+def sm(a, b, x, costs):
+    res = []
+    for y in x:
+        if y != a and isinstance(y, str):
+            for z in costs:
+                if y in z and b in z:
+                    res.append(costs[costs.index(z)][-1]+costs[costs.index(x)][-1])
+    next = ''
+    sm = 0
+    for x in costs:
+        if next in x:
+            if b in x:
+                sm += x[-1]
+                res.append(sm)
+                break
+
+            for y in x:
+                if y != next and isinstance(y, str):
+                    sm += x[-1]
+                    next = y
+                    break
+
+        if next=='' and a in x and b not in x:
+            for y in x:
+                if y != a and isinstance(y, str):
+                    sm += x[-1]
+                    next = y
+                    break
+    return res
+
+def cheapest_flight(costs: List, a: str, b: str) -> int:
+    prices = []
+    A, B = 0, 0
+    for x in costs:
+        if a in x and b in x:
+            prices.append(x[-1])
+        elif a in x and b not in x:
+            res = sm(a, b, x, costs)
+            prices.extend(res)
+        elif b in x and a not in x:
+            res = sm(b, a, x, costs)
+            prices.extend(res)
+
+    if prices==[]:
+        return 0
+
+    return min(prices)
+
+# print(cheapest_flight([["A","C",40],["A","B",20],["A","D",20],["B","C",50],["D","C",70]],"D","C"))
+# print(cheapest_flight([["A","C",100],["A","B",20],["D","F",900]],"A","F"))
+# print(cheapest_flight([["A","C",40],["A","B",20],["A","D",20],["B","C",50],["D","C",70]],"D","C"))
+# print(cheapest_flight([["A","B",10],["A","C",15],["B","D",15],["C","D",10]],"A","D"))
+# print(cheapest_flight([["A","B",10],["A","C",20],["B","D",15],["C","D",5],["D","E",5],["E","F",10],["C","F",25]],"A","F"))
+
+# OOP
+print()
+print('*'*50)
+print('OOP')
+
+class VoiceCommand():
+
+    def __init__(self, *args):
+        self.channels = args
+
+    # переключается на первый канал из списка
+    def first_channel(self):
+        pass
+
+    # переключается на последний канал из списка.
+    def last_channel(self):
+        pass
+
+    # переключается на канал номер n. Нумерация каналов начинается с 1, а не с 0.
+    def turn_channel(self, n):
+        self.n = n
+
+    # переключается на следующий канал. Если текущий канал - последний, то - на первый канал.
+    def next_channel(self):
+        pass
+
+    # переключается на предыдущий канал. Если текущий канал - первый, то - на последний канал.
+    def previous_channel(self):
+        pass
+
+    # возвращает название текущего канала.
+    def current_channel(self):
+        pass
+
+    # принимает 1 аргумент - число N или строку 'name' и возвращает "Yes", если канал
+    # с номером N или названием 'name' существует в списке и "No" в ином случае.
+    # def is_exist(self, n, name):
+    #     pass
+
+"""
+По умолчанию до начала работы всех команд включен канал №1.
+Ваша задача - создать класс VoiceCommand и методы, описанные ранее.
+В этой миссии вам может помочь такой шаблон проектирования, как Iterator .
+"""
+
+CHANNELS = ["BBC", "Discovery", "TV1000"]
+
+controller = VoiceCommand(CHANNELS)
+
+controller.first_channel() # == "BBC"
+controller.last_channel() # == "TV1000"
+controller.turn_channel(1) # == "BBC"
+controller.next_channel() # == "Discovery"
+controller.previous_channel() # == "BBC"
+controller.current_channel() # == "BBC"
+# controller.is_exist(4) # == "No"
+# controller.is_exist("BBC") # == "Yes"
+

@@ -30,7 +30,7 @@ starts_with = lambda s: True if s[0] == 'W' else False
 square_x = lambda x: x ** 2
 
 # lambda & any & all
-nums = list(1, range(21))
+nums = list(range(21))
 even = lambda x: x%2==0
 print(even(3)) # False (not even)
 res = [even(n) for n in nums]
@@ -178,8 +178,8 @@ print(say('Vasya', 'Pupkin'))
 say('Vasya', 'Pupkin')
 
 buy = decator(buy)
-print(buy())
-buy()
+# print(buy())
+# buy()
 
 ###
 
@@ -198,12 +198,12 @@ def header(func):
     return inner
 
 @header
-def func2():
+def func2() -> None:
     print('My function')
 
-func2(3,4,5)
+func2()
 
-def func(x):
+def func(x: int) -> int:
     def add(a):
         return x+a
     return add
