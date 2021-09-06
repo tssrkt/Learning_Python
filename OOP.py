@@ -294,8 +294,45 @@ class Lion:
     def __str__(self):
         return f'Lion - {self.name}'
 
-
-
 q = Lion('Simba')
 
+####################################
+
+class Acc:
+    def __init__(self, name, balance):
+        print('new_obj init')
+        self.name = name
+        self.balance = balance
+
+    def __add__(self, other):
+        print('add')
+        if isinstance(other, Acc):
+            return self.balance + other.balance
+        if isinstance(other, (int, float)):
+            return Acc(self.name, self.balance+other)
+        raise NotImplemented
+
+    # for to do 12+r (number first)
+    def __radd__(self, other):
+        print('radd')
+        return self+other
+
+    def __mul__(self, other):
+        print('mul')
+        if isinstance(other, Acc):
+            return self.balance * other.balance
+        if isinstance(other, (int, float)):
+            return self.balance * other
+        if isinstance(other, str):
+            return self.name + other
+        raise NotImplemented
+
+    def __repr__(self):
+        return f'Client {self.name} with balance {self.balance}'
+
+r = Acc('Misha', 78)
+r += 12
+
+k = Acc('Katya', 58)
+k = k+r
 

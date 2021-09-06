@@ -1010,7 +1010,138 @@ def highest_building(*b):
 # print(highest_building([0,0,1,0],[1,0,1,0],[1,1,1,0],[1,1,1,1]))
 
 
+    # print(a, len(a))
+    # print(b, len(b))
+    # print(a-b, b-a)
 
+from collections import Counter
+
+def verify_anagrams(a, b):
+    a = Counter(a.lower().replace(' ', ''))
+    b = Counter(b.lower().replace(' ', ''))
+
+    if not a-b and not b-a and len(a)==len(b):
+        return True
+    return False
+
+# print(verify_anagrams("  Hi  all  ","all hi"))
+# print(verify_anagrams("a","abcd"))
+# print(verify_anagrams("The Morse Code","There Come Dots"))
+
+def except_zero(items: list) -> Iterable:
+    srt = items[:]
+    srt.sort()
+    srt = [x for x in srt if x>0]
+    res = []
+    y = 0
+    for x in items:
+        if x==0:
+            res.append(0)
+        else:
+            res.append(srt[y])
+            y += 1
+    return res
+
+# print(except_zero([5, 3, 0, 0, 4, 1, 4, 0, 7]))
+
+def recall_password(gri: List[str], pas: List[str]) -> str:
+    res = ''
+    zuza = 1
+
+    while zuza<5:
+        a = []
+        for x in range(len(pas)):
+            for y in range(len(gri)):
+                if gri[x][y]=='X':
+                    res += pas[x][y]
+
+        for x in range(len(pas)):
+            a.append('')
+            for y in range(len(gri)-1, -1, -1):
+                a[x] += gri[y][x]
+        gri=a
+        zuza+=1
+    return res
+
+# print(recall_password(['X...', '..X.', 'X..X', '....'],  ['itdf', 'gdce', 'aton', 'qrdi']))
+
+from datetime import datetime
+
+def sum_light(els: List[datetime]) -> int:
+    res = 0
+    lst = []
+    for x in range(0, len(els)-1, 2):
+        lst.append([els[x], els[x+1]])
+
+    for x in lst:
+        x = str(x[1] - x[0])
+        if 'day' not in x:
+            c = list(map(int, x.split(':')))
+            res += c[0]*60*60 + c[1]*60 + c[2]
+        else:
+            a = list(map(str, x.split()))
+            c = list(map(int, a[-1].split(':')))
+            res += int(a[0])*24*60*60 + c[0]*60*60 + c[1]*60 + c[2]
+            print(x)
+    return res
+
+# print(sum_light([
+# datetime(2015, 1, 12, 10, 0, 0),
+# datetime(2015, 1, 12, 10, 10, 10),
+# datetime(2015, 1, 12, 11, 0, 0),
+# datetime(2015, 1, 12, 11, 10, 10)
+# ]))
+
+# print(sum_light([
+# datetime(2015, 1, 12, 10, 0, 0),
+# datetime(2015, 1, 12, 10, 0, 10),
+# datetime(2015, 1, 12, 11, 0, 0),
+# datetime(2015, 1, 13, 11, 0, 0)
+# ]))
+
+
+
+
+
+
+
+
+def lines(m):
+    # horizintal
+    for x in m:
+        if len(set(x))==1:
+            return True
+
+    # vertical
+    for x in range(len(m)):
+        a = []
+        for y in range(len(m)):
+            a.append(m[y][x])
+        if len(set(a))==1:
+            return True
+
+def recu(m):
+    pass
+
+def checkio(matrix: List[List[int]]) -> bool:
+    res = lines(matrix)
+    if res:
+        return True
+
+    res = recu(matrix)
+    if res:
+        return True
+    return False
+
+# print(checkio([
+#     [7, 1, 1, 8, 1, 1],
+#     [1, 1, 7, 3, 1, 5],
+#     [2, 3, 1, 2, 5, 1],
+#     [1, 1, 1, 5, 1, 4],
+#     [4, 6, 5, 1, 3, 1],
+#     [1, 1, 9, 1, 2, 1]
+#     ]))
+# Пока не знаю как решить задачку с диагоналями
 
 
 def checkio(s, s2=''):

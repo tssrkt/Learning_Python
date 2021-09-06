@@ -63,16 +63,16 @@ g = list(map(sorted, f))
 a = [1, 2, 0, 0, 3, 2, 5, 6, 4, 0, 12, 34, 23]
 f1 = [i for i in a if i > 9 and i < 100]
 f2 = list(filter(bool, a))
-f3 = list(filter(lambda x: len(a)>4, a))
+f3 = list(filter(lambda x: len(a) > 4, a))
 b = list(filter(str.isdigit, s))
 
 print()
-print('*'*50)
+print('*' * 50)
 print(f1)
 print(f2)
 print(f3)
 print(b)
-print('*'*50)
+print('*' * 50)
 
 d = {
     'aba': 33,
@@ -81,22 +81,24 @@ d = {
     'mag': 12
 }
 
-f4 = list(filter(lambda x: d[x]>10, d))
+f4 = list(filter(lambda x: d[x] > 10, d))
 
 # Zip
-a = [5, 6, 7 , 8]
+a = [5, 6, 7, 8]
 b = [100, 200, 300, 400]
 
 rez = zip(a, b)
 print(list(rez))
 
 # sorting
-a.sort() # Only for lists
-a = sorted(s, reverse=False) # Return list
+a.sort()  # Only for lists
+a = sorted(s, reverse=False)  # Return list
 print(sorted(b, key=abs))
 
+
 def fu(x):
-    return x%10, x//10%10
+    return x % 10, x // 10 % 10
+
 
 print(sorted(b, key=fu))
 print(sorted(s, key=str.lower))
@@ -106,25 +108,25 @@ a = ['a', 'baba', 'gala', 'maga123', 'a3', 'b1', 'sfs2344']
 # a = sorted(a, key=lambda x: -int(x.split()[0]))
 a = sorted(a, key=lambda x: x.split()[0].lower(), reverse=True)
 print(a)
-s.sort(key=len) # sort by length of strings
+s.sort(key=len)  # sort by length of strings
 
 # isinstance
-a = [5,3,4,'hello',[3,4],'world',[5],10.5]
+a = [5, 3, 4, 'hello', [3, 4], 'world', [5], 10.5]
 st = ''
 lst = []
 nums = 0
 for i in a:
     if isinstance(i, str):
-        st+=i
+        st += i
     elif isinstance(i, list):
-        lst=lst+i
+        lst = lst + i
     elif isinstance(i, (int, float)):
         nums = nums + i
 
 # all & any
 s = ['hello', 'ababa', 'gala', 'maga', '']
-print(all(s)) # all in list or tuple True or False
-print(any(s)) # if any is not empty then True
+print(all(s))  # all in list or tuple True or False
+print(any(s))  # if any is not empty then True
 
 # callable - вызываемый объект
 x = 10
@@ -132,6 +134,7 @@ print(callable(x))
 
 # module collection
 from collections import Counter
+
 nums = Counter(s)
 print(nums)
 for i in nums.elements():
@@ -140,13 +143,13 @@ for i in nums.elements():
 nums.most_common()
 
 r = Counter()
-for i in [1,2,3,3,4,5,5,5,5]:
-    r[i]+=1
+for i in [1, 2, 3, 3, 4, 5, 5, 5, 5]:
+    r[i] += 1
 print(r)
 
-d = Counter([1,2,3,4,5,5,5])
-print(r+d)
-print(d+r)
+d = Counter([1, 2, 3, 4, 5, 5, 5])
+print(r + d)
+print(d + r)
 
 # defaultdict
 # defaultdict(int, {'s':3})
@@ -172,13 +175,74 @@ print(d+r)
 print('ITERTOOLS')
 import itertools
 
-s = 'cat dog horse'
+s = 'cat dog horse cow sheep'
 words = s.split()
-res = list(itertools.permutations(words))
+res = list(itertools.permutations(words, r=5))
 print('res:', res)
 
-for x in itertools.permutations(words):
-    print(' '.join(x))
+# for x in itertools.permutations(words):
+#     print(' '.join(x))
+
+#################################
+
+k0, k1, k2, k3 = 0, 0, 0, 0
+aa1, aa2 = '', ''
+s = 'oskar'
+for x in itertools.permutations(s):
+    aa1 = ''.join(x)
+    print(x, aa1)
+    if aa1[0] != 'a' and 'ga' not in aa1:
+        k1 += 1
+    k0 += 1
+print(k0, k1)
+
+for x in itertools.product(s, repeat=6):
+    aa2 = ''.join(x)
+    if aa2.count('a') >= 1 and 'ba' not in aa2:
+        k3 += 1
+    k2 += 1
+print(k2, k3)
+
+########################
+print('*' * 50)
+print('GROUPBY')
+
+from itertools import groupby
+import string, random
+
+x = random.choices(string.ascii_lowercase, k=20)
+x = sorted(x)
+print('x:', x)
+print('groupby(x):', groupby(x))
+
+for key, group in (groupby(x)):
+    print('key:', key, ' group:', list(group))
+
+fruits = ['apple', 'orange', 'grapes', 'guava']
+selections = [True, False, False, True]
+result = list(itertools.compress(fruits, selections))
+print(result)
+
+fruits = fruits * 10
+sels = [True for x in range(len(fruits)) if x % 2 == 0]
+res = list(itertools.compress(fruits, sels))
+print(res)
+
+# import numpy as np
+# np_fruits = np.array(fruits)
+
+print(itertools.count(1, 5))
+print('accumulate:', list(itertools.accumulate([1, 2, 3, 4, 5, 6])))
+print('chain:', list(itertools.chain([1,2,3], ['dog', 'cat', 'horse'])))
+print('combinations:', list(itertools.combinations('abcd', 2)))
+print('compress:', list(itertools.compress('abcd', [1,0,1,0])))
+print('dropwhile:', list(itertools.dropwhile(lambda x: x<5, [1,2,3,4,6,7,8])))
+print('filterfalse:', list(itertools.filterfalse(lambda x: x<5, [1,2,3,45,67,78])))
+print('takewhile:', list(itertools.takewhile(lambda x: x<5, [1,2,3,4,56,7,8,9])))
+print('zip_longest:', list(itertools.zip_longest('abcdefg', '1234', fillvalue=0)))
+
+####################################
+print('*' * 50)
 
 ###############################
 # try except
@@ -197,7 +261,7 @@ for x in itertools.permutations(words):
 # Iterators
 print('Iterator')
 
-nums = [1,2,3]
+nums = [1, 2, 3]
 i_nums = iter(nums)
 
 while True:
@@ -231,9 +295,83 @@ def my_range(start, end):
 
 nums = MyRange(1, 10)
 
-for num in nums:
-    print(num)
+# for num in nums:
+#     print(num)
 
-print(next(nums))
+# print(next(nums))
+
+########################################
+# Enum
+print()
+print('*'*50)
+print('Enum')
+
+from enum import Enum, auto
+
+class Suite(Enum):
+    Club = auto()
+    Heart = auto()
+    Spade = auto()
+    Diamond = auto()
+
+class Value(Enum):
+    Two = auto()
+    Three = auto()
+    Four = auto()
+    Five = auto()
+    Six = auto()
+    Seven = auto()
+    Eight = auto()
+    Nine = auto()
+    Page = auto()
+    Knight = auto()
+    Queen = auto()
+    King = auto()
+    Ace = auto()
+
+class Card:
+    def __init__(self, suite: Suite, value: Value):
+        self.suite = suite
+        self.value = value
+
+    @property
+    def suite(self):
+        return self._suite
+
+    @property
+    def value(self):
+        return self._value
+
+    @suite.setter
+    def suite(self, suite: Suite):
+        if suite not in Suite:
+            raise Exception
+        self._suite = suite
+
+    @value.setter
+    def value(self, value: Value):
+        if value not in Value:
+            raise Exception
+        self._value = value
+
+    def __repr__(self):
+        return f'Card {self.value} of {self.suite}'
+
+class Deck:
+    def __init__(self):
+        self.cards = [Card(s, v) for s in Suite for v in Value]
+
+    def __repr__(self):
+        output = [f'{c}\n' for c in self.cards]
+        return ''.join(output)
+
+
+#################################################
+print()
+print('*'*50)
+print('Mutable & immutable')
+
+# Immutable: None, bool, int, float, str, tuple
+# Muttable: list, dict, set
 
 

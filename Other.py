@@ -29,24 +29,33 @@ else:
 a = [a + b for a in 'list' if a != 's' for b in 'soup' if b != 'u']
 print(a)
 
-d = dict(a=1,b=2,c=3)
+d = dict(a=1, b=2, c=3)
 print(d)
 
 d = dict.fromkeys(['a', 'b', 'c', 'd', 'e', 'f'], [1, 2, 3, 4, 5])
 print(d)
 
-d = {a:a**2 for a in range(7)}
+d = {a: a ** 2 for a in range(7)}
 print(d)
 
-a = [1,1,1,2,2,2,3,3,3,4,4]
+a = [1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4]
 a = set(a)
 s = set('aaaaaaaaaabbbbbbbbbccccc')
 print(a, s)
 
 c = frozenset('qwertysssss')
 print(a.isdisjoint(s))
-print(a==s)
-a.intersection_update(s) # intersection of set a with set s
+print(a == s)
+a.intersection_update(s)  # intersection of set a with set s
 a.difference_update(s)
 a.symmetric_difference_update(s)
 
+
+########################################
+
+def howdy():
+    """Description of howdy"""
+    print('Howdy')
+
+
+print(howdy.__doc__)  # will print description of function
