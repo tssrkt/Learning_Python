@@ -1,3 +1,23 @@
+# Variables first Python search:
+# Local - локальные
+# Enclosing (from parent functions)
+# Global - глобальные
+# Built-in - встроенные
+
+def genfun(n, power):
+    for x in range(1, n):
+        yield x**power
+
+for y in genfun(10, 2):
+    print(y, end=' ')
+
+gn = genfun(10, 2)
+print('next: ')
+print(next(gn))
+print(next(gn))
+print('genfun:', list(gn))
+
+
 a = [1, 2, 3]
 d = a
 
@@ -19,6 +39,7 @@ for x in s:
 else:
     print('There is no letter "a" in this variable.')
 
+x = 50
 while x < 5:
     if x % 6 == 0:
         break
@@ -59,3 +80,25 @@ def howdy():
 
 
 print(howdy.__doc__)  # will print description of function
+
+#########################################
+
+from functools import reduce
+
+ppl = ({'age': 12, 'name': 'Emmy', 'hobby': 'math'},
+        {'age': 13, 'name': 'Tom', 'hobby': 'coding'},
+        {'age': 15, 'name': 'Bob', 'hobby': 'astronomy'},
+        {'age': 17, 'name': 'Samantha', 'hobby': 'math'},
+        {'age': 19, 'name': 'Amanda', 'hobby': 'coding'},
+        {'age': 13, 'name': 'Mikle', 'hobby': 'chemistry'}
+        )
+
+total_age = reduce(lambda acc, val: acc + val['age'], ppl, 0)
+print('total_age:', total_age)
+
+def reducer(acc, val):
+    acc[val['hobby']].append(val['name'])
+    return acc
+
+people_by_field = reduce(reducer, ppl, {'math': [], 'coding': [], 'astronomy': [], 'chemistry': []})
+print('people_by_field:', people_by_field)

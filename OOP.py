@@ -194,7 +194,7 @@ class Account:
         print('delete balance')
         del self.__balance
 
-    my_balance = my_property_balance.setter(my_balance)
+    # my_balance = my_property_balance.setter(my_balance)
 
 #############################
 
@@ -220,7 +220,7 @@ class Square:
         return self.__area
 
 a = Square(5)
-print('Area of square a is', a.area())
+# print('Area of square a is', a.area())
 
 ################################
 
@@ -335,4 +335,129 @@ r += 12
 
 k = Acc('Katya', 58)
 k = k+r
+
+###########################################
+
+class HelloWorld:
+    def __init__(self, num_iters):
+        self.num_iters = num_iters
+        self.counter = 0
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.counter < self.num_iters:
+            self.counter += 1
+            return 'Hello World!'
+        raise StopIteration
+
+gr = HelloWorld(3)
+for x in gr:
+    print(x)
+
+names = ['Bob', 'Mikle', 'Samantha', 'Jhon', 'Amanda', 'Vasya']
+for x, name in enumerate(names, start=1):
+    print(x, name)
+
+for x, name in enumerate(names, start=1):
+    team = 'Red' if x%2 else 'Blue'
+    print(x, team, name)
+
+def my_enum(sequence, start=0):
+    for x in sequence:
+        yield start, item
+        start += 1
+
+class StringByLetter:
+    def __init__(self, string):
+        self.string = string
+        self.str_len = len(string)
+        self.position = 0
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.position < self.str_len:
+            letter = self.string[self.position]
+            self.position += 1
+            return letter.upper()
+        raise StopIteration
+
+for letter in StringByLetter('hello world'):
+    print(letter, end=' ')
+print()
+
+def string_by_letter(string):
+    for letter in string:
+        yield letter.upper()
+
+for letter in string_by_letter('hello world'):
+    print(letter, end=' ')
+print()
+
+from collections.abc import Iterator
+gen = string_by_letter('hello world')
+isinstance(gen, Iterator)
+
+def invalid_oper():
+    raise Exception('Only operations: +, -, * and /')
+
+def do_math(x, y, oper='+'):
+    opers = {
+        '+': lambda x,y: x+y,
+        '-': lambda x,y: x-y,
+        '*': lambda x,y: x*y,
+        '/': lambda x,y: x/y,
+    }
+    op_func = opers.get(oper)
+    return op_func(x, y)
+
+dm = do_math(2, 3, '*')
+print('do math:', dm)
+print('*'*50)
+
+#######################################################
+
+class User:
+    def __init__(self, name, role):
+        self.name = name
+        self.role = role
+
+user = User('simple_user', 'user')
+admin = User('root', 'admin')
+current_user = user
+
+def do_admin_work():
+    if current_user.role != 'admin':
+        raise Exception('Access denied')
+    return 'Do something administoe'
+
+do_admin_work()
+
+def do_admin_work2():
+    return 'Do admin 2'
+
+def check_access(func):
+    if current_user.role != 'admin':
+        raise Exception('Access denied')
+    return func()
+
+check_access(do_admin_work2)
+
+def check_access2(func):
+    def wrapper():
+        if current_user.role != 'admin':
+            raise Exception('Access denied')
+        return func()
+    return wrapper
+
+do_admin_work2.__name__
+do_admin_work2 = check_access2(do_admin_work)
+
+@check_access2
+def do_admin_work3():
+    return 'Do admin 3'
+
 

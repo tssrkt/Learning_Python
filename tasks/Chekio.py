@@ -44,7 +44,7 @@ def format_namelist(a):
 
     res = ''
     for x in range(len(names)):
-        if len(names)==1 or x == 0:
+        if len(names) == 1 or x == 0:
             res += names[x]
         elif len(names) - x == 1:
             res += ' и ' + names[x]
@@ -52,19 +52,21 @@ def format_namelist(a):
             res += ', ' + names[x]
     return res
 
+
 ############################
 
 def print_goods(*args):
-    if len(args)==0:
+    if len(args) == 0:
         print('Нет товаров')
     else:
         num = 1
         for x in args:
-            if type(x)==str and x!='':
+            if type(x) == str and x != '':
                 print(f'{num}. {x}')
-                num+=1
-        if num==1:
+                num += 1
+        if num == 1:
             print('Нет товаров')
+
 
 ############################
 
@@ -77,19 +79,24 @@ def left_join(a: tuple):
     for x in a:
         while 'right' in x:
             n = x.find('right')
-            x = x[:n] + 'left' + x[n+5:]
+            x = x[:n] + 'left' + x[n + 5:]
         res.append(x)
     s = ''
     n = 0
     for x in res:
-        if n==len(res)-1:
+        if n == len(res) - 1:
             s += x
         else:
             s += x + ','
         n += 1
     return s
 
-lorem = ["lorem","ipsum","dolor","sit","amet","consectetuer","adipiscing","elit","aenean","commodo","ligula","eget","dolor","aenean","massa","cum","sociis","natoque","penatibus","et","magnis","dis","parturient","montes","nascetur","ridiculus","mus","donec","quam","felis","ultricies","nec","pellentesque","eu","pretium","quis","sem","nulla","consequat","massa","quis"]
+
+lorem = ["lorem", "ipsum", "dolor", "sit", "amet", "consectetuer", "adipiscing", "elit", "aenean", "commodo", "ligula",
+         "eget", "dolor", "aenean", "massa", "cum", "sociis", "natoque", "penatibus", "et", "magnis", "dis",
+         "parturient", "montes", "nascetur", "ridiculus", "mus", "donec", "quam", "felis", "ultricies", "nec",
+         "pellentesque", "eu", "pretium", "quis", "sem", "nulla", "consequat", "massa", "quis"]
+
 
 #################################
 
@@ -108,9 +115,10 @@ def first_word(text: str):
     s = list(text.split())[0]
 
     for x in s:
-        if x in punk or x==' ':
+        if x in punk or x == ' ':
             s = list(text.split(x))[0]
     return s
+
 
 #################################
 
@@ -121,12 +129,14 @@ def days_diff(a, b):
     res = d1 - d2
     return abs(res.days)
 
+
 #################################
 
 def backward_string_by_word(text: str) -> str:
     import re
-    return re.sub(r'[a-zA-Z]+', lambda x : x.group()[::-1], text)
+    return re.sub(r'[a-zA-Z]+', lambda x: x.group()[::-1], text)
     # Переворачивает слова, оставляя порядок слов и пунктуацию прежними
+
 
 #################################
 
@@ -148,10 +158,11 @@ def bigger_price(limit: int, data: list) -> list:
     res = []
     for y in mxs:
         for x in data:
-            if x['price']==y:
+            if x['price'] == y:
                 res.append(x)
 
     return res
+
 
 # print(bigger_price(2, [
 #         {"name": "bread", "price": 100},
@@ -186,18 +197,20 @@ def between_markers(text: str, begin: str, end: str) -> str:
 
     return res
 
+
 # print(between_markers("No [b]hi","[b]","[/b]"))
 
 def second_index(text: str, symbol: str) -> [int, None]:
     """
         returns the second index of a symbol in a given text
     """
-    if text.count(symbol)<2:
+    if text.count(symbol) < 2:
         return None
     else:
         import re
         res = [m.start() for m in re.finditer(symbol, text)]
         return res[1]
+
 
 ######################################
 
@@ -216,42 +229,44 @@ def frequency_sort(items):
 
     return res
 
+
 # print(frequency_sort([4,6,2,2,6,4,4,4]))
 
 def safe_pawns(pawns: set) -> int:
     desk = []
     for x in range(8):
-        desk.append([0]*8)
+        desk.append([0] * 8)
 
-    d = {'a':0, 'b':1, 'c':2, 'd':3, 'e':4, 'f':5, 'g':6, 'h':7}
+    d = {'a': 0, 'b': 1, 'c': 2, 'd': 3, 'e': 4, 'f': 5, 'g': 6, 'h': 7}
 
     pawns = list(pawns)
     for x in pawns:
-        desk[abs(int(x[1])-8)][d.get(x[0])] = 1
+        desk[abs(int(x[1]) - 8)][d.get(x[0])] = 1
 
     res = 0
     for y in range(8):
-        if sum(desk[y])==0:
+        if sum(desk[y]) == 0:
             continue
-        elif y<7:
+        elif y < 7:
             for x in range(8):
-                if desk[y][x]==1:
-                    if 0<x<7 and (desk[y+1][x-1]==1 or desk[y+1][x+1]==1):
-                        res+=1
-                    elif x==0 and desk[y+1][x+1]==1:
-                        res+=1
-                    elif x==7 and desk[y+1][x-1]==1:
-                        res+=1
+                if desk[y][x] == 1:
+                    if 0 < x < 7 and (desk[y + 1][x - 1] == 1 or desk[y + 1][x + 1] == 1):
+                        res += 1
+                    elif x == 0 and desk[y + 1][x + 1] == 1:
+                        res += 1
+                    elif x == 7 and desk[y + 1][x - 1] == 1:
+                        res += 1
 
     # for x in desk:
     #     print(x)
 
     return res
 
+
 # print(safe_pawns(["a2","b2","c2","d2","e2","f2","g2","h2"]))
 
 def words_order(text: str, words: list) -> bool:
-    if len(words)>=2 and words[0]==words[1]:
+    if len(words) >= 2 and words[0] == words[1]:
         return False
 
     text = text.split()
@@ -259,9 +274,10 @@ def words_order(text: str, words: list) -> bool:
     for x in text:
         if x in words:
             w.append(x)
-    if w==words:
+    if w == words:
         return True
     return False
+
 
 # print(words_order("hi world im here",["world"]))
 
@@ -272,11 +288,12 @@ def checkio(number: int) -> int:
         res *= int(x)
     return res
 
+
 # print(checkio(123405))
 
 def is_all_upper(text: str) -> bool:
     text = text.replace(' ', '')
-    if text=='' or text.isdigit() or text.islower():
+    if text == '' or text.isdigit() or text.islower():
         return False
     else:
         for x in text:
@@ -284,14 +301,18 @@ def is_all_upper(text: str) -> bool:
                 return False
     return True
 
+
 # print(is_all_upper("ALL UPPER"))
 
 from typing import Iterable
+
+
 def is_ascending(items: Iterable[int]) -> bool:
     srt = sorted(items)
-    if srt==items:
+    if srt == items:
         return True
     return False
+
 
 # print(is_ascending([-5,10,99,123456]))
 
@@ -302,9 +323,10 @@ def goes_after(word: str, f: str, s: str) -> bool:
 
     f = int(word.index(f))
     s = int(word.index(s))
-    if f==s-1:
+    if f == s - 1:
         return True
     return False
+
 
 # print(goes_after("world","d","w"))
 
@@ -318,7 +340,7 @@ def translate(text: str) -> str:
             x += 1
             continue
         elif text[x] in vowels:
-            if x > 0 and text[x - 1] not in vowels and text[x-1]!=' ':
+            if x > 0 and text[x - 1] not in vowels and text[x - 1] != ' ':
                 x += 1
                 continue
             elif x < len(text) - 2 and text[x] == text[x + 1] == text[x + 2]:
@@ -328,6 +350,7 @@ def translate(text: str) -> str:
             res += text[x]
             x += 1
     return res
+
 
 # print(translate("hieeelalaooo")) # == "hello"
 # print(translate("hoooowe yyyooouuu duoooiiine")) # == "how you doin"
@@ -355,8 +378,10 @@ def checkio(s1: str, s2: str) -> str:
 
     return res
 
+
 # print(checkio(["one,two,three","four,five,one,two,six,three"]))
 import string
+
 
 def check_pangram(text):
     '''
@@ -371,6 +396,7 @@ def check_pangram(text):
                 return False
     return True
 
+
 # print(check_pangram("The quick brown fox jumps over the lazy dog."))
 
 def checkio(text: str) -> str:
@@ -384,10 +410,11 @@ def checkio(text: str) -> str:
             mx.setdefault(x, 1)
     mx_lst = mx.values()
     res = []
-    res = [k for k,v in mx.items() if v == max(mx_lst)]
+    res = [k for k, v in mx.items() if v == max(mx_lst)]
     res = sorted(res, key=str.lower)
 
     return res[0]
+
 
 # print(checkio("Lorem ipsum dolor sit amet"))
 
@@ -396,24 +423,25 @@ def checkio(text, word):
     for x in a:
         n = a.index(x)
         if word in x:
-            y1=x.find(word)+1
-            y2=y1+len(word)-1
-            return ([n+1, y1, n+1, y2])
+            y1 = x.find(word) + 1
+            y2 = y1 + len(word) - 1
+            return ([n + 1, y1, n + 1, y2])
 
     for x in a[:-1]:
         n = a.index(x)
         for y in range(len(x)):
             if x[y] == word[0] and len(word) <= (len(a) - n):
-                for z in range(1, len(word)+1):
+                for z in range(1, len(word) + 1):
                     q = a[n + z][y]
                     q1 = word[z]
-                    if z<len(word) and a[n + z][y] == word[z]:
-                        if z == len(word)-1:
-                            return [n+1, y+1, n + z+1, y+1]
+                    if z < len(word) and a[n + z][y] == word[z]:
+                        if z == len(word) - 1:
+                            return [n + 1, y + 1, n + z + 1, y + 1]
                         continue
                     else:
                         break
     return None
+
 
 # print(checkio("DREAMING of apples on a wall,\nAnd dreaming often, dear,\nI dreamed that, if I counted all,\n-How many would appear?","ten"))
 # checkio("He took his vorpal sword in hand:\nLong time the manxome foe he sought--\nSo rested he by the Tumtum tree,\nAnd stood awhile in thought.\nAnd as in uffish thought he stood,\nThe Jabberwock, with eyes of flame,\nCame whiffling through the tulgey wood,\nAnd burbled as it came!","noir")
@@ -425,9 +453,9 @@ def find_quotes(a):
     n = 0
     x = 0
     while x < len(a):
-        if a[x]=='"' and a[x+1]=='"':
+        if a[x] == '"' and a[x + 1] == '"':
             res.append('""')
-            x +=2
+            x += 2
             continue
         elif a[x] == '"' and n == 0:
             n = 1
@@ -447,9 +475,10 @@ def find_quotes(a):
                     n = 0
                     s = ''
                     break
-        x+=1
+        x += 1
 
     return res
+
 
 # print(find_quotes("count empty quotes \"\""))
 # print(find_quotes('"Greetings"'))
@@ -461,7 +490,7 @@ def long_repeat(line: str) -> int:
     res = 1
     a = []
     for x in range(len(line[:-1])):
-        if line[x] == line[x+1]:
+        if line[x] == line[x + 1]:
             res += 1
         else:
             a.append(res)
@@ -469,12 +498,15 @@ def long_repeat(line: str) -> int:
 
     return max(a)
 
+
 # print(long_repeat("ddvvrwwwrggg"))
 
 dic = {'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000}
 
+
 def d(x):
     return dic.get(x)
+
 
 def roman(s, res):
     n = len(s)
@@ -484,37 +516,38 @@ def roman(s, res):
         return 1
     elif n == 1:
         return res
-    elif n==2:
-        if d(s[0])>=d(s[1]):
-            res += d(s[0])+d(s[1])
+    elif n == 2:
+        if d(s[0]) >= d(s[1]):
+            res += d(s[0]) + d(s[1])
         else:
-            res += d(s[1])-d(s[0])
+            res += d(s[1]) - d(s[0])
 
-    if n>4:
-        n=4
+    if n > 4:
+        n = 4
 
     same = 1
     for x in range(1, n):
-        num=s[x]
+        num = s[x]
 
         if d(s[x]) == d(s[x - 1]):
             res += d(s[x])
-            same+=1
-        elif d(s[x]) < d(s[x-1]) and same==3:
+            same += 1
+        elif d(s[x]) < d(s[x - 1]) and same == 3:
             s = s[3:]
             return roman(s, res)
-        elif d(s[x]) > d(s[x-1]) and same==3:
-            res=0
-            res+=d(s[x])-d(s[x-1])*3
+        elif d(s[x]) > d(s[x - 1]) and same == 3:
+            res = 0
+            res += d(s[x]) - d(s[x - 1]) * 3
         else:
             res -= d(s[x - 1])
-    s=s[4:]
+    s = s[4:]
     return roman(s, res)
 
 
 def reverse_roman(s):
     res = roman(s, 0)
     return res
+
 
 # print(reverse_roman("MMMDCCCX"))
 # print(reverse_roman("MMCCCXLVI"))
@@ -523,12 +556,13 @@ def reverse_roman(s):
 def isometric_strings(a, b):
     for x in range(len(a)):
         if a[x].isalpha():
-            a=a.replace(a[x], str(x))
+            a = a.replace(a[x], str(x))
         if b[x].isalpha():
-            b=b.replace(b[x], str(x))
-        if a==b:
+            b = b.replace(b[x], str(x))
+        if a == b:
             return True
     return False
+
 
 # print(isometric_strings("bar","foo"))
 
@@ -546,13 +580,14 @@ def date_time(time: str) -> str:
     hours = str(int(time[11:13]))
     mins = str(int(time[-2] + time[-1]))
 
-    if hours=='1':
-        h='hour'
-    if mins=='1':
+    if hours == '1':
+        h = 'hour'
+    if mins == '1':
         m = 'minute'
 
     res = f"{day} {month} {year} year {hours} {h} {mins} {m}"
     return res
+
 
 # print(date_time("01.01.2000 00:00"))
 
@@ -564,24 +599,24 @@ def yaml(a):
     lv = []
     for x in a:
         if ':' in x:
-            if a.index(x)>0 and a[a.index(x)-1].count(':')>0:
+            if a.index(x) > 0 and a[a.index(x) - 1].count(':') > 0:
                 v = None
-            if v=='false':
+            if v == 'false':
                 lv.append(False)
                 v = ''
-            elif v=='true':
+            elif v == 'true':
                 lv.append(True)
                 v = ''
-            elif v!='':
+            elif v != '':
                 lv.append(v)
                 v = ''
             lk.append(x[:-1])
         else:
             v = v + ' ' + x
 
-    if v!='':
+    if v != '':
         lv.append(v)
-        v=''
+        v = ''
 
     for x in range(len(lk)):
         y = lv[x].strip().replace('\\', '')
@@ -595,6 +630,7 @@ def yaml(a):
         d.setdefault(lk[x], y)
 
     return d
+
 
 # print(yaml("name: Alex\nage: 12"))
 # print(yaml("name: Alex Fox\nage: 12\n\nclass: 12b"))
@@ -615,13 +651,15 @@ def checkio(a) -> str:
 
     return "D"
 
+
 # print(checkio(["OO.","XOX","XOX"]))
 
 def split_list(items: list) -> list:
-    if items==[]:
+    if items == []:
         return [[], []]
-    x = len(items)//2 if len(items)%2==0 else len(items)//2+1
+    x = len(items) // 2 if len(items) % 2 == 0 else len(items) // 2 + 1
     return [items[:x], items[x:]]
+
 
 # print(split_list([1, 2, 3, 4, 5, 6]))
 
@@ -672,11 +710,12 @@ def morse_decoder(code):
     for x in words:
         x = x.split()
         for y in x:
-            word+=MORSE.get(y)
+            word += MORSE.get(y)
         res += word + ' '
         word = ''
     res = res.capitalize()
     return res
+
 
 # print(morse_decoder("... --- -- .   - . -..- -"))
 
@@ -731,7 +770,7 @@ def checkio(line: str) -> str:
 
         v = True
         c = True
-        if my_even != '' and my_odd!='' and my_even[0] in vowels and my_odd[0] in cons:
+        if my_even != '' and my_odd != '' and my_even[0] in vowels and my_odd[0] in cons:
             for x in my_even:
                 if x not in vowels:
                     v = False
@@ -740,7 +779,7 @@ def checkio(line: str) -> str:
                 if x not in cons:
                     c = False
                     break
-        elif my_even != '' and my_odd!='' and my_even[0] in cons and my_odd[0] in vowels:
+        elif my_even != '' and my_odd != '' and my_even[0] in cons and my_odd[0] in vowels:
             for x in my_even:
                 if x not in cons:
                     c = False
@@ -761,6 +800,7 @@ def checkio(line: str) -> str:
 
     return res
 
+
 # print(checkio("My name is ..."))
 # print(checkio("A quantity of striped words."))
 # print(checkio("Dog,cat,mouse,bird.Human."))
@@ -768,13 +808,13 @@ def checkio(line: str) -> str:
 # print(checkio("1st 2a ab3er root rate"))
 
 def binar_morze(n):
-    if n=='0':
+    if n == '0':
         return '.'
 
     n = int(n)
     a = [1]
-    while a[-1]<=n:
-        a.append(a[-1]*2)
+    while a[-1] <= n:
+        a.append(a[-1] * 2)
         if a[-1] > n:
             del a[-1]
             break
@@ -783,35 +823,37 @@ def binar_morze(n):
     res = ''
     sm = 0
     for x in a:
-        if a.index(x)==0 or sm+x<=n:
+        if a.index(x) == 0 or sm + x <= n:
             sm += x
             res += '-'
-        elif sm+x>n:
-            res +='.'
+        elif sm + x > n:
+            res += '.'
     return res
+
 
 def checkio(time_string: str) -> str:
     a = time_string.split(':')
     res = ''
-    nums = [2,4,3,4,3,4]
+    nums = [2, 4, 3, 4, 3, 4]
     i = 0
 
     for x in a:
-        if len(x)<=1:
-            a[a.index(x)]='0'+x
+        if len(x) <= 1:
+            a[a.index(x)] = '0' + x
 
     zuka = 0
     for x in a:
         for n in x:
             bm = binar_morze(n)
-            bm = '.'*(nums[i] - len(bm)) + bm
+            bm = '.' * (nums[i] - len(bm)) + bm
             res += bm + ' '
-            i+=1
-        if zuka<2:
+            i += 1
+        if zuka < 2:
             res += ': '
         zuka += 1
     res = res.strip()
     return res
+
 
 # print(checkio("10:37:49"))
 # print(checkio("00:1:02"))
@@ -820,16 +862,17 @@ def checkio(time_string: str) -> str:
 from typing import List
 import math
 
+
 def total_cost(calls: List[str]) -> int:
     a = []
     for x in calls:
         if calls.index(x) == 0:
-            a.append(math.ceil((int(x.split()[-1])/ 60)))
+            a.append(math.ceil((int(x.split()[-1]) / 60)))
         else:
             if x[8:10] == calls[calls.index(x) - 1][8:10]:
-                a[-1] += int(math.ceil((int(x.split()[-1])/ 60)))
+                a[-1] += int(math.ceil((int(x.split()[-1]) / 60)))
             else:
-                a.append(int(math.ceil((int(x.split()[-1])/ 60))))
+                a.append(int(math.ceil((int(x.split()[-1]) / 60))))
 
     res = 0
     for x in a:
@@ -839,6 +882,7 @@ def total_cost(calls: List[str]) -> int:
             res += 100 + (x - 100) * 2
 
     return res
+
 
 # print(total_cost(["2014-01-01 01:12:13 181","2014-01-02 20:11:10 600","2014-01-03 01:12:13 6009","2014-01-03 12:13:55 200"]))
 
@@ -867,12 +911,15 @@ def fight(unit_1, unit_2):
         return True
     return False
 
+
 carl = Warrior()
 jim = Knight()
 # print(fight(carl, jim))
 
 bob = Warrior()
 mars = Warrior()
+
+
 # print(fight(bob, mars))
 
 def flat_list(a, neo=None):
@@ -888,14 +935,17 @@ def flat_list(a, neo=None):
             neo.append(x)
     return neo
 
+
 # print(flat_list([-1, [1, [-2], 1], -1]))
 
 def how_deep(structure, res=1):
     for x in structure:
         if isinstance(x, (tuple, list, set)):
-            res+=1
-            res = how_deep(x, res)
+            if res<2:
+                res+=1
+            res = res + how_deep(x)-1
     return res
+
 
 # print(how_deep([1,2,[3,[4]]]))
 
@@ -908,10 +958,10 @@ def checkio(n):
         if pigs >= fd:
             break
 
-        if x <= (fd-pigs):
+        if x <= (fd - pigs):
             fed += x
         else:
-            fed += (fd-pigs)
+            fed += (fd - pigs)
 
         pigs += x
         fd -= pigs
@@ -920,6 +970,7 @@ def checkio(n):
             break
     return fed
 
+
 # print(checkio(3))
 # print(checkio(5))
 
@@ -927,6 +978,7 @@ def clock_angle(time):
     hour, minute = map(int, time.split(':'))
     ans = abs((hour * 30 + minute * 0.5) - (minute * 6))
     return abs(min(360 - ans, ans))
+
 
 # print(clock_angle("02:30")) # == 105, "02:30"
 # print(clock_angle("13:42")) # == 159, "13:42"
@@ -953,13 +1005,14 @@ def create_zigzag(rows: int, cols: int, start: int = 1) -> List[List[int]]:
             is_evn = 1
     return res
 
+
 # print(create_zigzag(3,5))
 
 def non_repeat(line):
     """
         the longest substring without repeating chars
     """
-    if len(line) == 1 or (len(line) == 2 and line[0]!=line[1]):
+    if len(line) == 1 or (len(line) == 2 and line[0] != line[1]):
         return line
 
     res = []
@@ -977,6 +1030,7 @@ def non_repeat(line):
         return res[-1]
     return ''
 
+
 # print(non_repeat("abcabcffab"))
 # print(non_repeat("wq"))
 # print(non_repeat("dfghj"))
@@ -985,11 +1039,12 @@ def checkio(words_set):
     for x in words_set:
         res = 0
         for y in words_set:
-            if x in y and x[-1]==y[-1]:
+            if x in y and x[-1] == y[-1]:
                 res += 1
-        if res>1:
+        if res > 1:
             return True
     return False
+
 
 # print(checkio(["hello","la","hellow","cow"]))
 
@@ -1003,26 +1058,29 @@ def highest_building(*b):
             z += b[y][x]
         a.append(z)
 
-    return [a.index(max(a))+1, max(a)]
+    return [a.index(max(a)) + 1, max(a)]
+
 
 # print(highest_building([0,0,1,0],[1,0,1,0],[1,1,1,0],[1,1,1,1]))
 # print(highest_building([0,0,0,1,0,0,0],[0,0,1,1,1,0,0],[0,1,1,1,1,1,0],[1,1,1,1,1,1,1],[1,1,1,1,1,1,1],[1,1,1,1,1,1,1]))
 # print(highest_building([0,0,1,0],[1,0,1,0],[1,1,1,0],[1,1,1,1]))
 
 
-    # print(a, len(a))
-    # print(b, len(b))
-    # print(a-b, b-a)
+# print(a, len(a))
+# print(b, len(b))
+# print(a-b, b-a)
 
 from collections import Counter
+
 
 def verify_anagrams(a, b):
     a = Counter(a.lower().replace(' ', ''))
     b = Counter(b.lower().replace(' ', ''))
 
-    if not a-b and not b-a and len(a)==len(b):
+    if not a - b and not b - a and len(a) == len(b):
         return True
     return False
+
 
 # print(verify_anagrams("  Hi  all  ","all hi"))
 # print(verify_anagrams("a","abcd"))
@@ -1031,16 +1089,17 @@ def verify_anagrams(a, b):
 def except_zero(items: list) -> Iterable:
     srt = items[:]
     srt.sort()
-    srt = [x for x in srt if x>0]
+    srt = [x for x in srt if x > 0]
     res = []
     y = 0
     for x in items:
-        if x==0:
+        if x == 0:
             res.append(0)
         else:
             res.append(srt[y])
             y += 1
     return res
+
 
 # print(except_zero([5, 3, 0, 0, 4, 1, 4, 0, 7]))
 
@@ -1048,56 +1107,239 @@ def recall_password(gri: List[str], pas: List[str]) -> str:
     res = ''
     zuza = 1
 
-    while zuza<5:
+    while zuza < 5:
         a = []
         for x in range(len(pas)):
             for y in range(len(gri)):
-                if gri[x][y]=='X':
+                if gri[x][y] == 'X':
                     res += pas[x][y]
 
         for x in range(len(pas)):
             a.append('')
-            for y in range(len(gri)-1, -1, -1):
+            for y in range(len(gri) - 1, -1, -1):
                 a[x] += gri[y][x]
-        gri=a
-        zuza+=1
+        gri = a
+        zuza += 1
     return res
+
 
 # print(recall_password(['X...', '..X.', 'X..X', '....'],  ['itdf', 'gdce', 'aton', 'qrdi']))
 
 from datetime import datetime
 
-def sum_light(els: List[datetime]) -> int:
+
+def is_before(sw, dt):
+    if sw.year >= dt.year:
+        if sw.year>dt.year:
+            return False
+        if sw.month >= dt.month:
+            if sw.month>dt.month:
+                return False
+            if sw.day >= dt.day:
+                if sw.day>dt.day:
+                    return False
+                if sw.hour >= dt.hour:
+                    if sw.hour>dt.hour:
+                        return False
+                    if sw.minute >= dt.minute:
+                        if sw.minute>dt.minute:
+                            return False
+                        if sw.second >= dt.second:
+                            return False
+                        else: return True
+                    else: return True
+                else: return True
+            else: return True
+        else: return True
+    else: return True
+
+
+def sum_light(els: List[datetime], sw=None) -> int:
     res = 0
     lst = []
-    for x in range(0, len(els)-1, 2):
-        lst.append([els[x], els[x+1]])
+    for x in range(0, len(els) - 1, 2):
+        lst.append([els[x], els[x + 1]])
+
+    if sw != None:
+        for x in range(len(lst)):
+            if not is_before(sw, lst[x][0]):
+                if is_before(sw, lst[x][1]):
+                    lst[x][0] = sw
+                    break
+                else:
+                    lst[x] = 0
+            else:
+                break
 
     for x in lst:
-        x = str(x[1] - x[0])
-        if 'day' not in x:
-            c = list(map(int, x.split(':')))
-            res += c[0]*60*60 + c[1]*60 + c[2]
-        else:
-            a = list(map(str, x.split()))
-            c = list(map(int, a[-1].split(':')))
-            res += int(a[0])*24*60*60 + c[0]*60*60 + c[1]*60 + c[2]
-            print(x)
+        if x != 0:
+            x = str(x[1] - x[0])
+            if 'day' not in x:
+                c = list(map(int, x.split(':')))
+                res += c[0] * 60 * 60 + c[1] * 60 + c[2]
+            else:
+                a = list(map(str, x.split()))
+                c = list(map(int, a[-1].split(':')))
+                res += int(a[0]) * 24 * 60 * 60 + c[0] * 60 * 60 + c[1] * 60 + c[2]
+
     return res
 
-# print(sum_light([
-# datetime(2015, 1, 12, 10, 0, 0),
-# datetime(2015, 1, 12, 10, 10, 10),
-# datetime(2015, 1, 12, 11, 0, 0),
-# datetime(2015, 1, 12, 11, 10, 10)
-# ]))
 
-# print(sum_light([
-# datetime(2015, 1, 12, 10, 0, 0),
-# datetime(2015, 1, 12, 10, 0, 10),
-# datetime(2015, 1, 12, 11, 0, 0),
-# datetime(2015, 1, 13, 11, 0, 0)
-# ]))
+# print(sum_light(
+#     [
+#         datetime(2015, 1, 12, 10, 0, 0),
+#         datetime(2015, 1, 12, 10, 0, 10),
+#     ],
+#     datetime(2015, 1, 12, 10, 0, 5),
+# ))
+#
+# print(sum_light(
+#     [
+#         datetime(2015, 1, 12, 10, 0, 0),
+#         datetime(2015, 1, 12, 10, 10, 10),
+#         datetime(2015, 1, 12, 11, 0, 0),
+#         datetime(2015, 1, 12, 11, 10, 10),
+#     ],
+#     datetime(2015, 1, 12, 11, 0, 0),
+# ))
+
+def reverse_ascending(items):
+    a = []
+    res = []
+
+    if items == sorted(items) and len(items)==len(set(items)):
+        return items[::-1]
+    elif items == sorted(items, reverse=True) and len(items)==len(set(items)):
+        return items
+    elif items.count(items[0])==len(items):
+        return items
+
+    x = 1
+    while x < len(items):
+        if items[x] > items[x - 1]:
+            a.append(items[x - 1])
+            if x==len(items)-1 or (x!=len(items)-1 and items[x] >= items[x+1]):
+                a.append(items[x])
+                res += a[::-1]
+                a=[]
+                x+=1
+            x += 1
+
+        elif items[x] == items[x - 1]:
+            res.append(items[x-1])
+            x += 1
+
+        elif items[x] < items[x - 1]:
+            res.append(items[x-1])
+            x += 1
+    return res
+
+# print(reverse_ascending([1,2,2,3]))
+# print(reverse_ascending([5,4,3,2,1]))
+# print(reverse_ascending([1,1,2]))
+# print(reverse_ascending([5, 7, 10, 4, 2, 7, 8, 1, 3]))
+# print(reverse_ascending([1,2,3,4,5]))
+
+
+dic = {1: 'I', 5: 'V', 10: 'X', 50: 'L', 100: 'C', 500: 'D', 1000: 'M'}
+
+def bignums(a):
+    if len(str(a))==2:
+        zuka = 10
+    elif len(str(a))==3:
+        zuka = 100
+    elif len(str(a))==4:
+        zuka = 1000
+
+    res = ''
+    if a in [zuka, zuka*2, zuka*3]:
+        res = dic.get(zuka) * (a // zuka) + res
+    elif a == zuka*4:
+        res = dic.get(zuka) + dic.get(zuka*5) + res
+    elif a in [zuka*5, zuka*6, zuka*7, zuka*8]:
+        res = dic.get(zuka*5) + dic.get(zuka) * (a // zuka - 5) + res
+    elif a == zuka*9:
+        res = dic.get(zuka) + dic.get(zuka*10) + res
+    return res
+
+
+def checkio(data):
+    n = str(data)
+    res = ''
+
+    for x in range(len(n)-1, -1, -1):
+        a = int(n[x])
+        if a!=0:
+            if x==len(n)-1:
+                if a<=3:
+                    res += dic.get(1)*a
+                elif 3<a<=5:
+                    res += dic.get(1)*(5-a) + dic.get(5)
+                elif 5<a<=8:
+                    res += dic.get(5) + dic.get(1) * (a - 5)
+                elif a==9:
+                    res += dic.get(1) + dic.get(10)
+            else:
+                a = a*10 if x==len(n)-2 else a
+                a = a*100 if x==len(n)-3 else a
+                a = a*1000 if x==len(n)-4 else a
+                res = bignums(a) + res
+    return res
+
+# print(checkio(100))
+# print(checkio(200))
+# print(checkio(300))
+# print(checkio(400))
+# print(checkio(500))
+# print(checkio(600))
+# print(checkio(700))
+# print(checkio(800))
+# print(checkio(900))
+# print('*'*50)
+# print(checkio(1230))
+# print(checkio(2030))
+# print(checkio(3020))
+
+def rs(hst):
+    res = []
+    for y in range(len(hst) - 1):
+        res.append(hst[y])
+        back = True
+        ahead = True
+        for x in range(y + 1, len(hst)):
+            if ahead==True and hst[x] >= hst[y]:
+                res[-1] += hst[y]
+            else:
+                ahead = False
+            z = y-(x-y)
+            if back==True and y>0 and z>0 and hst[z]>= hst[y]:
+                res[-1] += hst[y]
+            else:
+                back = False
+            if ahead==back==False:
+                break
+    return res
+
+def largest_histogram(hst):
+    if len(hst)==1:
+        return hst[0]
+
+    res = rs(hst)
+    res2 = rs(hst[::-1])
+    res.extend(res2)
+    res.append(min(hst) * len(hst))
+
+    if max(res)>max(hst):
+        return max(res)
+    return max(hst)
+
+
+# print(largest_histogram([2, 1, 4, 5, 1, 3, 3])) # == 8, "complex"
+# print(largest_histogram([1, 1, 4, 1])) # == 4, "vertical"
+# print(largest_histogram([1, 1, 3, 1])) # == 4, "horizontal"
+# print(largest_histogram([5])) # == 5, "one is always the biggest"
+# print(largest_histogram([70,60,67,78,89,87,74,40,100,24,66,84,11,99,4,34,21,23,66,34,47,54,51,88,53,7,94,72,28,59,30,44,0,17,96,34,63,6,81,61,26,96,72,5,32,57,1,3,47,13,97,96,9,7,80,5,89,77,7,75,63,59,90,88,16,48,93,33,70,35,57,15,61,81,63,83,33,3,55,63,86,33,94,45,76,99,86,14,96,81,33,32,76,37,56,54,63,11,82,41,90,81,53,42,89,75,98,74,18,73,7,30,10,14,67,59,25,56,41,90,80,17,84,16,45,6,29,87,79,56,33,94,73,72,31,18,30,17,81,64,92,3,94,12,65,23,50,54,52,16,19,39,26,12,75,19,11,69,48,25,64,6,22,19,19,29,41,90,43,41,36,66,91,23,28,4,15,94,89,6,87,4,98,19,12,54,3,66,84,83,28,95,3,55,44,64,86,15,15,37,89,65,100,9,11,6,38,26,62,89,14,29,81,94,47,63,71,56,31,96,68,30,96,77,32,28,82,39,75,67,73,83,70,70,74,50,89,98,27,50,2,42,46,11,59,60,96,90,20,14,92,20,59,8,16,23,69,41,7,64,66,38,30,47,87,82,73,12,82,0,45,100,59,10,42,19,21,22,17,67,33,69,12,100,14,11,20,43,30,20,93,43,14,28,68,55,89,57,48,97,95,88,4,41,61,45,91,0,22,57,40,18,21,97,51,36,67,14,22,6,57,11,31,48,45,83,97,60,14,32,27,65,24,48,94,63,25,50,52,91,55,81,96,33,89,82,21,8,100,93,100,47,18,80,88,81,1,10,81,25,68,95,81,95,53,93,79,23,9,87,63,95,4,68,42,73,16,29,27,44,3,48,90,92,46,66,81,58,98,64,90,95,64,46,73,40,74,67,32,59,61,89,96,42,47,97,70,22,78,70,2,67,39,59,76,78,41,23,84,52,88,89,88,4,17,48,3,41,30,14,30,92,65,87,79,84,21,57,19,62,19,50,13,27,21,83,25,19,72,50,40,12,4,43,60,41,46,45,92,93,16,54,29,38,42,53,93,2,44,98,79,25,34,3,69,74,21,100,92,61,100,22,23,74,70,76,18,10,50,68,96,83,95,69,90,49,61,93,51,55,47,87,53,50,80,31,76,0,64,74,68,11,18,85,99,67,71,88,87,72,10,58,31,82,49,70,10,84,79,23,5,53,25,36,9,33,71,48,4,14,51,71,58,44,17,53,87,62,41,80,90,0,36,48,75,67,28,82,34,75,93,63,66,72,54,41,68,67,82,77,36,74,16,4,96,39,61,64,92,78,86,21,87,43,81,94,76,31,18,50,59,66,57,34,77,27,57,66,65,17,25,90,78,23,52,31,28,71,93,95,62,23,99,48,36,85,22,13,33,13,33,67,63,100,52,94,97,83,45,88,65,9,31,30,97,9,71,45,39,15,39,79,25,62,69,1,30,26,25,74,35,5,22,72,25,3,15,52,94,87,37,46,9,58,90,14,46,39,44,60,53,5,18,12,69,25,55,37,85,3,43,75,20,9,35,1,60,58,83,77,60,75,7,91,76,95,48,91,83,50,3,85,42,31,68,48,94,37,96,89,43,40,24,43,72,8,49,93,26,74,82,63,41,82,74,58,46,39,30,3,58,84,68,84,1,18,26,26,18,40,59,29,22,73,1,74,33,62,73,12,1,43,72,33,44,24,63,18,65,93,18,28,91,87,15,24,84,96,87,6,48,14,99,79,75,25,68,53,26,27,63,74,75,96,94,7,100,91,77,96,32,34,42,19,2,0,68,21,55,21,20,48,84,1,63,96,2,52,53,99,90,82,50,46,23,49,33,26,55,100,37,92,11,70,60,61,30,35,26,10,69,90,54,46,58,96,65,49,8,89,74,52,29,60,93,51,47,27,72,42,12,51,36,34,26,62,13,81,20,97,52,25,44,41,90,18,7,34,99,98,40,49,100,16,84,93,10,35,75,78,96,13,83,38,66,61,26,83,34,13,59,89,22,35,41,45,25,42,69,95,40,43,1,65,44,18,25,81,87,86,43,90,64,16,88,49,6,21,80,89,71,63,25,47,91,93,8,42,61,67,22,67,96,69,45,100,41,48,72,96,3,18,30,37,85,51,84,75,10,99,74,84,91,58,6,8,13,50,94,39,19,73,70,96,0,18,58,29,100,84,92,91,46,48,4,33,60,35,14,45,43,6,42,30,91,0,71,100,55,14,9,99,100,31,83,6,37,48,57]))
+# print(largest_histogram([5, 3])) # == 6, "two are smallest X 2"
 
 
 
@@ -1105,11 +1347,56 @@ def sum_light(els: List[datetime]) -> int:
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+def rs(price, a):
+    res = 0
+    for x in a:
+        if price==0:
+            break
+        while price >= x:
+            res += 1
+            price -= x
+    if price==0:
+        return res
+    return None
+
+
+def checkio(price, a):
+    """
+        return the minimum number of coins that add up to the price
+    """
+    a = sorted(a, reverse=True)
+    res = []
+    while len(a)>0:
+        z = rs(price, a)
+        if z!= None:
+            res.append(z)
+        del a[0]
+
+    if res==[]:
+        return None
+    return min(res)
+
+# print(checkio(123456,[1,6,7,456,678])) # == 187
+# print(checkio(8, [1, 3, 5])) # == 2
+# print(checkio(12, [1, 4, 5])) # == 3
 
 def lines(m):
     # horizintal
     for x in m:
-        if len(set(x))==1:
+        if len(set(x)) == 1:
             return True
 
     # vertical
@@ -1117,11 +1404,13 @@ def lines(m):
         a = []
         for y in range(len(m)):
             a.append(m[y][x])
-        if len(set(a))==1:
+        if len(set(a)) == 1:
             return True
+
 
 def recu(m):
     pass
+
 
 def checkio(matrix: List[List[int]]) -> bool:
     res = lines(matrix)
@@ -1132,6 +1421,7 @@ def checkio(matrix: List[List[int]]) -> bool:
     if res:
         return True
     return False
+
 
 # print(checkio([
 #     [7, 1, 1, 8, 1, 1],
@@ -1144,13 +1434,15 @@ def checkio(matrix: List[List[int]]) -> bool:
 # Пока не знаю как решить задачку с диагоналями
 
 
+
+
 def checkio(s, s2=''):
     a = [s.count('(') - s.count(')'), s.count('[') - s.count(']'), s.count('{') - s.count('}')]
     b = ['(', '[', '{']
     c = [')', ']', '}']
     d = c + b
 
-    if s2!='':
+    if s2 != '':
         s = s2
 
     zuzuka = True
@@ -1175,6 +1467,7 @@ def checkio(s, s2=''):
 
     return res
 
+
 # print(checkio("((5+3)*2+1)"))
 # print(checkio("(3+{1-1)}"))
 
@@ -1185,7 +1478,7 @@ def sm(a, b, x, costs):
         if y != a and isinstance(y, str):
             for z in costs:
                 if y in z and b in z:
-                    res.append(costs[costs.index(z)][-1]+costs[costs.index(x)][-1])
+                    res.append(costs[costs.index(z)][-1] + costs[costs.index(x)][-1])
     next = ''
     sm = 0
     for x in costs:
@@ -1201,13 +1494,14 @@ def sm(a, b, x, costs):
                     next = y
                     break
 
-        if next=='' and a in x and b not in x:
+        if next == '' and a in x and b not in x:
             for y in x:
                 if y != a and isinstance(y, str):
                     sm += x[-1]
                     next = y
                     break
     return res
+
 
 def cheapest_flight(costs: List, a: str, b: str) -> int:
     prices = []
@@ -1222,10 +1516,11 @@ def cheapest_flight(costs: List, a: str, b: str) -> int:
             res = sm(b, a, x, costs)
             prices.extend(res)
 
-    if prices==[]:
+    if prices == []:
         return 0
 
     return min(prices)
+
 
 # print(cheapest_flight([["A","C",40],["A","B",20],["A","D",20],["B","C",50],["D","C",70]],"D","C"))
 # print(cheapest_flight([["A","C",100],["A","B",20],["D","F",900]],"A","F"))
@@ -1235,8 +1530,9 @@ def cheapest_flight(costs: List, a: str, b: str) -> int:
 
 # OOP
 print()
-print('*'*50)
+print('*' * 50)
 print('OOP')
+
 
 class VoiceCommand():
 
@@ -1272,6 +1568,7 @@ class VoiceCommand():
     # def is_exist(self, n, name):
     #     pass
 
+
 """
 По умолчанию до начала работы всех команд включен канал №1.
 Ваша задача - создать класс VoiceCommand и методы, описанные ранее.
@@ -1282,12 +1579,11 @@ CHANNELS = ["BBC", "Discovery", "TV1000"]
 
 controller = VoiceCommand(CHANNELS)
 
-controller.first_channel() # == "BBC"
-controller.last_channel() # == "TV1000"
-controller.turn_channel(1) # == "BBC"
-controller.next_channel() # == "Discovery"
-controller.previous_channel() # == "BBC"
-controller.current_channel() # == "BBC"
+controller.first_channel()  # == "BBC"
+controller.last_channel()  # == "TV1000"
+controller.turn_channel(1)  # == "BBC"
+controller.next_channel()  # == "Discovery"
+controller.previous_channel()  # == "BBC"
+controller.current_channel()  # == "BBC"
 # controller.is_exist(4) # == "No"
 # controller.is_exist("BBC") # == "Yes"
-
