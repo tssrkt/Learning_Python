@@ -169,6 +169,33 @@ class M2:
 
 m4 = M2(1,2)
 
+################################################
+# hashlib
+
+import hashlib
+h = hashlib.md5(b'password')
+print(h.hexdigest())
+a = list(hashlib.algorithms_available)
+print('algorithms available:', a)
+h1 = hashlib.new('md5', b'foobar').hexdigest()
+h2 = hashlib.new('sha256', b'foobar').hexdigest()
+print(h1)
+print(h2)
+
+import itertools
+
+s = 'cat dog horse cow sheep'
+words = s.split()
+text = list(itertools.permutations(words, r=5))
+text = [' '.join(x) for x in text]
+
+# Record
+with open('password.txt', 'w', encoding='utf-8') as f:
+    for x in text:
+        a = hashlib.md5(x.encode('utf-8'))
+        f.write('Your hash: ' + a.hexdigest() + ' - ' + str(x) + '\n')
+
+
 
 
 

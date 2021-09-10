@@ -83,7 +83,7 @@ print(howdy.__doc__)  # will print description of function
 
 #########################################
 
-from functools import reduce
+from functools import reduce, total_ordering
 
 ppl = ({'age': 12, 'name': 'Emmy', 'hobby': 'math'},
         {'age': 13, 'name': 'Tom', 'hobby': 'coding'},
@@ -102,3 +102,14 @@ def reducer(acc, val):
 
 people_by_field = reduce(reducer, ppl, {'math': [], 'coding': [], 'astronomy': [], 'chemistry': []})
 print('people_by_field:', people_by_field)
+
+#####################################
+
+factorial = reduce(lambda x,y: x*y, range(1, 6))
+print('factorial of 5 is', factorial)
+
+#########################################
+# total_ordering
+
+
+
