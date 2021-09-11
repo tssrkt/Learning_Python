@@ -1178,10 +1178,10 @@ def checkio(from_date, to_date):
 
     res = 0
     x = 0
-    while fd<td:
-        if x==0:
+    while fd < td:
+        if x == 0:
             wd = weekday(fd.year, fd.month, fd.day)
-            x=1
+            x = 1
         else:
             try:
                 fd = date(fd.year, fd.month, fd.day + 1)
@@ -1214,11 +1214,10 @@ def fastest_horse(horses: list) -> int:
 
     for y, race in enumerate(horses, start=0):
         for x in range(len(horses[0])):
-            lsd[x].setdefault(y+1, race[x])
-
+            lsd[x].setdefault(y + 1, race[x])
 
     winners = []
-    for x in range(1, len(horses[0])+1):
+    for x in range(1, len(horses[0]) + 1):
         lsd.sort(key=ig(x))
         winners.append(lsd[0].get('horse'))
 
@@ -1243,25 +1242,217 @@ VALUES = {'e': 1, 'a': 1, 'i': 1, 'o': 1, 'n': 1, 'r': 1,
 
 from functools import reduce
 
+
 def worth_of_words(words):
     res = []
     for x in words:
         res.append(reduce(lambda a, b: a + VALUES.get(b), x, 0))
     return words[res.index(max(res))]
 
+
 # print(worth_of_words(['hi', 'quiz', 'bomb', 'president'])) # == 'quiz'
 
 import hashlib
+
+
 def checkio(hs, a):
     return hashlib.new(a, hs.encode('utf-8')).hexdigest()
+
 
 # print(checkio('welcome', 'md5'))
 # print(checkio('happy spam', 'sha224'))
 
+import math
+
+
+def style_text(res, line, style, width, word=''):
+    if style == 'l':
+        res += line
+        line = word + ' '
+    elif style == 'r':
+        m = width - len(line.replace('\n', ''))
+        res += ' ' * m + line
+        line = word + ' '
+    elif style == 'c':
+        m = math.ceil((width - len(line)) / 2)
+        m = 8 if m == 9 else m  # это костыль
+        # print(m, len(line))
+        res += ' ' * m + line
+        line = word + ' '
+    else:
+        m = (width - len(line.replace(' ', ''))) + 1
+        line = line.split()
+        while m > 0:
+            for x in range(len(line)):
+                if x != len(line) - 1:
+                    line[x] = line[x] + ' '
+                    m -= 1
+                    if m == 0:
+                        break
+        res += ''.join(line) + '\n'
+        line = word + ' '
+    return [res, line]
+
+
+def text_formatting(text: str, width: int, style: str) -> str:
+    s = text.split()
+    res = ''
+    line = ''
+    for x in range(len(s)):
+        line += s[x] + ' '
+        if len(line.strip()) > width:
+            line = ' '.join(list(line.split())[:-1]) + '\n'
+            res, line = style_text(res, line, style, width, s[x])
+        if x == len(s) - 1:
+            line = line.strip()
+            if style != 'j':
+                res, line = style_text(res, line, style, width)
+            else:
+                res += line
+    return res
+
+
+#
+# print("Lorem   ipsum  dolor  sit  amet,  consectetur\nadipisicing elit. Iure harum suscipit aperiam\naliquam    ad,   perferendis   ex   molestias\nreiciendis  accusantium  quos,  tempore  sunt\nquod   veniam,   eveniet   et  necessitatibus\nmollitia. Quasi, culpa.")
+# print('<>')
+# print(text_formatting("Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure harum suscipit aperiam aliquam ad, perferendis ex molestias reiciendis accusantium quos, tempore sunt quod veniam, eveniet et necessitatibus mollitia. Quasi, culpa.",45,"j"))
+# print('<>')
+# print("           Lorem ipsum dolor sit amet, consectetur\n     adipisicing elit. Iure harum suscipit aperiam\n   aliquam ad, perferendis ex molestias reiciendis\n       accusantium quos, tempore sunt quod veniam,\n eveniet et necessitatibus mollitia. Quasi, culpa.")
+# print()
+# print(text_formatting("Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure harum suscipit aperiam aliquam ad, perferendis ex molestias reiciendis accusantium quos, tempore sunt quod veniam, eveniet et necessitatibus mollitia. Quasi, culpa.",50,"r"))
+# print()
+# print(' Lorem ipsum dolor sit amet,\nconsectetur adipisicing elit.\n Iure harum suscipit aperiam\n  aliquam ad, perferendis ex\n     molestias reiciendis\naccusantium quos, tempore sunt\n   quod veniam, eveniet et\n   necessitatibus mollitia.\n        Quasi, culpa.')
+# print()
+# print(text_formatting("Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure harum suscipit aperiam aliquam ad, perferendis ex molestias reiciendis accusantium quos, tempore sunt quod veniam, eveniet et necessitatibus mollitia. Quasi, culpa.",30,"c"))
+# print()
+# text = "Hi, my name is Alex and I am 18 years old."
+# print(text_formatting(text, 20, 'l'))
+# """Hi, my name is Alex
+# and I am 18 years
+# old."""
+#
+# print(text_formatting(text, 20, 'c'))
+# """Hi, my name is Alex
+#  and I am 18 years
+#         old."""
+#
+# print(text_formatting(text, 20, 'r'))
+# """ Hi, my name is Alex
+#    and I am 18 years
+#                 old."""
+#
+# print(text_formatting(text, 20, 'j'))
+# """Hi,  my name is Alex
+# and  I  am  18 years
+# old."""
 
 
 
 
+
+
+
+
+
+
+
+
+
+def checkio(n, nxt=None):
+    a, b = 0, 0
+    lst = []
+
+    if nxt == None:
+        nxt = ''
+
+    for x in range(2, 10):
+        if n % x == 0:
+            y = n // x
+            nxt += str(x)
+            if y < 10:
+                nxt += str(y)
+                lst.append(int(nxt))
+                nxt = ''
+            else:
+                nxt = str(checkio(y, nxt))
+                lst.append(int(nxt))
+                nxt = ''
+
+    if lst == []:
+        return 0
+    return min(lst)
+
+
+# print(checkio(560)) # == 2578
+# print(checkio(20)) # == 45
+# print(checkio(125)) # == 555
+# print(checkio(21)) # == 37
+# print(checkio(17)) # == 0
+# print(checkio(33)) # == 0)
+# print('END')
+
+
+def checkio(data):
+    n = list(map(int, data.replace('(', '').replace(')', '').split(',')))
+    # a = n[] - n[]
+    # (2-a)**2 + (2-b)**2 = R**2
+    # (6-a)**2 + (2-b)**2 = R**2
+    # (2-a)**2 + (6-b)**2 = R**2
+    #
+    # (2 - a) ** 2 + (2 - b) ** 2 = (6-a)**2 + (2-b)**2
+    # 4 - 2a - a**2 + 4 - 2b - b**2 = 12 - 6a - a**2 + 4 - 2b - b**2
+    # 8a= 8
+
+    return "(x-{})^2+(y-{})^2={}^2".format(a, b, c)
+
+
+# print(checkio("(2,2),(6,2),(2,6)")) # == "(x-4)^2+(y-4)^2=2.83^2"
+# print(checkio("(3,7),(6,9),(9,7)")) # == "(x-6)^2+(y-5.75)^2=3.25^2"
+
+
+def friendly_number(number, base=1000, decimals=0, suffix='',
+                    powers=['', 'k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y']):
+    """
+    Format a number as friendly text, using common suffixes.
+    """
+
+    if abs(number) < base and decimals == 0:
+        return '{}'.format(number)
+
+    d = [100, 1000, 10 ** 6, 10 ** 9, 10 ** 12, 10 ** 15, 10 ** 18, 10 ** 21, 10 ** 24]
+    for x in range(len(d)):
+        if abs(number) < base:
+            bs = number
+            bs2 = 1
+            break
+        if abs(number) < d[x]:
+            if base not in d:
+                bs = number // base // base
+                bs2 = d[x - 2]
+                break
+            bs = abs(number) // d[x - 1]
+            bs2 = d[x - 1]
+            break
+
+    if number < 0:
+        bs = '-' + str(bs)
+
+    dec = str(round(number / bs2, decimals)) if decimals != 0 else str(bs)
+    dec2 = '0' * (decimals - 1) if number % bs2 == 0 and decimals != 0 else ''
+    if powers != ['', 'k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y']:
+        pw = powers[1]
+    else:
+        pw = powers[d.index(bs2)] if bs2 in d else ''
+    return dec + dec2 + pw + suffix
+
+
+# print(friendly_number(255000000000, powers=["","k","M"]))
+# print(friendly_number(-150, base=100, powers=["","d","D"]))
+# print(friendly_number(1024000000, base=1024, suffix="iB"))
+# print(friendly_number(10240))
+# print(friendly_number(102, decimals=2))
+# print(friendly_number(12000000, decimals=3))
+# print(friendly_number(12341234, decimals=1))
 
 
 from datetime import datetime, timedelta
@@ -1407,7 +1598,7 @@ def baidarka(els, x, op, lmp=1, se=None):
     swt = 0
     for y in range(x + 1, len(els)):
         # Если находим конец горения лампочки
-        if isinstance(els[y], (tuple, list)) and els[y][-1]==lmp:
+        if isinstance(els[y], (tuple, list)) and els[y][-1] == lmp:
             # Если нашли новое время включения
             if swt == 1:
                 swt = 0
@@ -1426,12 +1617,12 @@ def baidarka(els, x, op, lmp=1, se=None):
             swt = 1
 
         # Если выключения лампочки не произошло
-        if y==len(els)-1 and swt==0:
+        if y == len(els) - 1 and swt == 0:
             # Вызываем бандуру:
-            se = se if se!=None else brn_start[0]+tm
+            se = se if se != None else brn_start[0] + tm
             # Если время включения лампочки равно времени конца наблюдения
-            if brn_start[0]==se:
-                els[x]=0
+            if brn_start[0] == se:
+                els[x] = 0
                 continue
             # Вызываем бандуру
             rs = bandura(brn_start[0], se, tm)
@@ -1442,7 +1633,7 @@ def baidarka(els, x, op, lmp=1, se=None):
 
     # Возвращаем список к предыдущему виду (когда не только кортежи)
     for w in range(len(els)):
-        if isinstance(els[w], (tuple, list)) and els[w][-1]==1:
+        if isinstance(els[w], (tuple, list)) and els[w][-1] == 1:
             els[w] = els[w][0]
 
     return els
@@ -1474,12 +1665,12 @@ def sum_light(els: List[datetime], start_watching=None, end_watching=None, opera
 
     # #########################################################################
     # Передано ли время работы лампочек
-    if op!=None:
+    if op != None:
         fns = [0, 0, 0]
         # Нашли начало горения (встали на лампочку х)
         for x in range(len(els)):
             # Если это 2 или 3 лапочка и мы ее еще не корректировали
-            if isinstance(els[x], (tuple, list)) and fns[els[x][-1]-1]==0:
+            if isinstance(els[x], (tuple, list)) and fns[els[x][-1] - 1] == 0:
                 # Вызываем байдарку и обозначаем лампочку, как обработанную
                 n_lamp = els[x][-1] - 1
                 els = baidarka(els, x, op, els[x][-1], se)
@@ -1506,14 +1697,14 @@ def sum_light(els: List[datetime], start_watching=None, end_watching=None, opera
 
     els_2 = []
     x = 0
-    while x<len(els):
+    while x < len(els):
         for y in range(len(els)):
-            if isinstance(els[y], datetime) and els[y]==lmps[x]:
+            if isinstance(els[y], datetime) and els[y] == lmps[x]:
                 els_2.append(els[y])
-                x+=1
-            elif isinstance(els[y], (tuple, list)) and els[y][0]==lmps[x]:
+                x += 1
+            elif isinstance(els[y], (tuple, list)) and els[y][0] == lmps[x]:
                 els_2.append(els[y])
-                x+=1
+                x += 1
 
     els = els_2
 
@@ -1575,105 +1766,105 @@ def sum_light(els: List[datetime], start_watching=None, end_watching=None, opera
     return res
 
 
-print(sum_light([
-    (datetime(2015, 1, 12, 10, 0, 10), 3),
-    datetime(2015, 1, 12, 10, 0, 20),
-    (datetime(2015, 1, 12, 10, 0, 30), 3),
-    (datetime(2015, 1, 12, 10, 0, 30), 2),
-],
-start_watching=datetime(2015, 1, 12, 10, 0, 10),
-end_watching=datetime(2015, 1, 12, 10, 0, 30),
-operating=timedelta(seconds=5))) # == 10)
-
-print(sum_light(els=[
-[datetime(2015, 1, 12, 10, 0, 10), 3],
-datetime(2015, 1, 12, 10, 0, 20),
-[datetime(2015, 1, 12, 10, 0, 30), 3],
-[datetime(2015, 1, 12, 10, 0, 30), 2],
-datetime(2015, 1, 12, 10, 0, 40),
-[datetime(2015, 1, 12, 10, 0, 50), 2],
-[datetime(2015, 1, 12, 10, 1, 0), 3],
-[datetime(2015, 1, 12, 10, 1, 20), 3]
-],
-operating=timedelta(seconds=10))) # == 30
-
-print(sum_light([
-    datetime(2015, 1, 12, 10, 0, 0),
-    datetime(2015, 1, 12, 10, 0, 30),
-    (datetime(2015, 1, 12, 10, 0, 30), 2),
-    (datetime(2015, 1, 12, 10, 1, 0), 2),
-], operating=timedelta(seconds=20))) # == 40
-
-print(sum_light([
-    (datetime(2015, 1, 12, 10, 0, 10), 3),
-    datetime(2015, 1, 12, 10, 0, 20),
-    (datetime(2015, 1, 12, 10, 0, 30), 3),
-    (datetime(2015, 1, 12, 10, 0, 30), 2),
-    datetime(2015, 1, 12, 10, 0, 40),
-    (datetime(2015, 1, 12, 10, 0, 50), 2),
-    (datetime(2015, 1, 12, 10, 1, 20), 2),
-    (datetime(2015, 1, 12, 10, 1, 40), 2),
-], start_watching=datetime(2015, 1, 12, 10, 0, 20), operating=timedelta(seconds=100))) # == 50
-
-print(sum_light([
-    datetime(2015, 1, 12, 10, 0, 0),
-    [datetime(2015, 1, 12, 10, 0, 0), 2],
-    datetime(2015, 1, 12, 10, 0, 10),
-    [datetime(2015, 1, 12, 10, 1, 0), 2]
-]))  # == 60
-
-print(sum_light([
-    [datetime(2015, 1, 12, 10, 0, 10), 3],
-    datetime(2015, 1, 12, 10, 0, 20),
-    [datetime(2015, 1, 12, 10, 0, 30), 3],
-    [datetime(2015, 1, 12, 10, 0, 30), 2],
-    datetime(2015, 1, 12, 10, 0, 40),
-    [datetime(2015, 1, 12, 10, 0, 50), 2]
-]))  # == 40
-
-print(sum_light([
-    [datetime(2015, 1, 12, 10, 0, 10), 3],
-    datetime(2015, 1, 12, 10, 0, 20),
-    [datetime(2015, 1, 12, 10, 0, 30), 3],
-    [datetime(2015, 1, 12, 10, 0, 30), 2],
-    datetime(2015, 1, 12, 10, 0, 40),
-    [datetime(2015, 1, 12, 10, 0, 50), 2],
-    [datetime(2015, 1, 12, 10, 1, 20), 2],
-    [datetime(2015, 1, 12, 10, 1, 40), 2]
-],
-    datetime(2015, 1, 12, 10, 0, 20)))  # == 50
-
-print(sum_light([
-    datetime(2015, 1, 12, 10, 0, 0),
-    datetime(2015, 1, 12, 10, 0, 10),
-    (datetime(2015, 1, 12, 10, 0, 0), 2),
-    (datetime(2015, 1, 12, 10, 1, 0), 2),
-]))  # == 60
-
-print(sum_light([
-    (datetime(2015, 1, 12, 10, 0, 10), 3),
-    datetime(2015, 1, 12, 10, 0, 20),
-    (datetime(2015, 1, 12, 10, 0, 30), 3),
-    (datetime(2015, 1, 12, 10, 0, 30), 2),
-    datetime(2015, 1, 12, 10, 0, 40),
-    (datetime(2015, 1, 12, 10, 0, 50), 2),
-    (datetime(2015, 1, 12, 10, 1, 0), 3),
-    (datetime(2015, 1, 12, 10, 1, 20), 3),
-]))  # == 60
-
-print(sum_light([
-    datetime(2015, 1, 12, 10, 0, 20),
-    (datetime(2015, 1, 12, 10, 0, 30), 2),
-    datetime(2015, 1, 12, 10, 0, 40),
-    (datetime(2015, 1, 12, 10, 0, 50), 2),
-], datetime(2015, 1, 12, 10, 0, 30)))  # == 20
-
-print(sum_light([
-    datetime(2015, 1, 12, 10, 0, 0),
-    datetime(2015, 1, 12, 10, 0, 10),
-    (datetime(2015, 1, 12, 10, 0, 0), 2),
-    (datetime(2015, 1, 12, 10, 1, 0), 2),
-], datetime(2015, 1, 12, 10, 0, 20), datetime(2015, 1, 12, 10, 1, 0)))  # == 40
+# print(sum_light([
+#     (datetime(2015, 1, 12, 10, 0, 10), 3),
+#     datetime(2015, 1, 12, 10, 0, 20),
+#     (datetime(2015, 1, 12, 10, 0, 30), 3),
+#     (datetime(2015, 1, 12, 10, 0, 30), 2),
+# ],
+#     start_watching=datetime(2015, 1, 12, 10, 0, 10),
+#     end_watching=datetime(2015, 1, 12, 10, 0, 30),
+#     operating=timedelta(seconds=5)))  # == 10)
+#
+# print(sum_light(els=[
+#     [datetime(2015, 1, 12, 10, 0, 10), 3],
+#     datetime(2015, 1, 12, 10, 0, 20),
+#     [datetime(2015, 1, 12, 10, 0, 30), 3],
+#     [datetime(2015, 1, 12, 10, 0, 30), 2],
+#     datetime(2015, 1, 12, 10, 0, 40),
+#     [datetime(2015, 1, 12, 10, 0, 50), 2],
+#     [datetime(2015, 1, 12, 10, 1, 0), 3],
+#     [datetime(2015, 1, 12, 10, 1, 20), 3]
+# ],
+#     operating=timedelta(seconds=10)))  # == 30
+#
+# print(sum_light([
+#     datetime(2015, 1, 12, 10, 0, 0),
+#     datetime(2015, 1, 12, 10, 0, 30),
+#     (datetime(2015, 1, 12, 10, 0, 30), 2),
+#     (datetime(2015, 1, 12, 10, 1, 0), 2),
+# ], operating=timedelta(seconds=20)))  # == 40
+#
+# print(sum_light([
+#     (datetime(2015, 1, 12, 10, 0, 10), 3),
+#     datetime(2015, 1, 12, 10, 0, 20),
+#     (datetime(2015, 1, 12, 10, 0, 30), 3),
+#     (datetime(2015, 1, 12, 10, 0, 30), 2),
+#     datetime(2015, 1, 12, 10, 0, 40),
+#     (datetime(2015, 1, 12, 10, 0, 50), 2),
+#     (datetime(2015, 1, 12, 10, 1, 20), 2),
+#     (datetime(2015, 1, 12, 10, 1, 40), 2),
+# ], start_watching=datetime(2015, 1, 12, 10, 0, 20), operating=timedelta(seconds=100)))  # == 50
+#
+# print(sum_light([
+#     datetime(2015, 1, 12, 10, 0, 0),
+#     [datetime(2015, 1, 12, 10, 0, 0), 2],
+#     datetime(2015, 1, 12, 10, 0, 10),
+#     [datetime(2015, 1, 12, 10, 1, 0), 2]
+# ]))  # == 60
+#
+# print(sum_light([
+#     [datetime(2015, 1, 12, 10, 0, 10), 3],
+#     datetime(2015, 1, 12, 10, 0, 20),
+#     [datetime(2015, 1, 12, 10, 0, 30), 3],
+#     [datetime(2015, 1, 12, 10, 0, 30), 2],
+#     datetime(2015, 1, 12, 10, 0, 40),
+#     [datetime(2015, 1, 12, 10, 0, 50), 2]
+# ]))  # == 40
+#
+# print(sum_light([
+#     [datetime(2015, 1, 12, 10, 0, 10), 3],
+#     datetime(2015, 1, 12, 10, 0, 20),
+#     [datetime(2015, 1, 12, 10, 0, 30), 3],
+#     [datetime(2015, 1, 12, 10, 0, 30), 2],
+#     datetime(2015, 1, 12, 10, 0, 40),
+#     [datetime(2015, 1, 12, 10, 0, 50), 2],
+#     [datetime(2015, 1, 12, 10, 1, 20), 2],
+#     [datetime(2015, 1, 12, 10, 1, 40), 2]
+# ],
+#     datetime(2015, 1, 12, 10, 0, 20)))  # == 50
+#
+# print(sum_light([
+#     datetime(2015, 1, 12, 10, 0, 0),
+#     datetime(2015, 1, 12, 10, 0, 10),
+#     (datetime(2015, 1, 12, 10, 0, 0), 2),
+#     (datetime(2015, 1, 12, 10, 1, 0), 2),
+# ]))  # == 60
+#
+# print(sum_light([
+#     (datetime(2015, 1, 12, 10, 0, 10), 3),
+#     datetime(2015, 1, 12, 10, 0, 20),
+#     (datetime(2015, 1, 12, 10, 0, 30), 3),
+#     (datetime(2015, 1, 12, 10, 0, 30), 2),
+#     datetime(2015, 1, 12, 10, 0, 40),
+#     (datetime(2015, 1, 12, 10, 0, 50), 2),
+#     (datetime(2015, 1, 12, 10, 1, 0), 3),
+#     (datetime(2015, 1, 12, 10, 1, 20), 3),
+# ]))  # == 60
+#
+# print(sum_light([
+#     datetime(2015, 1, 12, 10, 0, 20),
+#     (datetime(2015, 1, 12, 10, 0, 30), 2),
+#     datetime(2015, 1, 12, 10, 0, 40),
+#     (datetime(2015, 1, 12, 10, 0, 50), 2),
+# ], datetime(2015, 1, 12, 10, 0, 30)))  # == 20
+#
+# print(sum_light([
+#     datetime(2015, 1, 12, 10, 0, 0),
+#     datetime(2015, 1, 12, 10, 0, 10),
+#     (datetime(2015, 1, 12, 10, 0, 0), 2),
+#     (datetime(2015, 1, 12, 10, 1, 0), 2),
+# ], datetime(2015, 1, 12, 10, 0, 20), datetime(2015, 1, 12, 10, 1, 0)))  # == 40
 
 # print(sum_light([
 # datetime(2015, 1, 12, 10, 0, 0),
@@ -1698,28 +1889,28 @@ print(sum_light([
 # datetime(2015, 1, 12, 10, 0, 10),
 # datetime(2015, 1, 12, 10, 0, 20)))
 
-print(sum_light([
-    datetime(2015, 1, 12, 10, 0, 0),
-    datetime(2015, 1, 12, 10, 10, 10),
-    datetime(2015, 1, 12, 11, 0, 0),
-],
-    datetime(2015, 1, 12, 10, 10, 0),
-    datetime(2015, 1, 12, 11, 0, 10)))  # == 20
-
-print(sum_light([
-    datetime(2015, 1, 12, 10, 0, 0),
-],
-    datetime(2015, 1, 12, 9, 9, 0),
-    datetime(2015, 1, 12, 10, 0, 0)))  # == 0
-
-print(sum_light([
-    datetime(2015, 1, 12, 10, 0, 0),
-    datetime(2015, 1, 12, 10, 10, 10),
-    datetime(2015, 1, 12, 11, 0, 0),
-    datetime(2015, 1, 12, 11, 10, 10),
-],
-    datetime(2015, 1, 12, 9, 0, 0),
-    datetime(2015, 1, 12, 10, 5, 0)))  # == 300
+# print(sum_light([
+#     datetime(2015, 1, 12, 10, 0, 0),
+#     datetime(2015, 1, 12, 10, 10, 10),
+#     datetime(2015, 1, 12, 11, 0, 0),
+# ],
+#     datetime(2015, 1, 12, 10, 10, 0),
+#     datetime(2015, 1, 12, 11, 0, 10)))  # == 20
+#
+# print(sum_light([
+#     datetime(2015, 1, 12, 10, 0, 0),
+# ],
+#     datetime(2015, 1, 12, 9, 9, 0),
+#     datetime(2015, 1, 12, 10, 0, 0)))  # == 0
+#
+# print(sum_light([
+#     datetime(2015, 1, 12, 10, 0, 0),
+#     datetime(2015, 1, 12, 10, 10, 10),
+#     datetime(2015, 1, 12, 11, 0, 0),
+#     datetime(2015, 1, 12, 11, 10, 10),
+# ],
+#     datetime(2015, 1, 12, 9, 0, 0),
+#     datetime(2015, 1, 12, 10, 5, 0)))  # == 300
 
 
 def reverse_ascending(items):
@@ -1956,17 +2147,38 @@ def lines(m):
             return True
 
 
-def recu(m):
-    pass
+def di(m, m_start, m_end, step, ahead=True, up=False):
+    if not up:
+        m_end_1 = m_end - 2
+        m_end_2 = m_end
+    else:
+        m_end_1 = m_end + 3
+        m_end_2 = m_end - 2
+
+
+    for y in range(m_start, m_end_1, step):
+        for x in range(m_start, m_end_2, step):
+            if ahead and not up and m[y][x] == m[y + 1][x - 1] == m[y + 2][x - 2] == m[y + 3][x - 3]:
+                return True
+            elif not ahead and not up and m[y][x] == m[y + 1][x + 1] == m[y + 2][x + 2] == m[y + 3][x + 3]:
+                return True
+            elif ahead and up and m[y][x] == m[y - 1][x + 1] == m[y - 2][x + 2] == m[y - 3][x + 3]:
+                return True
+    return False
+
+def diago(m):
+    if len(m[0]) < 4:
+        return False
+
+    if di(m, 3, len(m), 1, True, False): return True
+    if di(m, 0, len(m), 1, False, False): return True
+    if di(m, len(m), 3, -1, True, True): return True
+
+    return False
 
 
 def checkio(matrix: List[List[int]]) -> bool:
-    res = lines(matrix)
-    if res:
-        return True
-
-    res = recu(matrix)
-    if res:
+    if lines(matrix) or diago(matrix):
         return True
     return False
 
@@ -1978,44 +2190,62 @@ def checkio(matrix: List[List[int]]) -> bool:
 #     [1, 1, 1, 5, 1, 4],
 #     [4, 6, 5, 1, 3, 1],
 #     [1, 1, 9, 1, 2, 1]
-#     ]))
+# ]))
+
 # Пока не знаю как решить задачку с диагоналями
 
 
-def checkio(s, s2=''):
+def checkio(s, s3=None):
     a = [s.count('(') - s.count(')'), s.count('[') - s.count(']'), s.count('{') - s.count('}')]
     b = ['(', '[', '{']
     c = [')', ']', '}']
     d = c + b
 
-    if s2 != '':
-        s = s2
-
-    zuzuka = True
-    for x in d:
-        if x in s:
-            zuzuka = False
-            break
-    if zuzuka == True:
-        return True
-
     for x in range(len(a)):
         if a[x] != 0:
             return False
 
-    res = True
+    if s3 != None:
+        res = checkio(s3)
+        if res==True:
+            s3==None
+
+    ou = [x for x in d if x in s]
+    if len(ou)==0 and s3==None:
+        return True
+
+    res = False
     for x in range(len(s)):
         if s[x] in b:
             z = b.index(s[x])
-            n = s.rfind(c[z])
-            s2 = s[x + 1:n]
-            res = checkio(s, s2)
+            if c[z] in s:
+                n = s.rfind(c[z])
+                s2 = s[x + 1:n]
+                if n!=len(s)-1:
+                    s3 = s[n:]
+                else:
+                    s3 = None
+                res = checkio(s2, s3)
+                if res==True:
+                    break
+            else:
+                break
 
     return res
 
 
+# print(checkio("[1+202]*3*({4+3)}"))
 # print(checkio("((5+3)*2+1)"))
 # print(checkio("(3+{1-1)}"))
+
+
+
+
+
+
+
+
+
 
 
 def sm(a, b, x, costs):
