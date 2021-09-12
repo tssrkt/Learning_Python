@@ -1312,7 +1312,6 @@ def text_formatting(text: str, width: int, style: str) -> str:
     return res
 
 
-#
 # print("Lorem   ipsum  dolor  sit  amet,  consectetur\nadipisicing elit. Iure harum suscipit aperiam\naliquam    ad,   perferendis   ex   molestias\nreiciendis  accusantium  quos,  tempore  sunt\nquod   veniam,   eveniet   et  necessitatibus\nmollitia. Quasi, culpa.")
 # print('<>')
 # print(text_formatting("Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure harum suscipit aperiam aliquam ad, perferendis ex molestias reiciendis accusantium quos, tempore sunt quod veniam, eveniet et necessitatibus mollitia. Quasi, culpa.",45,"j"))
@@ -1348,115 +1347,195 @@ def text_formatting(text: str, width: int, style: str) -> str:
 
 
 
+def reverse_ascending(items):
+    a = []
+    res = []
+
+    if items == sorted(items) and len(items) == len(set(items)):
+        return items[::-1]
+    elif items == sorted(items, reverse=True) and len(items) == len(set(items)):
+        return items
+    elif items.count(items[0]) == len(items):
+        return items
+
+    x = 1
+    while x < len(items):
+        if items[x] > items[x - 1]:
+            a.append(items[x - 1])
+            if x == len(items) - 1 or (x != len(items) - 1 and items[x] >= items[x + 1]):
+                a.append(items[x])
+                res += a[::-1]
+                a = []
+                x += 1
+            x += 1
+
+        elif items[x] == items[x - 1]:
+            res.append(items[x - 1])
+            x += 1
+
+        elif items[x] < items[x - 1]:
+            res.append(items[x - 1])
+            x += 1
+    return res
 
 
+# print(reverse_ascending([1,2,2,3]))
+# print(reverse_ascending([5,4,3,2,1]))
+# print(reverse_ascending([1,1,2]))
+# print(reverse_ascending([5, 7, 10, 4, 2, 7, 8, 1, 3]))
+# print(reverse_ascending([1,2,3,4,5]))
 
 
+dic = {1: 'I', 5: 'V', 10: 'X', 50: 'L', 100: 'C', 500: 'D', 1000: 'M'}
 
 
+def bignums(a):
+    if len(str(a)) == 2:
+        zuka = 10
+    elif len(str(a)) == 3:
+        zuka = 100
+    elif len(str(a)) == 4:
+        zuka = 1000
 
-
-
-
-def checkio(n, nxt=None):
-    a, b = 0, 0
-    lst = []
-
-    if nxt == None:
-        nxt = ''
-
-    for x in range(2, 10):
-        if n % x == 0:
-            y = n // x
-            nxt += str(x)
-            if y < 10:
-                nxt += str(y)
-                lst.append(int(nxt))
-                nxt = ''
-            else:
-                nxt = str(checkio(y, nxt))
-                lst.append(int(nxt))
-                nxt = ''
-
-    if lst == []:
-        return 0
-    return min(lst)
-
-
-# print(checkio(560)) # == 2578
-# print(checkio(20)) # == 45
-# print(checkio(125)) # == 555
-# print(checkio(21)) # == 37
-# print(checkio(17)) # == 0
-# print(checkio(33)) # == 0)
-# print('END')
+    res = ''
+    if a in [zuka, zuka * 2, zuka * 3]:
+        res = dic.get(zuka) * (a // zuka) + res
+    elif a == zuka * 4:
+        res = dic.get(zuka) + dic.get(zuka * 5) + res
+    elif a in [zuka * 5, zuka * 6, zuka * 7, zuka * 8]:
+        res = dic.get(zuka * 5) + dic.get(zuka) * (a // zuka - 5) + res
+    elif a == zuka * 9:
+        res = dic.get(zuka) + dic.get(zuka * 10) + res
+    return res
 
 
 def checkio(data):
-    n = list(map(int, data.replace('(', '').replace(')', '').split(',')))
-    # a = n[] - n[]
-    # (2-a)**2 + (2-b)**2 = R**2
-    # (6-a)**2 + (2-b)**2 = R**2
-    # (2-a)**2 + (6-b)**2 = R**2
-    #
-    # (2 - a) ** 2 + (2 - b) ** 2 = (6-a)**2 + (2-b)**2
-    # 4 - 2a - a**2 + 4 - 2b - b**2 = 12 - 6a - a**2 + 4 - 2b - b**2
-    # 8a= 8
+    n = str(data)
+    res = ''
 
-    return "(x-{})^2+(y-{})^2={}^2".format(a, b, c)
+    for x in range(len(n) - 1, -1, -1):
+        a = int(n[x])
+        if a != 0:
+            if x == len(n) - 1:
+                if a <= 3:
+                    res += dic.get(1) * a
+                elif 3 < a <= 5:
+                    res += dic.get(1) * (5 - a) + dic.get(5)
+                elif 5 < a <= 8:
+                    res += dic.get(5) + dic.get(1) * (a - 5)
+                elif a == 9:
+                    res += dic.get(1) + dic.get(10)
+            else:
+                a = a * 10 if x == len(n) - 2 else a
+                a = a * 100 if x == len(n) - 3 else a
+                a = a * 1000 if x == len(n) - 4 else a
+                res = bignums(a) + res
+    return res
 
 
-# print(checkio("(2,2),(6,2),(2,6)")) # == "(x-4)^2+(y-4)^2=2.83^2"
-# print(checkio("(3,7),(6,9),(9,7)")) # == "(x-6)^2+(y-5.75)^2=3.25^2"
+# print(checkio(100))
+# print(checkio(200))
+# print(checkio(300))
+# print(checkio(400))
+# print(checkio(500))
+# print(checkio(600))
+# print(checkio(700))
+# print(checkio(800))
+# print(checkio(900))
+# print('*'*50)
+# print(checkio(1230))
+# print(checkio(2030))
+# print(checkio(3020))
 
-
-def friendly_number(number, base=1000, decimals=0, suffix='',
-                    powers=['', 'k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y']):
-    """
-    Format a number as friendly text, using common suffixes.
-    """
-
-    if abs(number) < base and decimals == 0:
-        return '{}'.format(number)
-
-    d = [100, 1000, 10 ** 6, 10 ** 9, 10 ** 12, 10 ** 15, 10 ** 18, 10 ** 21, 10 ** 24]
-    for x in range(len(d)):
-        if abs(number) < base:
-            bs = number
-            bs2 = 1
-            break
-        if abs(number) < d[x]:
-            if base not in d:
-                bs = number // base // base
-                bs2 = d[x - 2]
+def rs(hst):
+    res = []
+    for y in range(len(hst) - 1):
+        res.append(hst[y])
+        back = True
+        ahead = True
+        for x in range(y + 1, len(hst)):
+            if ahead == True and hst[x] >= hst[y]:
+                res[-1] += hst[y]
+            else:
+                ahead = False
+            z = y - (x - y)
+            if back == True and y > 0 and z > 0 and hst[z] >= hst[y]:
+                res[-1] += hst[y]
+            else:
+                back = False
+            if ahead == back == False:
                 break
-            bs = abs(number) // d[x - 1]
-            bs2 = d[x - 1]
-            break
-
-    if number < 0:
-        bs = '-' + str(bs)
-
-    dec = str(round(number / bs2, decimals)) if decimals != 0 else str(bs)
-    dec2 = '0' * (decimals - 1) if number % bs2 == 0 and decimals != 0 else ''
-    if powers != ['', 'k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y']:
-        pw = powers[1]
-    else:
-        pw = powers[d.index(bs2)] if bs2 in d else ''
-    return dec + dec2 + pw + suffix
+    return res
 
 
-# print(friendly_number(255000000000, powers=["","k","M"]))
-# print(friendly_number(-150, base=100, powers=["","d","D"]))
-# print(friendly_number(1024000000, base=1024, suffix="iB"))
-# print(friendly_number(10240))
-# print(friendly_number(102, decimals=2))
-# print(friendly_number(12000000, decimals=3))
-# print(friendly_number(12341234, decimals=1))
+def largest_histogram(hst):
+    if len(hst) == 1:
+        return hst[0]
+
+    res = rs(hst)
+    res2 = rs(hst[::-1])
+    res.extend(res2)
+    res.append(min(hst) * len(hst))
+
+    if max(res) > max(hst):
+        return max(res)
+    return max(hst)
 
 
+# print(largest_histogram([2, 1, 4, 5, 1, 3, 3])) # == 8, "complex"
+# print(largest_histogram([1, 1, 4, 1])) # == 4, "vertical"
+# print(largest_histogram([1, 1, 3, 1])) # == 4, "horizontal"
+# print(largest_histogram([5])) # == 5, "one is always the biggest"
+# print(largest_histogram([70,60,67,78,89,87,74,40,100,24,66,84,11,99,4,34,21,23,66,34,47,54,51,88,53,7,94,72,28,59,30,44,0,17,96,34,63,6,81,61,26,96,72,5,32,57,1,3,47,13,97,96,9,7,80,5,89,77,7,75,63,59,90,88,16,48,93,33,70,35,57,15,61,81,63,83,33,3,55,63,86,33,94,45,76,99,86,14,96,81,33,32,76,37,56,54,63,11,82,41,90,81,53,42,89,75,98,74,18,73,7,30,10,14,67,59,25,56,41,90,80,17,84,16,45,6,29,87,79,56,33,94,73,72,31,18,30,17,81,64,92,3,94,12,65,23,50,54,52,16,19,39,26,12,75,19,11,69,48,25,64,6,22,19,19,29,41,90,43,41,36,66,91,23,28,4,15,94,89,6,87,4,98,19,12,54,3,66,84,83,28,95,3,55,44,64,86,15,15,37,89,65,100,9,11,6,38,26,62,89,14,29,81,94,47,63,71,56,31,96,68,30,96,77,32,28,82,39,75,67,73,83,70,70,74,50,89,98,27,50,2,42,46,11,59,60,96,90,20,14,92,20,59,8,16,23,69,41,7,64,66,38,30,47,87,82,73,12,82,0,45,100,59,10,42,19,21,22,17,67,33,69,12,100,14,11,20,43,30,20,93,43,14,28,68,55,89,57,48,97,95,88,4,41,61,45,91,0,22,57,40,18,21,97,51,36,67,14,22,6,57,11,31,48,45,83,97,60,14,32,27,65,24,48,94,63,25,50,52,91,55,81,96,33,89,82,21,8,100,93,100,47,18,80,88,81,1,10,81,25,68,95,81,95,53,93,79,23,9,87,63,95,4,68,42,73,16,29,27,44,3,48,90,92,46,66,81,58,98,64,90,95,64,46,73,40,74,67,32,59,61,89,96,42,47,97,70,22,78,70,2,67,39,59,76,78,41,23,84,52,88,89,88,4,17,48,3,41,30,14,30,92,65,87,79,84,21,57,19,62,19,50,13,27,21,83,25,19,72,50,40,12,4,43,60,41,46,45,92,93,16,54,29,38,42,53,93,2,44,98,79,25,34,3,69,74,21,100,92,61,100,22,23,74,70,76,18,10,50,68,96,83,95,69,90,49,61,93,51,55,47,87,53,50,80,31,76,0,64,74,68,11,18,85,99,67,71,88,87,72,10,58,31,82,49,70,10,84,79,23,5,53,25,36,9,33,71,48,4,14,51,71,58,44,17,53,87,62,41,80,90,0,36,48,75,67,28,82,34,75,93,63,66,72,54,41,68,67,82,77,36,74,16,4,96,39,61,64,92,78,86,21,87,43,81,94,76,31,18,50,59,66,57,34,77,27,57,66,65,17,25,90,78,23,52,31,28,71,93,95,62,23,99,48,36,85,22,13,33,13,33,67,63,100,52,94,97,83,45,88,65,9,31,30,97,9,71,45,39,15,39,79,25,62,69,1,30,26,25,74,35,5,22,72,25,3,15,52,94,87,37,46,9,58,90,14,46,39,44,60,53,5,18,12,69,25,55,37,85,3,43,75,20,9,35,1,60,58,83,77,60,75,7,91,76,95,48,91,83,50,3,85,42,31,68,48,94,37,96,89,43,40,24,43,72,8,49,93,26,74,82,63,41,82,74,58,46,39,30,3,58,84,68,84,1,18,26,26,18,40,59,29,22,73,1,74,33,62,73,12,1,43,72,33,44,24,63,18,65,93,18,28,91,87,15,24,84,96,87,6,48,14,99,79,75,25,68,53,26,27,63,74,75,96,94,7,100,91,77,96,32,34,42,19,2,0,68,21,55,21,20,48,84,1,63,96,2,52,53,99,90,82,50,46,23,49,33,26,55,100,37,92,11,70,60,61,30,35,26,10,69,90,54,46,58,96,65,49,8,89,74,52,29,60,93,51,47,27,72,42,12,51,36,34,26,62,13,81,20,97,52,25,44,41,90,18,7,34,99,98,40,49,100,16,84,93,10,35,75,78,96,13,83,38,66,61,26,83,34,13,59,89,22,35,41,45,25,42,69,95,40,43,1,65,44,18,25,81,87,86,43,90,64,16,88,49,6,21,80,89,71,63,25,47,91,93,8,42,61,67,22,67,96,69,45,100,41,48,72,96,3,18,30,37,85,51,84,75,10,99,74,84,91,58,6,8,13,50,94,39,19,73,70,96,0,18,58,29,100,84,92,91,46,48,4,33,60,35,14,45,43,6,42,30,91,0,71,100,55,14,9,99,100,31,83,6,37,48,57]))
+# print(largest_histogram([5, 3])) # == 6, "two are smallest X 2"
+
+################################################
+
+def non_repeat(s):
+    """
+        the longest substring without repeating chars
+    """
+
+    if s == '':
+        return ''
+    if s.count(s[0]) == len(s):
+        return s[0]
+
+    res = []
+    for y in range(len(s) - 1):
+        res.append(s[y])
+        vperyod = True
+        vzad = True
+        for x in range(y + 1, len(s)):
+            if vperyod == True and res[-1].count(s[x]) == 0:
+                res[-1] += s[x]
+            else:
+                vperyod = False
+            z = y - (x - y)
+            if vzad == True and y > 0 and z > 0 and res[-1].count(s[z]) == 0:
+                res[-1] = s[z] + res[-1]
+            else:
+                vzad = False
+            if vzad == vperyod == False:
+                break
+
+    mx = res[:]
+    mx.sort(key=len)
+
+    for x in res:
+        if len(x) == len(mx[-1]):
+            return x
+
+
+# print(non_repeat('abdjwawk')) # == 'abdjw', "Second"
+# print(non_repeat('abcabcffab')) # == 'abcf', "Third"
+# print(non_repeat('aaaaa')) # == 'a', "First"
+
+
+########################
+# ЗАДАЧКА С ЛАМПОЧКАМИ #
+########################
 from datetime import datetime, timedelta
-
 
 # Находится ли время начала или конца отсчета перед включением лампочки
 def is_before(sw, dt):
@@ -1913,453 +1992,3 @@ def sum_light(els: List[datetime], start_watching=None, end_watching=None, opera
 #     datetime(2015, 1, 12, 10, 5, 0)))  # == 300
 
 
-def reverse_ascending(items):
-    a = []
-    res = []
-
-    if items == sorted(items) and len(items) == len(set(items)):
-        return items[::-1]
-    elif items == sorted(items, reverse=True) and len(items) == len(set(items)):
-        return items
-    elif items.count(items[0]) == len(items):
-        return items
-
-    x = 1
-    while x < len(items):
-        if items[x] > items[x - 1]:
-            a.append(items[x - 1])
-            if x == len(items) - 1 or (x != len(items) - 1 and items[x] >= items[x + 1]):
-                a.append(items[x])
-                res += a[::-1]
-                a = []
-                x += 1
-            x += 1
-
-        elif items[x] == items[x - 1]:
-            res.append(items[x - 1])
-            x += 1
-
-        elif items[x] < items[x - 1]:
-            res.append(items[x - 1])
-            x += 1
-    return res
-
-
-# print(reverse_ascending([1,2,2,3]))
-# print(reverse_ascending([5,4,3,2,1]))
-# print(reverse_ascending([1,1,2]))
-# print(reverse_ascending([5, 7, 10, 4, 2, 7, 8, 1, 3]))
-# print(reverse_ascending([1,2,3,4,5]))
-
-
-dic = {1: 'I', 5: 'V', 10: 'X', 50: 'L', 100: 'C', 500: 'D', 1000: 'M'}
-
-
-def bignums(a):
-    if len(str(a)) == 2:
-        zuka = 10
-    elif len(str(a)) == 3:
-        zuka = 100
-    elif len(str(a)) == 4:
-        zuka = 1000
-
-    res = ''
-    if a in [zuka, zuka * 2, zuka * 3]:
-        res = dic.get(zuka) * (a // zuka) + res
-    elif a == zuka * 4:
-        res = dic.get(zuka) + dic.get(zuka * 5) + res
-    elif a in [zuka * 5, zuka * 6, zuka * 7, zuka * 8]:
-        res = dic.get(zuka * 5) + dic.get(zuka) * (a // zuka - 5) + res
-    elif a == zuka * 9:
-        res = dic.get(zuka) + dic.get(zuka * 10) + res
-    return res
-
-
-def checkio(data):
-    n = str(data)
-    res = ''
-
-    for x in range(len(n) - 1, -1, -1):
-        a = int(n[x])
-        if a != 0:
-            if x == len(n) - 1:
-                if a <= 3:
-                    res += dic.get(1) * a
-                elif 3 < a <= 5:
-                    res += dic.get(1) * (5 - a) + dic.get(5)
-                elif 5 < a <= 8:
-                    res += dic.get(5) + dic.get(1) * (a - 5)
-                elif a == 9:
-                    res += dic.get(1) + dic.get(10)
-            else:
-                a = a * 10 if x == len(n) - 2 else a
-                a = a * 100 if x == len(n) - 3 else a
-                a = a * 1000 if x == len(n) - 4 else a
-                res = bignums(a) + res
-    return res
-
-
-# print(checkio(100))
-# print(checkio(200))
-# print(checkio(300))
-# print(checkio(400))
-# print(checkio(500))
-# print(checkio(600))
-# print(checkio(700))
-# print(checkio(800))
-# print(checkio(900))
-# print('*'*50)
-# print(checkio(1230))
-# print(checkio(2030))
-# print(checkio(3020))
-
-def rs(hst):
-    res = []
-    for y in range(len(hst) - 1):
-        res.append(hst[y])
-        back = True
-        ahead = True
-        for x in range(y + 1, len(hst)):
-            if ahead == True and hst[x] >= hst[y]:
-                res[-1] += hst[y]
-            else:
-                ahead = False
-            z = y - (x - y)
-            if back == True and y > 0 and z > 0 and hst[z] >= hst[y]:
-                res[-1] += hst[y]
-            else:
-                back = False
-            if ahead == back == False:
-                break
-    return res
-
-
-def largest_histogram(hst):
-    if len(hst) == 1:
-        return hst[0]
-
-    res = rs(hst)
-    res2 = rs(hst[::-1])
-    res.extend(res2)
-    res.append(min(hst) * len(hst))
-
-    if max(res) > max(hst):
-        return max(res)
-    return max(hst)
-
-
-# print(largest_histogram([2, 1, 4, 5, 1, 3, 3])) # == 8, "complex"
-# print(largest_histogram([1, 1, 4, 1])) # == 4, "vertical"
-# print(largest_histogram([1, 1, 3, 1])) # == 4, "horizontal"
-# print(largest_histogram([5])) # == 5, "one is always the biggest"
-# print(largest_histogram([70,60,67,78,89,87,74,40,100,24,66,84,11,99,4,34,21,23,66,34,47,54,51,88,53,7,94,72,28,59,30,44,0,17,96,34,63,6,81,61,26,96,72,5,32,57,1,3,47,13,97,96,9,7,80,5,89,77,7,75,63,59,90,88,16,48,93,33,70,35,57,15,61,81,63,83,33,3,55,63,86,33,94,45,76,99,86,14,96,81,33,32,76,37,56,54,63,11,82,41,90,81,53,42,89,75,98,74,18,73,7,30,10,14,67,59,25,56,41,90,80,17,84,16,45,6,29,87,79,56,33,94,73,72,31,18,30,17,81,64,92,3,94,12,65,23,50,54,52,16,19,39,26,12,75,19,11,69,48,25,64,6,22,19,19,29,41,90,43,41,36,66,91,23,28,4,15,94,89,6,87,4,98,19,12,54,3,66,84,83,28,95,3,55,44,64,86,15,15,37,89,65,100,9,11,6,38,26,62,89,14,29,81,94,47,63,71,56,31,96,68,30,96,77,32,28,82,39,75,67,73,83,70,70,74,50,89,98,27,50,2,42,46,11,59,60,96,90,20,14,92,20,59,8,16,23,69,41,7,64,66,38,30,47,87,82,73,12,82,0,45,100,59,10,42,19,21,22,17,67,33,69,12,100,14,11,20,43,30,20,93,43,14,28,68,55,89,57,48,97,95,88,4,41,61,45,91,0,22,57,40,18,21,97,51,36,67,14,22,6,57,11,31,48,45,83,97,60,14,32,27,65,24,48,94,63,25,50,52,91,55,81,96,33,89,82,21,8,100,93,100,47,18,80,88,81,1,10,81,25,68,95,81,95,53,93,79,23,9,87,63,95,4,68,42,73,16,29,27,44,3,48,90,92,46,66,81,58,98,64,90,95,64,46,73,40,74,67,32,59,61,89,96,42,47,97,70,22,78,70,2,67,39,59,76,78,41,23,84,52,88,89,88,4,17,48,3,41,30,14,30,92,65,87,79,84,21,57,19,62,19,50,13,27,21,83,25,19,72,50,40,12,4,43,60,41,46,45,92,93,16,54,29,38,42,53,93,2,44,98,79,25,34,3,69,74,21,100,92,61,100,22,23,74,70,76,18,10,50,68,96,83,95,69,90,49,61,93,51,55,47,87,53,50,80,31,76,0,64,74,68,11,18,85,99,67,71,88,87,72,10,58,31,82,49,70,10,84,79,23,5,53,25,36,9,33,71,48,4,14,51,71,58,44,17,53,87,62,41,80,90,0,36,48,75,67,28,82,34,75,93,63,66,72,54,41,68,67,82,77,36,74,16,4,96,39,61,64,92,78,86,21,87,43,81,94,76,31,18,50,59,66,57,34,77,27,57,66,65,17,25,90,78,23,52,31,28,71,93,95,62,23,99,48,36,85,22,13,33,13,33,67,63,100,52,94,97,83,45,88,65,9,31,30,97,9,71,45,39,15,39,79,25,62,69,1,30,26,25,74,35,5,22,72,25,3,15,52,94,87,37,46,9,58,90,14,46,39,44,60,53,5,18,12,69,25,55,37,85,3,43,75,20,9,35,1,60,58,83,77,60,75,7,91,76,95,48,91,83,50,3,85,42,31,68,48,94,37,96,89,43,40,24,43,72,8,49,93,26,74,82,63,41,82,74,58,46,39,30,3,58,84,68,84,1,18,26,26,18,40,59,29,22,73,1,74,33,62,73,12,1,43,72,33,44,24,63,18,65,93,18,28,91,87,15,24,84,96,87,6,48,14,99,79,75,25,68,53,26,27,63,74,75,96,94,7,100,91,77,96,32,34,42,19,2,0,68,21,55,21,20,48,84,1,63,96,2,52,53,99,90,82,50,46,23,49,33,26,55,100,37,92,11,70,60,61,30,35,26,10,69,90,54,46,58,96,65,49,8,89,74,52,29,60,93,51,47,27,72,42,12,51,36,34,26,62,13,81,20,97,52,25,44,41,90,18,7,34,99,98,40,49,100,16,84,93,10,35,75,78,96,13,83,38,66,61,26,83,34,13,59,89,22,35,41,45,25,42,69,95,40,43,1,65,44,18,25,81,87,86,43,90,64,16,88,49,6,21,80,89,71,63,25,47,91,93,8,42,61,67,22,67,96,69,45,100,41,48,72,96,3,18,30,37,85,51,84,75,10,99,74,84,91,58,6,8,13,50,94,39,19,73,70,96,0,18,58,29,100,84,92,91,46,48,4,33,60,35,14,45,43,6,42,30,91,0,71,100,55,14,9,99,100,31,83,6,37,48,57]))
-# print(largest_histogram([5, 3])) # == 6, "two are smallest X 2"
-
-################################################
-
-def non_repeat(s):
-    """
-        the longest substring without repeating chars
-    """
-
-    if s == '':
-        return ''
-    if s.count(s[0]) == len(s):
-        return s[0]
-
-    res = []
-    for y in range(len(s) - 1):
-        res.append(s[y])
-        vperyod = True
-        vzad = True
-        for x in range(y + 1, len(s)):
-            if vperyod == True and res[-1].count(s[x]) == 0:
-                res[-1] += s[x]
-            else:
-                vperyod = False
-            z = y - (x - y)
-            if vzad == True and y > 0 and z > 0 and res[-1].count(s[z]) == 0:
-                res[-1] = s[z] + res[-1]
-            else:
-                vzad = False
-            if vzad == vperyod == False:
-                break
-
-    mx = res[:]
-    mx.sort(key=len)
-
-    for x in res:
-        if len(x) == len(mx[-1]):
-            return x
-
-
-# print(non_repeat('abdjwawk')) # == 'abdjw', "Second"
-# print(non_repeat('abcabcffab')) # == 'abcf', "Third"
-# print(non_repeat('aaaaa')) # == 'a', "First"
-
-
-def rs(price, a):
-    res = 0
-    for x in a:
-        if price == 0:
-            break
-        while price >= x:
-            res += 1
-            price -= x
-    if price == 0:
-        return res
-    return None
-
-
-def checkio(price, a):
-    """
-        return the minimum number of coins that add up to the price
-    """
-    a = sorted(a, reverse=True)
-    res = []
-    while len(a) > 0:
-        z = rs(price, a)
-        if z != None:
-            res.append(z)
-        del a[0]
-
-    if res == []:
-        return None
-    return min(res)
-
-
-# print(checkio(123456,[1,6,7,456,678])) # == 187
-# print(checkio(8, [1, 3, 5])) # == 2
-# print(checkio(12, [1, 4, 5])) # == 3
-
-def lines(m):
-    # horizintal
-    for x in m:
-        if len(set(x)) == 1:
-            return True
-
-    # vertical
-    for x in range(len(m)):
-        a = []
-        for y in range(len(m)):
-            a.append(m[y][x])
-        if len(set(a)) == 1:
-            return True
-
-
-def di(m, m_start, m_end, step, ahead=True, up=False):
-    if not up:
-        m_end_1 = m_end - 2
-        m_end_2 = m_end
-    else:
-        m_end_1 = m_end + 3
-        m_end_2 = m_end - 2
-
-
-    for y in range(m_start, m_end_1, step):
-        for x in range(m_start, m_end_2, step):
-            if ahead and not up and m[y][x] == m[y + 1][x - 1] == m[y + 2][x - 2] == m[y + 3][x - 3]:
-                return True
-            elif not ahead and not up and m[y][x] == m[y + 1][x + 1] == m[y + 2][x + 2] == m[y + 3][x + 3]:
-                return True
-            elif ahead and up and m[y][x] == m[y - 1][x + 1] == m[y - 2][x + 2] == m[y - 3][x + 3]:
-                return True
-    return False
-
-def diago(m):
-    if len(m[0]) < 4:
-        return False
-
-    if di(m, 3, len(m), 1, True, False): return True
-    if di(m, 0, len(m), 1, False, False): return True
-    if di(m, len(m), 3, -1, True, True): return True
-
-    return False
-
-
-def checkio(matrix: List[List[int]]) -> bool:
-    if lines(matrix) or diago(matrix):
-        return True
-    return False
-
-
-# print(checkio([
-#     [7, 1, 1, 8, 1, 1],
-#     [1, 1, 7, 3, 1, 5],
-#     [2, 3, 1, 2, 5, 1],
-#     [1, 1, 1, 5, 1, 4],
-#     [4, 6, 5, 1, 3, 1],
-#     [1, 1, 9, 1, 2, 1]
-# ]))
-
-# Пока не знаю как решить задачку с диагоналями
-
-
-def checkio(s, s3=None):
-    a = [s.count('(') - s.count(')'), s.count('[') - s.count(']'), s.count('{') - s.count('}')]
-    b = ['(', '[', '{']
-    c = [')', ']', '}']
-    d = c + b
-
-    for x in range(len(a)):
-        if a[x] != 0:
-            return False
-
-    if s3 != None:
-        res = checkio(s3)
-        if res==True:
-            s3==None
-
-    ou = [x for x in d if x in s]
-    if len(ou)==0 and s3==None:
-        return True
-
-    res = False
-    for x in range(len(s)):
-        if s[x] in b:
-            z = b.index(s[x])
-            if c[z] in s:
-                n = s.rfind(c[z])
-                s2 = s[x + 1:n]
-                if n!=len(s)-1:
-                    s3 = s[n:]
-                else:
-                    s3 = None
-                res = checkio(s2, s3)
-                if res==True:
-                    break
-            else:
-                break
-
-    return res
-
-
-# print(checkio("[1+202]*3*({4+3)}"))
-# print(checkio("((5+3)*2+1)"))
-# print(checkio("(3+{1-1)}"))
-
-
-
-
-
-
-
-
-
-
-
-def sm(a, b, x, costs):
-    res = []
-    for y in x:
-        if y != a and isinstance(y, str):
-            for z in costs:
-                if y in z and b in z:
-                    res.append(costs[costs.index(z)][-1] + costs[costs.index(x)][-1])
-    next = ''
-    sm = 0
-    for x in costs:
-        if next in x:
-            if b in x:
-                sm += x[-1]
-                res.append(sm)
-                break
-
-            for y in x:
-                if y != next and isinstance(y, str):
-                    sm += x[-1]
-                    next = y
-                    break
-
-        if next == '' and a in x and b not in x:
-            for y in x:
-                if y != a and isinstance(y, str):
-                    sm += x[-1]
-                    next = y
-                    break
-    return res
-
-
-def cheapest_flight(costs: List, a: str, b: str) -> int:
-    prices = []
-    A, B = 0, 0
-    for x in costs:
-        if a in x and b in x:
-            prices.append(x[-1])
-        elif a in x and b not in x:
-            res = sm(a, b, x, costs)
-            prices.extend(res)
-        elif b in x and a not in x:
-            res = sm(b, a, x, costs)
-            prices.extend(res)
-
-    if prices == []:
-        return 0
-
-    return min(prices)
-
-
-# print(cheapest_flight([["A","C",40],["A","B",20],["A","D",20],["B","C",50],["D","C",70]],"D","C"))
-# print(cheapest_flight([["A","C",100],["A","B",20],["D","F",900]],"A","F"))
-# print(cheapest_flight([["A","C",40],["A","B",20],["A","D",20],["B","C",50],["D","C",70]],"D","C"))
-# print(cheapest_flight([["A","B",10],["A","C",15],["B","D",15],["C","D",10]],"A","D"))
-# print(cheapest_flight([["A","B",10],["A","C",20],["B","D",15],["C","D",5],["D","E",5],["E","F",10],["C","F",25]],"A","F"))
-
-# OOP
-print()
-print('*' * 50)
-print('OOP')
-
-
-class VoiceCommand():
-
-    def __init__(self, *args):
-        self.channels = args
-
-    # переключается на первый канал из списка
-    def first_channel(self):
-        pass
-
-    # переключается на последний канал из списка.
-    def last_channel(self):
-        pass
-
-    # переключается на канал номер n. Нумерация каналов начинается с 1, а не с 0.
-    def turn_channel(self, n):
-        self.n = n
-
-    # переключается на следующий канал. Если текущий канал - последний, то - на первый канал.
-    def next_channel(self):
-        pass
-
-    # переключается на предыдущий канал. Если текущий канал - первый, то - на последний канал.
-    def previous_channel(self):
-        pass
-
-    # возвращает название текущего канала.
-    def current_channel(self):
-        pass
-
-    # принимает 1 аргумент - число N или строку 'name' и возвращает "Yes", если канал
-    # с номером N или названием 'name' существует в списке и "No" в ином случае.
-    # def is_exist(self, n, name):
-    #     pass
-
-
-"""
-По умолчанию до начала работы всех команд включен канал №1.
-Ваша задача - создать класс VoiceCommand и методы, описанные ранее.
-В этой миссии вам может помочь такой шаблон проектирования, как Iterator .
-"""
-
-CHANNELS = ["BBC", "Discovery", "TV1000"]
-
-controller = VoiceCommand(CHANNELS)
-
-controller.first_channel()  # == "BBC"
-controller.last_channel()  # == "TV1000"
-controller.turn_channel(1)  # == "BBC"
-controller.next_channel()  # == "Discovery"
-controller.previous_channel()  # == "BBC"
-controller.current_channel()  # == "BBC"
-# controller.is_exist(4) # == "No"
-# controller.is_exist("BBC") # == "Yes"

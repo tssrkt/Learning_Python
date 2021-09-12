@@ -109,7 +109,11 @@ factorial = reduce(lambda x,y: x*y, range(1, 6))
 print('factorial of 5 is', factorial)
 
 #########################################
-# total_ordering
+# any & all
 
+p = 'qwerty123'
+any([x.isdigit() for x in p]) # == True
+all([x.isdigit() for x in p]) # == False
 
+is_acceptable_password = lambda p: len(p)>6 and any([l.isdigit() for l in p])
 
