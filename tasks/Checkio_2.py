@@ -448,4 +448,217 @@ def checkio(s: str) -> str:
 # print(checkio('$222.100.455,34')) # == '$222,100,455.34'
 # print(checkio('$222,100,455')) # == '$222,100,455')
 
+all = {
+    'color': ['blue', 'green', 'red', 'white', 'yellow'],
+    'pet': ['cat', 'bird', 'dog', 'fish', 'horse'],
+    'drink': ['beer', 'coffee', 'milk', 'tea', 'water'],
+    'ciga': ['Rothmans', 'Dunhill', 'Pall Mall', 'Winfield', 'Marlboro'],
+    'man': ['Brit', 'Dane', 'German', 'Norwegian', 'Swede']}
+
+QUESTIONS = {"color":'color', "nationality":'man', "beverage":'drink', "cigarettes":'ciga', "pet":'pet'}
+
+# for all
+def gt(item, slovar):
+    for k,v in slovar.items():
+        if item in v:
+            return k
+
+# for pancha
+def gt2(item, slovar):
+    for k,v in slovar.items():
+        if item in list(v.values()):
+            return k
+
+def lopata(rels, pancha):
+    new_rels = []
+    for a in rels:
+        x = a.split('-')
+        if gt2(x[0], pancha)!=None and x[1].isalpha():
+            pancha[gt2(x[0], pancha)][gt(x[1], all)] = x[1]
+        elif gt2(x[1], pancha)!=None and x[0].isalpha():
+            pancha[gt2(x[1], pancha)][gt(x[0], all)] = x[0]
+        else:
+            new_rels.append(a)
+    return pancha, new_rels
+
+def bandura(pancha):
+    for key in all.keys():
+        spisok = []
+        for k,v in pancha.items():
+            spisok.append(v[key])
+        spisok = list(filter(lambda x: x!='', spisok))
+        if len(spisok)==4:
+            item = list(filter(lambda x: x not in spisok, all[key]))[0]
+            for k,v in pancha.items():
+                if v[key]=='':
+                    v[key]=item
+    return pancha
+
+def answer(rels, q):
+    pancha = {k:{'man': '', 'drink': '', 'pet': '', 'ciga': '', 'color': ''} for k in range(1, 6)}
+    new_rels = []
+
+    # Numbers of houses
+    for a in rels:
+        x = a.split('-')
+        if x[0].isdigit():
+            pancha[int(x[0])][gt(x[1], all)] = x[1]
+        elif x[1].isdigit():
+            pancha[int(x[1])][gt(x[0], all)] = x[0]
+        else:
+            new_rels.append(a)
+
+    # Filling pancha
+    while len(new_rels)>0:
+        pancha, new_rels = lopata(new_rels, pancha)
+        pancha = bandura(pancha)
+
+    # Answering on the question
+    q = q.split('-')
+    if q[1]=='number':
+        return str(gt2(q[0], pancha))
+    return pancha[gt2(q[0], pancha)][QUESTIONS[q[1]]]
+
+    # print(new_rels)
+    # for k,v in pancha.items():
+    #     print(k, v)
+
+# print(answer(('Norwegian-Dunhill', 'Marlboro-blue', 'Brit-3',
+#                    'German-coffee', 'beer-white', 'cat-water',
+#                    'horse-2', 'milk-3', '4-Rothmans',
+#                    'dog-Swede', 'Norwegian-1', 'horse-Marlboro',
+#                    'bird-Brit', '4-green', 'Winfield-beer',
+#                    'Dane-blue', '5-dog', 'blue-horse',
+#                    'yellow-cat', 'Winfield-Swede', 'tea-Marlboro'),
+#                   'fish-color')) # == 'green'  # What is the color of the house where the Fish lives?
+# print(answer(('Norwegian-Dunhill', 'Marlboro-blue', 'Brit-3',
+#                    'German-coffee', 'beer-white', 'cat-water',
+#                    'horse-2', 'milk-3', '4-Rothmans',
+#                    'dog-Swede', 'Norwegian-1', 'horse-Marlboro',
+#                    'bird-Brit', '4-green', 'Winfield-beer',
+#                    'Dane-blue', '5-dog', 'blue-horse',
+#                    'yellow-cat', 'Winfield-Swede', 'tea-Marlboro'),
+#                   'tea-number')) # == '2'  # What is the number of the house where tea is favorite beverage?
+# print(answer(('Norwegian-Dunhill', 'Marlboro-blue', 'Brit-3',
+#                    'German-coffee', 'beer-white', 'cat-water',
+#                    'horse-2', 'milk-3', '4-Rothmans',
+#                    'dog-Swede', 'Norwegian-1', 'horse-Marlboro',
+#                    'bird-Brit', '4-green', 'Winfield-beer',
+#                    'Dane-blue', '5-dog', 'blue-horse',
+#                    'yellow-cat', 'Winfield-Swede', 'tea-Marlboro'),
+#                   'Norwegian-beverage')) # == 'water'  # What is the favorite beverage of the Norwegian man?
+
+
+def longest_palindromic(a):
+    if len(set(a))==1:
+        return a
+    res = [a[0]]
+    palin = ''
+    for x in range(1, len(a)-1):
+        for y in range(x+1, len(a)):
+            z = x - (y - x)
+            if z>=0 and a[y]==a[z]:
+                palin = a[x] if palin=='' else palin
+                palin = a[y] + palin + a[z]
+                continue
+            else:
+                if palin!='':
+                    res.append(palin)
+                    palin = ''
+                break
+    res.sort(key=len, reverse=True)
+    return res[0]
+
+# print(longest_palindromic("123abcba")) # == "abcba"
+# print(longest_palindromic("aaaaa")) # == "aaaaa"
+# print(longest_palindromic('abc')) # == 'a'
+# print(longest_palindromic('abacada')) # == 'aba'
+
+#ALPHA (%41–%5A and %61–%7A), DIGIT (%30–%39)
+
+
+def checkio(url):
+    import string as s
+    SIGNS = {'%2D': '-', '%2E': '.', '%5F': '_', '%7E': '~'}
+    ALPHA = s.ascii_lowercase
+    nums = ['4', '5', '6', '7']
+
+    url = url.lower()
+    if ':80/' in url or ':80' in url and url.rfind('0')==len(url)-1:
+        url = url.replace(':80', '')
+    if '/./' in url and '../' not in url:
+        url = url.replace('./', '')
+    new_url = url
+    if '%' in url:
+        x = url.find('%')
+        new_url = url[:x]
+        while x< len(url):
+            if url[x]=='%':
+                a = url[x:x+3].upper()
+                if a in SIGNS:
+                    new_url += SIGNS.get(a)
+                    x += 3
+                elif url[x+1]=='3' and url[x+2].isdigit():
+                    new_url += url[x+2]
+                    x += 3
+                elif url[x+1] in nums:
+                    if url[x+1]=='4':
+                        if url[x+2].isdigit():
+                            new_url += ALPHA[int(url[x+2])-1]
+                        x += 3
+                    elif url[x+1]=='5':
+                        new_url += ALPHA[ALPHA.index(url[x+2])+18]
+                        x += 3
+                    elif url[x+1]=='6':
+                        new_url += ALPHA[ALPHA.index(url[x+2])+9]
+                        x += 3
+                    elif url[x+1]=='7':
+                        new_url += ALPHA[int(url[x + 2]) + 15]
+                        x += 3
+                else:
+                    new_url += a.upper()
+                    x += 3
+            else:
+                new_url += url[x]
+                x += 1
+
+    y = 0
+    while '../' in new_url or '/..' in new_url:
+        x = new_url.find('.', y)
+        if x+2<len(new_url):
+            if new_url[x+1]=='.' and new_url[x+2]=='/':
+                n = new_url[:x-1].rfind('/')
+                repl = new_url[n+1:x+3]
+                new_url = new_url.replace(repl, '', 1)
+            else:
+                y = x+1
+        else:
+            if new_url[x+1]=='.':
+                n = new_url[:x-1].rfind('/')
+                repl = new_url[n+1:]
+                new_url = new_url.replace(repl, '', 1)
+                if new_url[-1]=='/':
+                    new_url = new_url[:-1]
+            else:
+                y = x+1
+
+    while './' in new_url:
+        new_url = new_url.replace('./', '', 1)
+    return new_url
+
+# print(checkio("http://Www.Checkio.org:80/ta%73K%2d/1/../2/./%3f%3e")) # == "http://www.checkio.org/task-/2/%3F%3E"
+# print(checkio("http://example.com/a/b/c/d/../../")) # == "http://example.com/a/b/"
+# print(checkio("http://example.com:80/HOME/../././Guest/1/../2/..")) # == "http://example.com/guest"
+# print(checkio("http://example.com/%31%30%2D%2f%2E%1f%5F%7E")) # == "http://example.com/10-%2F.%1F_~"
+# print(checkio("http://Example.com:80/%48%6f%6d%45")) # == "http://example.com/home"
+# print(checkio("HTTP://EXAMPLE.COM:80")) # == "http://example.com"
+# print(checkio("Http://Www.Checkio.org")) # == "http://www.checkio.org"
+# print(checkio("http://www.checkio.org/%cc%b1bac")) # == "http://www.checkio.org/%CC%B1bac"
+# print(checkio("http://www.checkio.org/task%5F%31")) # == "http://www.checkio.org/task_1"
+# print(checkio("http://www.checkio.org:80/home/")) # == "http://www.checkio.org/home/"
+# print(checkio("http://www.checkio.org:8080/home/")) # == "http://www.checkio.org:8080/home/"
+# print(checkio("http://www.checkio.org/task/./1/../2/././name")) # == "http://www.checkio.org/task/2/name"
+
+
+
 
