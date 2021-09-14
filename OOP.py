@@ -434,7 +434,7 @@ def do_admin_work():
         raise Exception('Access denied')
     return 'Do something administoe'
 
-do_admin_work()
+# do_admin_work()
 
 def do_admin_work2():
     return 'Do admin 2'
@@ -444,7 +444,7 @@ def check_access(func):
         raise Exception('Access denied')
     return func()
 
-check_access(do_admin_work2)
+# check_access(do_admin_work2)
 
 def check_access2(func):
     def wrapper():
@@ -453,11 +453,311 @@ def check_access2(func):
         return func()
     return wrapper
 
-do_admin_work2.__name__
-do_admin_work2 = check_access2(do_admin_work)
+# do_admin_work2.__name__
+# do_admin_work2 = check_access2(do_admin_work)
 
 @check_access2
 def do_admin_work3():
     return 'Do admin 3'
+
+##################################################
+
+class Rectangle:
+    def __init__(self, a, b):
+        self.a = a
+        self.b = b
+
+    @property
+    def area(self):
+        return self.a * self.b
+
+    def __eq__(self, other): # равно
+        print('__eq__ call')
+        if isinstance(other, Rectangle):
+            return self.a == other.a and self.b == other.b
+
+    def __lt__(self, other): # self меньше ?
+        print('__lt__ call')
+        if isinstance(other, Rectangle):
+            return self.area < other.area
+        elif isinstance(other, (int, float)):
+            return self.area < other
+
+    def __le__(self, other): # меньше или равно
+        return self==other or self<other
+
+
+r1 = Rectangle(1, 2)
+r2 = Rectangle(3, 4)
+print(r1==r2)
+print(r1<r2)
+
+########################################################################################
+
+class Point:
+
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def __eq__(self, other):
+        return isinstance(other, Point) and self.x == other.x and self.y == other.y
+
+    def __hash__(self):
+        return hash((self.x, self.y))
+
+    def __len__(self):
+        print('__len__ call')
+        return abs(self.x - self.y)
+
+    def __bool__(self):
+        print('__bool__ call')
+        return self.x != 0 or self.y != 0
+
+#########################################
+
+class Contr:
+
+    def __init__(self):
+        self.counter = 0
+        self.summa = 0
+        self.length = 0
+        print('init object', self)
+
+    def __call__(self, *args, **kwargs):
+        self.counter += 1
+        self.summa += sum(args)
+        self.length += len(args)
+        print('object call', self)
+        print(f'Экземпляр вызывался {self.counter} раз')
+
+    def average(self):
+        return self.summa / self.length
+
+
+from time import perf_counter
+from functools import reduce
+
+class Timer:
+    def __init__(self, func):
+        self.fn = func
+
+    def __call__(self, *args, **kwargs):
+        start = perf_counter()
+        print(f'Call function {self.fn.__name__}')
+        result = self.fn(*args, **kwargs)
+        finish = perf_counter()
+        print(f'Function was working {finish - start}')
+        return result
+
+@Timer
+def factorial(n):
+    return reduce(lambda x,y: x*y, range(1, n+1))
+
+@Timer
+def fiba(n):
+    if n<=2:
+        return 1
+    return fiba(n-1) + fiba(n-2)
+
+print('factorial:', factorial(5))
+print('fibonacchi:', fiba(20))
+print(Timer(fiba(20)))
+
+###################################################################
+
+
+class Paralellepiped:
+    def __init__(self, a, b):
+        self.a = a
+        self.b = b
+
+    def get_area(self):
+        return self.a * self.b
+
+    def __str__(self):
+        return f'Paralellepiped {self.a}*{self.b}'
+
+class Square:
+    def __init__(self, a):
+        self.a = a
+
+    def get_area(self):
+        return self.a**2
+
+    def __str__(self):
+        return f'Square {self.a}*{self.a}'
+
+r1 = Paralellepiped(3, 4)
+sq1 = Square(5)
+figures = [r1, sq1]
+
+# Полиморфизм - это обработка разных объектов путем использования одного метода.
+# Объекты и методы разные, названия методов - одинаковые (get_area)
+for figa in figures:
+    print(figa.get_area())
+
+########################################################################################
+
+
+class Vector:
+
+    def __init__(self, *args):
+        self.values = list(args)
+
+    def __repr__(self):
+        return str(self.values)
+
+    def __getitem__(self, item):
+        if 0<item<len(self.values):
+            return self.values[item]
+        else:
+            raise IndexError('Index out of collection')
+
+    def __setitem__(self, key, value):
+        if 0<=key<len(self.values):
+            self.values[key] = value
+        elif key>=len(self.values):
+            diff = key - len(self.values)
+            self.values.extend([0]*diff)
+            self.values[key] = value
+        else:
+            raise IndexError('Index out of collection')
+
+    def __delitem__(self, key):
+        if 0<=key<len(self.values):
+            del self.values[key]
+        else:
+            raise IndexError('Index out of collection')
+
+
+#######################################################################################
+
+class Mark:
+    def __init__(self, values):
+        self.value = values
+        self.index = 0
+
+    def __next__(self):
+        print('Call next marks')
+        if self.index >= len(self.value):
+            raise StopIteration
+        letter = self.value[self.index]
+        self.index += 1
+        return letter
+
+    def __iter__(self):
+        print('call iter')
+        self.index = 0
+        return self
+
+
+class Student:
+    def __init__(self, name, surname, marks):
+        self.name = name
+        self.surname = surname
+        self.marks = marks
+
+    def __iter__(self):
+        print('call iter')
+        self.index = 0
+        return iter(self.marks)
+
+    def __next__(self):
+        print('Call next student')
+        if self.index >= len(self.name):
+            raise StopIteration
+        letter = self.name[self.index]
+        self.index += 1
+        return letter
+
+m = Mark([3,4,5,3,5])
+igor = Student('Igor', 'Pupkin', m)
+c = igor.__iter__()
+print(c)
+
+########################################################################################
+
+class Person:
+    name = 'Adam'
+
+    def __init__(self, name):
+        print('init Person')
+        self.name = name
+
+    def __str__(self):
+        return f"Person {self.name}"
+
+    def can_walk(self):
+        print('Person can walk')
+
+    def combo(self):
+        if hasattr(self, 'can_walk'):
+            self.can_walk()
+
+class Doctor(Person):
+    name = 'Bob'
+
+    def can_cure(self):
+        print('I can cure')
+
+    def can_walk(self):
+        print('Doctor can walk')
+
+    def __str__(self):
+        return f'Doctor {self.name}'
+
+class Dentist(Doctor, Person):
+    def __init__(self, rank, degree):
+        super().__init__(rank) # rank берем у Doctor
+        Person.__init__(self, degree) # degree берем у Person
+
+
+class Architect(Person):
+    __slots__ = ['name', 'age']
+
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    def can_build(self):
+        print('I can build')
+
+d1 = Doctor('Panteleymon')
+a1 = Architect('Evlampiy')
+print(issubclass(Doctor, Person))
+
+#############################################################################################
+# Делегирование
+
+class Person:
+    def __init__(self, name, surname):
+        self.name = name
+        self.surname = surname
+        self.age = 50
+
+    def walk(self):
+        print('Person walk')
+
+    def __str__(self):
+        return f'Person {self.name} {self.surname}'
+
+class Doctor(Person):
+    def __init__(self, name, surname, age):
+        super().__init__(name, surname)
+        self.age = age
+
+    def walk(self):
+        print('Doctor walk')
+        super().walk()
+
+p = Person('Ivan', 'Ivanov')
+d = Doctor('Peter', 'Petrov', 30)
+print(p.walk())
+print(d.walk())
+print(p.name, p.surname)
+print(d.name, d.surname, d.age)
+
+
 
 

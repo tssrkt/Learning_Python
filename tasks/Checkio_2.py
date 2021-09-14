@@ -660,5 +660,7 @@ def checkio(url):
 # print(checkio("http://www.checkio.org/task/./1/../2/././name")) # == "http://www.checkio.org/task/2/name"
 
 
+checkio = lambda x: x==x[::-1]
 
+print(checkio("asd"))
 
