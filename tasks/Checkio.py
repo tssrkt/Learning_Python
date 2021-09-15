@@ -886,41 +886,7 @@ def total_cost(calls: List[str]) -> int:
 
 # print(total_cost(["2014-01-01 01:12:13 181","2014-01-02 20:11:10 600","2014-01-03 01:12:13 6009","2014-01-03 12:13:55 200"]))
 
-class Warrior:
-    health = 50
-    attack = 5
 
-    def is_alive(self):
-        if self.health > 0:
-            return True
-        return False
-
-
-class Knight(Warrior):
-    attack = 7
-
-
-def fight(unit_1, unit_2):
-    while unit_1.is_alive() and unit_2.is_alive():
-        unit_2.health -= unit_1.attack
-
-        if unit_2.is_alive():
-            unit_1.health -= unit_2.attack
-
-    if unit_1.is_alive() and not unit_2.is_alive():
-        return True
-    return False
-
-
-carl = Warrior()
-jim = Knight()
-# print(fight(carl, jim))
-
-bob = Warrior()
-mars = Warrior()
-
-
-# print(fight(bob, mars))
 
 def flat_list(a, neo=None):
     if a == []:

@@ -600,7 +600,58 @@ print(s_first == 25000)  # False
 print(100000 < s_first)  # False
 print(100 < s_first)  # True
 
+##################################################################################################
 
+
+class Wallet:
+
+    def __init__(self, currency, balance):
+        if type(currency)!=str:
+            raise TypeError('Неверный тип валюты')
+        elif type(currency)==str and len(currency)!=3:
+            raise NameError('Неверная длина названия валюты')
+        elif type(currency)==str and len(currency)==3 and any([x for x in currency if x.islower()]):
+            raise ValueError('Название должно состоять только из заглавных букв')
+        else:
+            self.currency = currency
+        self.balance = balance
+
+    def __eq__(self, other):
+        if type(other)!=Wallet:
+            raise TypeError(f'Wallet не поддерживает сравнение с {other}')
+        elif self.currency!=other.currency:
+            raise ValueError('Нельзя сравнить разные валюты')
+        else:
+            return self.balance==other.balance
+
+    def __add__(self, other):
+        if type(other)!=Wallet or self.currency!=other.currency:
+            raise ValueError(f'Данная операция запрещена')
+        else:
+            return Wallet(self.currency, self.balance+other.balance)
+
+    def __sub__(self, other):
+        if type(other)!=Wallet or self.currency!=other.currency:
+            raise ValueError(f'Данная операция запрещена')
+        else:
+            return Wallet(self.currency, self.balance-other.balance)
+
+
+print()
+print('*'*50)
+print('WALLET')
+wallet1 = Wallet('USD', 50)
+wallet2 = Wallet('RUB', 100)
+wallet3 = Wallet('RUB', 150)
+wallet4 = Wallet(12, 150)  # исключение TypeError('Неверный тип валюты')
+wallet5 = Wallet('qwerty', 150)  # исключение NameError('Неверная длина названия валюты')
+wallet6 = Wallet('abc', 150)  # исключение ValueError('Название должно состоять только из заглавных букв')
+print(wallet2 == wallet3)  # False
+print(wallet2 == 100)  # TypeError('Wallet не поддерживает сравнение с 100')
+print(wallet2 == wallet1)  # ValueError('Нельзя сравнить разные валюты')
+wallet7 = wallet2 + wallet3
+print(wallet7.currency, wallet7.balance)  # печатает 'RUB 250'
+wallet2 + 45  # ValueError('Данная операция запрещена')
 
 
 

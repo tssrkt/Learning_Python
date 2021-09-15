@@ -758,6 +758,16 @@ print(d.walk())
 print(p.name, p.surname)
 print(d.name, d.surname, d.age)
 
+#############################################################################
+
+
+class MyEx(Exception):
+    pass
+
+try:
+    raise MyEx('Error')
+except AttributeError:
+    print('Attribute Error')
 
 
 
