@@ -18,6 +18,7 @@ class Lancer(Warrior):
     # соответственно, получаемый вторым юнитом урон).
     def __init__(self):
         self.attack = 6
+        self.health = 50
 
 
 class Vampire(Warrior):
@@ -66,9 +67,9 @@ def fight(unit_1, unit_2, healer_1=False, healer_2=False):
             unit_2.health -= damage
 
         if type(unit_1) == Vampire and damage != 0:
-            unit_1.health += (damage / int(100 / unit_1.vampirism))
-            if unit_1.health > 40:
-                unit_1.health = 40
+            unit_1.health += int(damage * unit_1.vampirism / 100)
+            if unit_1.health > unit_1.max_health:
+                unit_1.health = unit_1.max_health
 
         if unit_1.is_alive and healer_1:
             healer_1.heal(unit_1)
@@ -86,8 +87,8 @@ def fight(unit_1, unit_2, healer_1=False, healer_2=False):
 
             if type(unit_2) == Vampire and damage != 0:
                 unit_2.health += (damage / int(100 / unit_2.vampirism))
-                if unit_2.health > 40:
-                    unit_2.health = 40
+                if unit_1.health > unit_1.max_health:
+                    unit_1.health = unit_1.max_health
 
             if unit_2.is_alive and healer_2:
                 healer_2.heal(unit_2)
@@ -149,7 +150,6 @@ class Battle():
             print('Not correct input!')
 
 
-print('WARRIORS')
 army_1 = Army()
 army_2 = Army()
 army_1.add_units(Lancer, 7)

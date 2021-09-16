@@ -4,6 +4,7 @@ def delete_zero(grp):
     res = list(it.filterfalse(lambda x: x == 0, grp))
     return res
 
+
 def merge_intervals(a):
     """
         Merge overlapped intervals.
@@ -11,15 +12,15 @@ def merge_intervals(a):
     for x in range(len(a)):
         a[x] = [a[x][0], a[x][-1]]
 
-    for x in range(len(a)-1):
-        for y in range(x+1, len(a)):
-            if a[x]!=0 and a[y]!=0:
-                if a[x][-1]>=a[y][0] or a[x][-1]==a[y][0]+1 or a[x][-1]==a[y][0]-1:
-                    if a[x][-1]>=a[y][-1]:
-                        a[y]=0
+    for x in range(len(a) - 1):
+        for y in range(x + 1, len(a)):
+            if a[x] != 0 and a[y] != 0:
+                if a[x][-1] >= a[y][0] or a[x][-1] == a[y][0] + 1 or a[x][-1] == a[y][0] - 1:
+                    if a[x][-1] >= a[y][-1]:
+                        a[y] = 0
                         continue
-                    a[x][-1]=a[y][-1]
-                    a[y]=0
+                    a[x][-1] = a[y][-1]
+                    a[y] = 0
                     continue
     a = delete_zero(a)
 
@@ -28,6 +29,7 @@ def merge_intervals(a):
 
     return a
 
+
 # print(merge_intervals([(1, 4), (2, 6), (8, 10), (12, 19)])) # == [(1, 6), (8, 10), (12, 19)]
 # print(merge_intervals([(1, 12), (2, 3), (4, 7)])) # == [(1, 12)]
 # print(merge_intervals([(1, 5), (6, 10), (10, 15), (17, 20)])) # == [(1, 15), (17, 20)]
@@ -35,17 +37,19 @@ def merge_intervals(a):
 
 from typing import Iterable
 
+
 def expand_intervals(a: Iterable) -> Iterable:
     res = []
     for x in range(len(a)):
         res.append(a[x][0])
-        if a[x][0]+1<a[x][-1]:
-            for y in range(a[x][0]+1, a[x][-1]):
+        if a[x][0] + 1 < a[x][-1]:
+            for y in range(a[x][0] + 1, a[x][-1]):
                 res.append(y)
         res.append(a[x][-1])
     res = set(res)
     res = list(res)
     return res
+
 
 # print(expand_intervals([[1,2],[4,4]])) # == [1,2,4]
 # print(expand_intervals([(1, 3), (5, 7)])) # == [1, 2, 3, 5, 6, 7]
@@ -57,7 +61,8 @@ def get_cookie(c, n):
     for x in lst:
         if n in x:
             z = x.find('=')
-            return x[z+1:].replace(';', '')
+            return x[z + 1:].replace(';', '')
+
 
 # print(get_cookie("USER=name=Unknown; domain=bbc.com","USER")) # == name=Unknown
 # print(get_cookie("ffo=false; domain=google.com; expires=Sunday, 20-May-2018 00:00:00 GMT","expires"))
@@ -67,13 +72,13 @@ def get_cookie(c, n):
 
 
 def unix_match(fn: str, ptrn: str) -> bool:
-    if set(ptrn)=={'*'} or set(ptrn)=={'*', '?'} and len(ptrn)<=len(fn):
+    if set(ptrn) == {'*'} or set(ptrn) == {'*', '?'} and len(ptrn) <= len(fn):
         return True
 
-    if fn.count('.')==1 and ptrn.count('.')==1:
+    if fn.count('.') == 1 and ptrn.count('.') == 1:
         fn = fn.split('.')
         ptrn = ptrn.split('.')
-    elif len(fn)==len(ptrn):
+    elif len(fn) == len(ptrn):
         for x in range(len(fn)):
             if ptrn[x] == '?' or ptrn[x] == fn[x]:
                 continue
@@ -82,26 +87,27 @@ def unix_match(fn: str, ptrn: str) -> bool:
         return True
     elif '.*' in ptrn and '.' in fn:
         for x in range(len(fn)):
-            if ptrn[x]=='?' or ptrn[x]==fn[x]:
+            if ptrn[x] == '?' or ptrn[x] == fn[x]:
                 continue
-            elif ptrn[x]=='*':
+            elif ptrn[x] == '*':
                 return True
             else:
                 return False
-    if type(fn)==list and len(fn)==len(ptrn):
-        if fn[-1]==ptrn[-1] or ptrn[-1]=='*' or set(ptrn[-1])=={'?'} and len(ptrn[-1])==len(fn[-1]):
-            if ptrn[0]=='*':
+    if type(fn) == list and len(fn) == len(ptrn):
+        if fn[-1] == ptrn[-1] or ptrn[-1] == '*' or set(ptrn[-1]) == {'?'} and len(ptrn[-1]) == len(fn[-1]):
+            if ptrn[0] == '*':
                 return True
-            if '?' in ptrn[0] and len(fn[0])==len(ptrn[0]):
+            if '?' in ptrn[0] and len(fn[0]) == len(ptrn[0]):
                 for x in range(len(fn[0])):
-                    if ptrn[0][x]=='?' or ptrn[0][x]==fn[0][x]:
+                    if ptrn[0][x] == '?' or ptrn[0][x] == fn[0][x]:
                         continue
                     else:
                         return False
                 return True
-            elif ptrn[0]=='*' or fn[0]==ptrn[0]:
+            elif ptrn[0] == '*' or fn[0] == ptrn[0]:
                 return True
     return False
+
 
 # print(unix_match("file19.txt","*z*")) # == False
 # print(unix_match("name....","name.*")) # == True
@@ -137,28 +143,28 @@ def ptrn_check(ptrn, fn, x):
 
 
 def unix_match(fn: str, ptrn: str) -> bool:
-    if fn==ptrn:
+    if fn == ptrn:
         return True
     after = False
     new_ptrn = ''
     for x in range(len(fn)):
-        if ptrn[x]==fn[x] and after==False:
+        if ptrn[x] == fn[x] and after == False:
             continue
-        elif ptrn[x]=='[' and after==False:
+        elif ptrn[x] == '[' and after == False:
             new_ptrn = ptrn[:ptrn.index('[')] + fn[x] + ptrn[ptrn.index(']') + 1:]
             after = True
             if ptrn_check(ptrn, fn, x):
                 continue
             else:
                 return False
-        elif after==True:
-            if '[' not in new_ptrn and ']' not in new_ptrn and new_ptrn==fn:
+        elif after == True:
+            if '[' not in new_ptrn and ']' not in new_ptrn and new_ptrn == fn:
                 return True
-            elif '[' not in new_ptrn and ']' not in new_ptrn and new_ptrn!=fn:
+            elif '[' not in new_ptrn and ']' not in new_ptrn and new_ptrn != fn:
                 return False
-            elif '[' in new_ptrn and ']' in new_ptrn and new_ptrn[x]==fn[x]:
+            elif '[' in new_ptrn and ']' in new_ptrn and new_ptrn[x] == fn[x]:
                 continue
-            elif new_ptrn[x]=='[':
+            elif new_ptrn[x] == '[':
                 if ptrn_check(new_ptrn, fn, x):
                     new_ptrn = new_ptrn[:new_ptrn.index('[')] + fn[x] + new_ptrn[new_ptrn.index(']') + 1:]
                     continue
@@ -179,34 +185,36 @@ def unix_match(fn: str, ptrn: str) -> bool:
 def flatten(lst):
     lst2 = []
     for x in lst:
-        if type(x)==list:
+        if type(x) == list:
             lst2.extend(x)
         else:
             lst2.append(x)
     return lst2
+
 
 def get_key(d, value):
     for k, v in d.items():
         if value in v:
             return k
 
+
 def is_family(tree: list[list[str]]) -> bool:
-    if len(tree)==1:
+    if len(tree) == 1:
         return True
     d = {}
     for x in range(len(tree)):
         person = tree[x][0]
         son = tree[x][1]
-        if person==son:
+        if person == son:
             return False
-        if d=={}:
+        if d == {}:
             d.setdefault(person, [son])
         else:
             if person in d.keys():
                 d[person].append(son)
             elif person in flatten(d.values()):
                 grandpa = get_key(d, person)
-                if son==grandpa or son in flatten(d.values()):
+                if son == grandpa or son in flatten(d.values()):
                     return False
                 else:
                     d.setdefault(person, [son])
@@ -261,20 +269,21 @@ def cut_sentence(s: str, n: int) -> str:
     '''
     Cut a given sentence, so it becomes shorter than or equal to a given length.
     '''
-    if n>=len(s):
+    if n >= len(s):
         return s
 
     a = s.split()
     res = a[0]
     for x in range(1, len(a)):
-        if len(res)>n:
+        if len(res) > n:
             return '...'
-        elif len(res + ' ' + a[x])<=n:
+        elif len(res + ' ' + a[x]) <= n:
             res += ' ' + a[x]
         else:
             res += '...'
             break
     return res
+
 
 # print(cut_sentence("Hi my name is Alex",1)) # == "..."
 # print(cut_sentence("Hi my name is Alex", 4)) # == "Hi..."
@@ -286,8 +295,9 @@ def cut_sentence(s: str, n: int) -> str:
 def best_stock(d: dict) -> str:
     price = max(list(d.values()))
     for k, v in d.items():
-        if price==v:
+        if price == v:
             return k
+
 
 # print(best_stock({
 #     'CAC': 10.0,
@@ -304,6 +314,7 @@ def best_stock(d: dict) -> str:
 def checkio(n: int) -> int:
     return bin(n).count('1')
 
+
 # print(checkio(4)) # == 1
 # print(checkio(15)) # == 4
 # print(checkio(1)) # == 1
@@ -318,7 +329,7 @@ def to_decrypt(ct, n):
         if x.isalpha():
             z = alpha.index(x)
             try:
-                res += alpha[z+n]
+                res += alpha[z + n]
             except IndexError:
                 z = n - (len(alpha) - (z))
                 res += alpha[z]
@@ -350,6 +361,7 @@ def to_encrypt(txt, n):
             res += ' '
     return res
 
+
 # print(to_encrypt("a b c", 3)) # == "d e f"
 # print(to_encrypt("a b c", -3)) # == "x y z"
 # print(to_encrypt("simple text", 16)) # == "iycfbu junj"
@@ -359,22 +371,23 @@ def to_encrypt(txt, n):
 
 def count_neighbours(g, row, col):
     NBRS = {
-        1: lambda x, y: [x-1, y-1],  # left upper square
-        2: lambda x, y: [x-1, y],
-        3: lambda x, y: [x-1, y+1],
-        4: lambda x, y: [x, y+1],
-        5: lambda x, y: [x+1, y+1],
-        6: lambda x, y: [x+1, y],
-        7: lambda x, y: [x+1, y-1],
-        8: lambda x, y: [x, y-1]
+        1: lambda x, y: [x - 1, y - 1],  # left upper square
+        2: lambda x, y: [x - 1, y],
+        3: lambda x, y: [x - 1, y + 1],
+        4: lambda x, y: [x, y + 1],
+        5: lambda x, y: [x + 1, y + 1],
+        6: lambda x, y: [x + 1, y],
+        7: lambda x, y: [x + 1, y - 1],
+        8: lambda x, y: [x, y - 1]
     }
 
     res = 0
     for x in range(1, 9):
         a, b = NBRS[x](row, col)
-        if len(g)>a>=0 and len(g[0])>b>=0:
-            res = res+1 if g[a][b]==1 else res
+        if len(g) > a >= 0 and len(g[0]) > b >= 0:
+            res = res + 1 if g[a][b] == 1 else res
     return res
+
 
 # print(count_neighbours([[1,0,1,0,1],[0,1,0,1,0],[1,0,1,0,1],[0,1,0,1,0],[1,0,1,0,1],[0,1,0,1,0]],5,4))
 # print(count_neighbours([[1,1,1],[1,1,1],[1,1,1]],0,2)) # == 3
@@ -392,32 +405,33 @@ def count_neighbours(g, row, col):
 
 def koma(s):
     if ',' not in s:
-        if s.count('.')>1:
+        if s.count('.') > 1:
             return s.replace('.', ',')
         else:
             z = s.split('.')[-1]
             z = ''.join(i for i in z if i.isdigit())
-            if z.isdigit() and int(z)==0:
+            if z.isdigit() and int(z) == 0:
                 return s.replace('.', ',')
             return s
     if '.' not in s:
-        if s.count(',')==1:
+        if s.count(',') == 1:
             return s.replace(',', '.')
-        if s.count(',')>1:
+        if s.count(',') > 1:
             return s
     s = s.replace(',', '.')
     n = s.count('.') - 1
     return s.replace('.', ',', n)
+
 
 def checkio(s: str) -> str:
     res = ''
     dt = False
     if '$' not in s:
         return s
-    if s[-1]=='.':
+    if s[-1] == '.':
         dt = True
         s = s[:-1]
-    if s.count('$')>1:
+    if s.count('$') > 1:
         s = s.split('$')
         if '' in s:
             del s[s.index('')]
@@ -455,47 +469,52 @@ all = {
     'ciga': ['Rothmans', 'Dunhill', 'Pall Mall', 'Winfield', 'Marlboro'],
     'man': ['Brit', 'Dane', 'German', 'Norwegian', 'Swede']}
 
-QUESTIONS = {"color":'color', "nationality":'man', "beverage":'drink', "cigarettes":'ciga', "pet":'pet'}
+QUESTIONS = {"color": 'color', "nationality": 'man', "beverage": 'drink', "cigarettes": 'ciga', "pet": 'pet'}
+
 
 # for all
 def gt(item, slovar):
-    for k,v in slovar.items():
+    for k, v in slovar.items():
         if item in v:
             return k
 
+
 # for pancha
 def gt2(item, slovar):
-    for k,v in slovar.items():
+    for k, v in slovar.items():
         if item in list(v.values()):
             return k
+
 
 def lopata(rels, pancha):
     new_rels = []
     for a in rels:
         x = a.split('-')
-        if gt2(x[0], pancha)!=None and x[1].isalpha():
+        if gt2(x[0], pancha) != None and x[1].isalpha():
             pancha[gt2(x[0], pancha)][gt(x[1], all)] = x[1]
-        elif gt2(x[1], pancha)!=None and x[0].isalpha():
+        elif gt2(x[1], pancha) != None and x[0].isalpha():
             pancha[gt2(x[1], pancha)][gt(x[0], all)] = x[0]
         else:
             new_rels.append(a)
     return pancha, new_rels
 
+
 def bandura(pancha):
     for key in all.keys():
         spisok = []
-        for k,v in pancha.items():
+        for k, v in pancha.items():
             spisok.append(v[key])
-        spisok = list(filter(lambda x: x!='', spisok))
-        if len(spisok)==4:
+        spisok = list(filter(lambda x: x != '', spisok))
+        if len(spisok) == 4:
             item = list(filter(lambda x: x not in spisok, all[key]))[0]
-            for k,v in pancha.items():
-                if v[key]=='':
-                    v[key]=item
+            for k, v in pancha.items():
+                if v[key] == '':
+                    v[key] = item
     return pancha
 
+
 def answer(rels, q):
-    pancha = {k:{'man': '', 'drink': '', 'pet': '', 'ciga': '', 'color': ''} for k in range(1, 6)}
+    pancha = {k: {'man': '', 'drink': '', 'pet': '', 'ciga': '', 'color': ''} for k in range(1, 6)}
     new_rels = []
 
     # Numbers of houses
@@ -509,19 +528,20 @@ def answer(rels, q):
             new_rels.append(a)
 
     # Filling pancha
-    while len(new_rels)>0:
+    while len(new_rels) > 0:
         pancha, new_rels = lopata(new_rels, pancha)
         pancha = bandura(pancha)
 
     # Answering on the question
     q = q.split('-')
-    if q[1]=='number':
+    if q[1] == 'number':
         return str(gt2(q[0], pancha))
     return pancha[gt2(q[0], pancha)][QUESTIONS[q[1]]]
 
     # print(new_rels)
     # for k,v in pancha.items():
     #     print(k, v)
+
 
 # print(answer(('Norwegian-Dunhill', 'Marlboro-blue', 'Brit-3',
 #                    'German-coffee', 'beer-white', 'cat-water',
@@ -550,31 +570,32 @@ def answer(rels, q):
 
 
 def longest_palindromic(a):
-    if len(set(a))==1:
+    if len(set(a)) == 1:
         return a
     res = [a[0]]
     palin = ''
-    for x in range(1, len(a)-1):
-        for y in range(x+1, len(a)):
+    for x in range(1, len(a) - 1):
+        for y in range(x + 1, len(a)):
             z = x - (y - x)
-            if z>=0 and a[y]==a[z]:
-                palin = a[x] if palin=='' else palin
+            if z >= 0 and a[y] == a[z]:
+                palin = a[x] if palin == '' else palin
                 palin = a[y] + palin + a[z]
                 continue
             else:
-                if palin!='':
+                if palin != '':
                     res.append(palin)
                     palin = ''
                 break
     res.sort(key=len, reverse=True)
     return res[0]
 
+
 # print(longest_palindromic("123abcba")) # == "abcba"
 # print(longest_palindromic("aaaaa")) # == "aaaaa"
 # print(longest_palindromic('abc')) # == 'a'
 # print(longest_palindromic('abacada')) # == 'aba'
 
-#ALPHA (%41–%5A and %61–%7A), DIGIT (%30–%39)
+# ALPHA (%41–%5A and %61–%7A), DIGIT (%30–%39)
 
 
 def checkio(url):
@@ -584,7 +605,7 @@ def checkio(url):
     nums = ['4', '5', '6', '7']
 
     url = url.lower()
-    if ':80/' in url or ':80' in url and url.rfind('0')==len(url)-1:
+    if ':80/' in url or ':80' in url and url.rfind('0') == len(url) - 1:
         url = url.replace(':80', '')
     if '/./' in url and '../' not in url:
         url = url.replace('./', '')
@@ -592,27 +613,27 @@ def checkio(url):
     if '%' in url:
         x = url.find('%')
         new_url = url[:x]
-        while x< len(url):
-            if url[x]=='%':
-                a = url[x:x+3].upper()
+        while x < len(url):
+            if url[x] == '%':
+                a = url[x:x + 3].upper()
                 if a in SIGNS:
                     new_url += SIGNS.get(a)
                     x += 3
-                elif url[x+1]=='3' and url[x+2].isdigit():
-                    new_url += url[x+2]
+                elif url[x + 1] == '3' and url[x + 2].isdigit():
+                    new_url += url[x + 2]
                     x += 3
-                elif url[x+1] in nums:
-                    if url[x+1]=='4':
-                        if url[x+2].isdigit():
-                            new_url += ALPHA[int(url[x+2])-1]
+                elif url[x + 1] in nums:
+                    if url[x + 1] == '4':
+                        if url[x + 2].isdigit():
+                            new_url += ALPHA[int(url[x + 2]) - 1]
                         x += 3
-                    elif url[x+1]=='5':
-                        new_url += ALPHA[ALPHA.index(url[x+2])+18]
+                    elif url[x + 1] == '5':
+                        new_url += ALPHA[ALPHA.index(url[x + 2]) + 18]
                         x += 3
-                    elif url[x+1]=='6':
-                        new_url += ALPHA[ALPHA.index(url[x+2])+9]
+                    elif url[x + 1] == '6':
+                        new_url += ALPHA[ALPHA.index(url[x + 2]) + 9]
                         x += 3
-                    elif url[x+1]=='7':
+                    elif url[x + 1] == '7':
                         new_url += ALPHA[int(url[x + 2]) + 15]
                         x += 3
                 else:
@@ -625,26 +646,27 @@ def checkio(url):
     y = 0
     while '../' in new_url or '/..' in new_url:
         x = new_url.find('.', y)
-        if x+2<len(new_url):
-            if new_url[x+1]=='.' and new_url[x+2]=='/':
-                n = new_url[:x-1].rfind('/')
-                repl = new_url[n+1:x+3]
+        if x + 2 < len(new_url):
+            if new_url[x + 1] == '.' and new_url[x + 2] == '/':
+                n = new_url[:x - 1].rfind('/')
+                repl = new_url[n + 1:x + 3]
                 new_url = new_url.replace(repl, '', 1)
             else:
-                y = x+1
+                y = x + 1
         else:
-            if new_url[x+1]=='.':
-                n = new_url[:x-1].rfind('/')
-                repl = new_url[n+1:]
+            if new_url[x + 1] == '.':
+                n = new_url[:x - 1].rfind('/')
+                repl = new_url[n + 1:]
                 new_url = new_url.replace(repl, '', 1)
-                if new_url[-1]=='/':
+                if new_url[-1] == '/':
                     new_url = new_url[:-1]
             else:
-                y = x+1
+                y = x + 1
 
     while './' in new_url:
         new_url = new_url.replace('./', '', 1)
     return new_url
+
 
 # print(checkio("http://Www.Checkio.org:80/ta%73K%2d/1/../2/./%3f%3e")) # == "http://www.checkio.org/task-/2/%3F%3E"
 # print(checkio("http://example.com/a/b/c/d/../../")) # == "http://example.com/a/b/"
@@ -660,7 +682,292 @@ def checkio(url):
 # print(checkio("http://www.checkio.org/task/./1/../2/././name")) # == "http://www.checkio.org/task/2/name"
 
 
-checkio = lambda x: x==x[::-1]
+def nearest_square(n):
+    for x in range(n - 1, 0, -1):
+        if not (x ** 0.5) % 1:
+            low = x
+            break
 
-print(checkio("asd"))
+    for x in range(n + 1, 1000001):
+        if not (x ** 0.5) % 1:
+            up = x
+            break
+
+    res = low if (n - low) < (up - n) else up
+    return res
+
+
+########################################################################################
+
+fibochka = [1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765]
+
+
+def checkio(opacity):
+    sq = [x if x in fibochka else -1 for x in range(1, 10001)]
+    yo = 10000 - opacity
+    for x, y in enumerate(sq, start=0):
+        if sum(sq[:x + 1]) == yo:
+            return x + 1
+
+
+# print(checkio(9999)) # == 1
+# print(checkio(9994)) # == 3
+# print(checkio(9995)) # == 4
+
+def name_spell(name, spell):
+    for letter in name:
+        if letter in spell:
+            spell = spell.replace(letter, '', 1)
+        else:
+            return False
+    spell = '1' if spell=='' else spell
+    return spell
+
+def monsters(spell: str, MONSTERS) -> int:
+    names = []
+    for name in MONSTERS:
+        inside = name_spell(name, spell)
+        if inside:
+            spell = inside
+            names.append(name)
+            while inside:
+                inside = name_spell(name, spell)
+                if inside:
+                    spell = inside
+                    names.append(name)
+    return len(names)
+
+import itertools as it
+
+def halloween_monsters(spell: str):
+    MONSTERS = ['jack', 'ghost', 'witch', 'mummy', 'zombie', 'vampire', 'skeleton', 'werewolf', 'frankenstein']
+    variations = list(it.permutations(MONSTERS, r=len(MONSTERS)))
+    res = []
+    for variant in variations:
+        res.append(monsters(spell, variant))
+    return max(res)
+
+# print(halloween_monsters("sqcnxsqhtrxmhoslaykktvocxmjkwmuzewulwuotncvgebbqvdbyjpzirzmscporjklfiefzuaiynpyljdqbdpwighggfdv"))
+# print(halloween_monsters("kenoistcepajmlvre")) # == 2
+# print(halloween_monsters("llzmfrhlthfqpnnkgvtzvgknsewejisuspfqzbbmmsfxdnxcvpikyytqqcraiomrbvxdjeyjxolorezwao")) # == 7
+# print(halloween_monsters('finhtiistchwwaerecnnkt'))  # == 3  # witch, witch, frankenstein)
+# print(halloween_monsters("miaimavrurymepepv")) # == 2
+# print(halloween_monsters('tkjagchso'))  # == 2               # jack, ghost
+
+
+def checkio(ptrn, image):
+    rows = len(ptrn)
+    cols = len(ptrn[0])
+    for x in range(len(image)-len(ptrn)+1):
+        for y in range(len(image[0])-len(ptrn[0])+1):
+            pikcha = True
+            for x1, row in enumerate(image[x:x+rows], start=0):
+                if pikcha == False:
+                    break
+                for y1, col in enumerate(row[y:y+cols], start=0):
+                    if col!=ptrn[x1][y1]:
+                        pikcha = False
+                        break
+            if pikcha==True:
+                for x1, row in enumerate(image[x:x + rows], start=x):
+                    for y1, col in enumerate(row[y:y + cols], start=y):
+                        image[x1][y1]=image[x1][y1]+2
+    return image
+
+# print(checkio([[0,0,0],[0,0,0],[0,0,0]],[[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,1,0,0,0,1,0,0,0,0,0],[0,0,0,1,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,1,0,0,0],[0,0,0,0,0,1,0,0,0,0,0,0],[0,0,1,0,0,0,0,0,1,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,1,0,0,0,0,1,0,0,0,1,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,1,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,1,0,0]]))
+# print(checkio([[1, 0], [1, 1]],
+#         [[0, 1, 0, 1, 0],
+#          [0, 1, 1, 0, 0],
+#          [1, 0, 1, 1, 0],
+#          [1, 1, 0, 1, 1],
+#          [0, 1, 1, 0, 0]])) # == [[0, 3, 2, 1, 0],
+#                             #  [0, 3, 3, 0, 0],
+#                             #  [3, 2, 1, 3, 2],
+#                             #  [3, 3, 0, 3, 3],
+#                             #  [0, 1, 1, 0, 0]]
+# print(checkio([[1, 1], [1, 1]],
+#         [[1, 1, 1],
+#          [1, 1, 1],
+#          [1, 1, 1]])) # == [[3, 3, 1],
+#                       #    [3, 3, 1],
+#                       #    [1, 1, 1]])
+
+
+def encode(msg, sa, kw):
+    msg = msg.lower().replace(' ', '')
+    ptrn = 'ADFGVX'
+    sa_matrix = {'A': '', 'D': '', 'F': '', 'G': '', 'V': '', 'X': ''}
+    num = 0
+
+    # Create matrix of secret alphabet
+    for x in range(6):
+        for y in range(6):
+            sa_matrix[ptrn[x]] += sa[num]
+            num += 1
+
+    # Create table of upper letters
+    shifr = ''
+    for x in msg:
+        for k, v in sa_matrix.items():
+            if x in v:
+                shifr += k + ptrn[v.index(x)]
+
+    # Clean keyword from repeating letters
+    kw2 = ''
+    for x in kw:
+        if x not in kw2:
+            kw2 += x
+    kw = kw2
+
+    # Create new matrix by keyword
+    kw_matrix = []
+    kw_matrix.append(kw)
+    while len(shifr)>0:
+        kw_matrix.append('')
+        for x in range(len(kw)):
+            if len(shifr)==0:
+                break
+            kw_matrix[-1] += shifr[0]
+            shifr = shifr.replace(shifr[0], '', 1)
+
+    # Reorganize matrix by alphabet and keyword
+    kw = ''.join(sorted(kw))
+    neo_matrix = ['']*len(kw)
+    for x, s in enumerate(kw, start=0):
+        for y in range(len(kw_matrix)):
+            try:
+                neo_matrix[y] += kw_matrix[y][kw_matrix[0].index(s)]
+            except IndexError:
+                neo_matrix[y] += ' '
+
+    # Read the neo_matrix by columns
+    res = ''
+    del neo_matrix[0]
+    neo_matrix = list(filter(lambda x: x!='', neo_matrix))
+
+    for x in range(len(neo_matrix[0])):
+        for y, row in enumerate(neo_matrix, start=0):
+            if row[x]!=' ':
+                res += row[x]
+    return res
+
+
+def decode(msg, sa, kw):
+    # Clean keyword from repeating letters
+    kw2 = ''
+    for x in kw:
+        if x not in kw2:
+            kw2 += x
+    kw = kw2
+    kw2 = ''.join(sorted(kw))
+
+    if len(msg)%len(kw):
+        rows = len(msg)//len(kw) + 1
+        spaces = kw[(len(msg)%len(kw)):]
+    else:
+        rows = len(msg)//len(kw)
+        spaces = ''
+
+    # Create keyword matrix
+    kw_matrix = ['']*rows
+    for s in kw2:
+        if s not in spaces:
+            for y in range(rows):
+                kw_matrix[y] += msg[0]
+                msg = msg[1:]
+        else:
+            for y in range(rows-1):
+                kw_matrix[y] += msg[0]
+                msg = msg[1:]
+            kw_matrix[y+1] += ' '
+
+    # Create neo_matrix by keyword
+    neo_matrix = []
+    for x in kw:
+        for y in range(rows):
+            if y>len(neo_matrix)-1:
+                neo_matrix.append([])
+            neo_matrix[y].append(kw_matrix[y][kw2.index(x)])
+
+    # Create string of upper letters
+    shifr = ''
+    for x in range(rows):
+        for y, s in enumerate(neo_matrix[x], start=0):
+            if s!=' ':
+                shifr += s
+
+    # Create matrix of secret alphabet
+    ptrn = 'ADFGVX'
+    sa_matrix = {'A': '', 'D': '', 'F': '', 'G': '', 'V': '', 'X': ''}
+    num = 0
+    for x in range(6):
+        for y in range(6):
+            sa_matrix[ptrn[x]] += sa[num]
+            num += 1
+
+    # Decode using matrix of secret alphabet
+    res = ''
+    for x in range(0, len(shifr), 2):
+        res += sa_matrix.get(shifr[x])[ptrn.index(shifr[x+1])]
+    return res
+
+# print(encode("I am going", "dhxmu4p3j6aoibzv9w1n70qkfslyc8tr5e2g", "cipher"))
+# print(decode("DXGAXAAXXVDDFGFX", "dhxmu4p3j6aoibzv9w1n70qkfslyc8tr5e2g", "weasel"))
+# print(encode("I am going", "dhxmu4p3j6aoibzv9w1n70qkfslyc8tr5e2g", "weasel"))
+# print(encode('I am going.', 'dhxmu4p3j6aoibzv9w1n70qkfslyc8tr5e2g','cipher'))  # == 'FXGAFVXXAXDDDXGA'
+# print(decode('FXGAFVXXAXDDDXGA', 'dhxmu4p3j6aoibzv9w1n70qkfslyc8tr5e2g','cipher'))  # == 'iamgoing')
+
+def steps_finder(x, y):
+    # All steps of horse
+    STEPS = {
+        1: lambda x, y: [x-2, y-1],
+        2: lambda x, y: [x-2, y+1],
+        3: lambda x, y: [x-1, y+2],
+        4: lambda x, y: [x+1, y+2],
+        5: lambda x, y: [x+2, y+1],
+        6: lambda x, y: [x+2, y-1],
+        7: lambda x, y: [x+1, y-2],
+        8: lambda x, y: [x-1, y-2]
+    }
+
+    res = []
+    for num in range(1, 9):
+        stp = STEPS[num](x, y)
+        if 8>stp[0]>=0 and 8>stp[1]>=0:
+            res.append(stp)
+    return res
+
+def chess_knight(start, moves):
+    row = 'abcdefgh'
+    x, y = (8 - int(list(start)[1])), row.index(list(start)[0])
+
+    steps = []
+    prev_move = []
+    prev_move.append([x, y])
+    while moves>0:
+        next_move = []
+        for z in prev_move:
+            next_move.extend(steps_finder(z[0], z[1]))
+        prev_move = next_move
+        steps.extend(prev_move)
+        moves -= 1
+
+    res = []
+    for x in steps:
+        res.append(row[x[1]] + str(8 - int(x[0])))
+
+    res = list(set(res))
+    res = sorted(res, key=lambda x: int(x[1]))
+    return sorted(res)
+
+
+# print(chess_knight('h8', 2)) # == ['d6', 'd8', 'e5', 'e7', 'f4', 'f7', 'f8', 'g5', 'g6', 'h4', 'h6', 'h8'])
+# print(chess_knight('a1', 1)) # == ['b3', 'c2']
+
+
+
+
+
+
+
 

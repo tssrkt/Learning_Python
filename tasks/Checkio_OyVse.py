@@ -445,3 +445,37 @@ def greatest_common_divisor(*args:int) -> int:
 # print(greatest_common_divisor(2, 4, 8)) # == 2
 # print(greatest_common_divisor(2, 3, 5, 7, 11)) # == 1
 # print(greatest_common_divisor(3, 9, 3, 9)) # == 3)
+
+
+def decode_amsco(msg, key):
+    key = str(key)
+    matrix = [[]]
+    for x in range(len(key)):
+        matrix[-1].append(int(key[x]))
+
+    key_sort = sorted(key)
+    rows = (len(msg)//2+len(msg)//4)//len(key) + 1
+    print(len(msg), len(key), rows)
+    for x in range(len(key)):
+        strt = 1
+        if ((matrix[0].index(matrix[0][x])) + 1) % 2:
+            strt = 2
+        for y in range(1, rows):
+            if y>len(matrix)-1:
+                matrix.append([''] * len(key))
+            matrix[y][matrix[0].index(int(key_sort[x]))] += msg[:strt]
+            msg = msg[strt:]
+            strt = 1 if strt==2 else 2
+
+
+
+
+    res = ''
+
+    for x in matrix:
+        print(x)
+
+
+    return res
+
+print(decode_amsco("oruoreemdstmioitlpslam", 4123)) # == "loremipsumdolorsitamet"

@@ -1,3 +1,67 @@
+class Person:
+    def __init__(self, first_name, last_name, birth_date, job, working_years, salary, country, city, gender='unknown'):
+        self.first_name = first_name
+        self.last_name = last_name
+        self.birth_date = birth_date
+        self.job = job
+        self.working_years = working_years
+        self.salary = salary
+        self.country = country
+        self.city = city
+        self.gender = gender
+
+    def name(self):
+        return '{} {}'.format(self.first_name, self.last_name)
+
+    def age(self):
+        """ Age of person at 01.01.2018 """
+        from datetime import date
+        d, m, y = (self.birth_date).split('.')
+        born = date(int(y), int(m), int(d))
+        today = date(2018, 1, 1)
+        return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+
+
+    def work(self):
+        if self.gender=='male':
+            return f'He is a {self.job}'
+        elif self.gender=='female':
+            return f'She is a {self.job}'
+        else:
+            return f'Is a {self.job}'
+
+    def money(self):
+        money = str(self.working_years * (self.salary*12))
+        for x in range(len(money)-1, -1, -3):
+            money = money[:x+1] + ' ' + money[x+1:]
+        return money.strip()
+
+    def home(self):
+        return f'Lives in {self.city}, {self.country}'
+
+
+# p1 = Person('John', 'Smith', '19.09.1979', 'welder', 15, 3600, 'Canada', 'Vancouver', 'male')
+# print(p1.money())
+# print(p1.age())
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 from abc import ABC, abstractmethod
 
 class Army(ABC):
@@ -60,24 +124,24 @@ class Archer(Warrior):
 
 
 
-my_army = EuropeanArmy()
-enemy_army = AsianArmy()
-
-soldier_1 = my_army.train_swordsman("Jaks")
-soldier_2 = my_army.train_lancer("Harold")
-soldier_3 = my_army.train_archer("Robin")
-
-soldier_4 = enemy_army.train_swordsman("Kishimoto")
-soldier_5 = enemy_army.train_lancer("Ayabusa")
-soldier_6 = enemy_army.train_archer("Kirigae")
-
-soldier_1.introduce() == "Knight Jaks, European swordsman"
-soldier_2.introduce() == "Raubritter Harold, European lancer"
-soldier_3.introduce() == "Ranger Robin, European archer"
-
-soldier_4.introduce() == "Samurai Kishimoto, Asian swordsman"
-soldier_5.introduce() == "Ronin Ayabusa, Asian lancer"
-soldier_6.introduce() == "Shinobi Kirigae, Asian archer"
+# my_army = EuropeanArmy()
+# enemy_army = AsianArmy()
+#
+# soldier_1 = my_army.train_swordsman("Jaks")
+# soldier_2 = my_army.train_lancer("Harold")
+# soldier_3 = my_army.train_archer("Robin")
+#
+# soldier_4 = enemy_army.train_swordsman("Kishimoto")
+# soldier_5 = enemy_army.train_lancer("Ayabusa")
+# soldier_6 = enemy_army.train_archer("Kirigae")
+#
+# soldier_1.introduce() == "Knight Jaks, European swordsman"
+# soldier_2.introduce() == "Raubritter Harold, European lancer"
+# soldier_3.introduce() == "Ranger Robin, European archer"
+#
+# soldier_4.introduce() == "Samurai Kishimoto, Asian swordsman"
+# soldier_5.introduce() == "Ronin Ayabusa, Asian lancer"
+# soldier_6.introduce() == "Shinobi Kirigae, Asian archer"
 
 
 

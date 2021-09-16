@@ -149,3 +149,4 @@ def recall_password(grille, password):
         answer += ''.join([password[r][c] for r in range(4) for c in range(4) if grille[r][c] == 'X'])
         grille = list(map(''.join, zip(*grille[::-1])))
     return answer
+
