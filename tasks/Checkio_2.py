@@ -832,8 +832,8 @@ def encode(msg, sa, kw):
 
     # Reorganize matrix by alphabet and keyword
     kw = ''.join(sorted(kw))
-    neo_matrix = ['']*len(kw)
-    for x, s in enumerate(kw, start=0):
+    neo_matrix = ['']*len(kw_matrix)
+    for s in kw:
         for y in range(len(kw_matrix)):
             try:
                 neo_matrix[y] += kw_matrix[y][kw_matrix[0].index(s)]
@@ -846,7 +846,7 @@ def encode(msg, sa, kw):
     neo_matrix = list(filter(lambda x: x!='', neo_matrix))
 
     for x in range(len(neo_matrix[0])):
-        for y, row in enumerate(neo_matrix, start=0):
+        for row in neo_matrix:
             if row[x]!=' ':
                 res += row[x]
     return res
@@ -892,7 +892,7 @@ def decode(msg, sa, kw):
     # Create string of upper letters
     shifr = ''
     for x in range(rows):
-        for y, s in enumerate(neo_matrix[x], start=0):
+        for s in neo_matrix[x]:
             if s!=' ':
                 shifr += s
 
@@ -916,6 +916,9 @@ def decode(msg, sa, kw):
 # print(encode("I am going", "dhxmu4p3j6aoibzv9w1n70qkfslyc8tr5e2g", "weasel"))
 # print(encode('I am going.', 'dhxmu4p3j6aoibzv9w1n70qkfslyc8tr5e2g','cipher'))  # == 'FXGAFVXXAXDDDXGA'
 # print(decode('FXGAFVXXAXDDDXGA', 'dhxmu4p3j6aoibzv9w1n70qkfslyc8tr5e2g','cipher'))  # == 'iamgoing')
+# print(encode("One 1, Two 2, Three 3, Four 4, Five 5, Six 6, Seven 7, Eight 8, Nine 9, Zero 0", "d9sr4qxvaz75yu2hkwpm8j63b1legot0ifnc", "monty")) # == 'VGFFAGVGXGXVDVXGXVDGXDVAVXFVDXDFVVVAXGVXXVXXGGXAFDFADDFXVVGVVXXFGXDXDAAVGVVGFAGXVAFGVGAGVFGGXGFFXDAD'
+
+
 
 def steps_finder(x, y):
     # All steps of horse
@@ -965,9 +968,130 @@ def chess_knight(start, moves):
 # print(chess_knight('a1', 1)) # == ['b3', 'c2']
 
 
+def sum_consecutives(a):
+    res = []
+    same = []
+    for x, n in enumerate(a):
+        if x<len(a)-1 and n==a[x+1]:
+            same.append(n)
+        else:
+            if same==[]:
+                res.append(n)
+            else:
+                same.append(n)
+                res.append(sum(same))
+                same = []
+    if same != []:
+        res.append(sum(same))
+    return res
+
+
+# print(sum_consecutives([1,1,2,1])) # == [2,2,1]
+# print(sum_consecutives([1, 1, 1, 1])) # == [4]
+# print(sum_consecutives([1, 1, 2, 2])) # == [2, 4]
+
+
+def simple_areas(*args):
+    from math import pi
+    # Circle
+    if len(args)==1:
+        return round(pi*(args[0]/2)**2, 2)
+    # Rectangle
+    elif len(args)==2:
+        return round(args[0]*args[1], 2)
+    # Triangle
+    else:
+        p = (args[0]+args[1]+args[2])/2
+        return round((p*(p-args[0])*(p-args[1])*(p-args[2]))**0.5, 2)
+
+# print(simple_areas(3)) # == 7.07
+# print(simple_areas(2, 2)) # == 4
+# print(simple_areas(2, 3)) # == 6
+# print(simple_areas(3, 5, 4)) # == 6
+# print(simple_areas(1.5, 2.5, 2)) # == 1.5)
+
+
+def check_command(ptrn, cmd):
+    a = str(bin(ptrn))
+    a = '0'*(len(cmd)-len(a[2:])) + a[2:]
+
+    if len(cmd)<len(a):
+        return False
+
+    for n, s in enumerate(cmd):
+        if a[n]=='0' and s.isalpha() or a[n]=='1' and s.isdigit():
+            return False
+    return True
+
+
+# print(check_command(8,"a")) # == False
+# print(check_command(42, "12a0b3e4")) # == True
+# print(check_command(101, "ab23b4zz")) # == False
+
+
+def weak_point(m):
+    rows = [sum(x) for x in m]
+    cols = []
+
+    for x in range(len(m[0])):
+        col = 0
+        for y in m:
+            col += y[x]
+        cols.append(col)
+
+    return [rows.index(min(rows)), cols.index(min(cols))]
+
+#################################################################
 
 
 
+
+
+
+
+
+
+
+
+
+def next_stages(x, y, obs, psh=True):
+    pass
+
+def first_stage(x, y, obs, psh=True):
+    pass
+
+def landing_site(obs):
+    ALPHA = 'ABCDEFGHIJKL'
+    hexa = []
+    for x in range(9):
+        hexa.append([])
+        for y in range(12):
+            hexa[-1].append(ALPHA[y]+str(x+1))
+
+    sites = []
+    site = False
+    for x, row in enumerate(hexa[1:-1], start=1):
+        for y, s in enumerate(row[1:-1], start=1):
+            if s not in obs:
+                psh = (y+1)%2
+                site = first_stage(x, y, obs, psh)
+                if site:
+                    sites.append(site)
+
+
+    mx_site = (sorted(sites, key=len))[-1]
+    # sites = list(filter(sites, lambda x: x if len(x)==len(mx_site)))
+
+
+
+    for x in hexa:
+        print(x)
+
+    return sites
+
+# print(landing_site({'E5', 'E7', 'F4', 'F6', 'G4', 'G6', 'H3', 'H5'})) # == {'C3', 'J7'}
+# print(landing_site({'A4', 'C2', 'C6', 'C9', 'D4', 'D7', 'F1', 'F5',
+#                      'F8', 'G4', 'H7', 'I2', 'I5', 'I9', 'K3', 'K8', 'L5'})) # == {'B7', 'E3', 'J6'}
 
 
 

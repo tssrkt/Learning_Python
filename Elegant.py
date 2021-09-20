@@ -13,6 +13,8 @@ OPERATORS = {
     "div": lambda x, y: x // y if y else z_div,
     "pow": lambda x, y: x ** y
 }
+
+
 # print(OPERATORS[c](a, b))
 
 # put your python code here
@@ -26,7 +28,7 @@ OPERATORS = {
 #     print(str(x) + ' программистов')
 
 # Все исключения вместе
-def printExcTree(thisclass, nest = 0):
+def printExcTree(thisclass, nest=0):
     if nest > 1:
         print(" |" * (nest - 1), end="")
     if nest > 0:
@@ -36,4 +38,27 @@ def printExcTree(thisclass, nest = 0):
     for subclass in thisclass.__subclasses__():
         printExcTree(subclass, nest + 1)
 
+
 printExcTree(BaseException)
+
+###################################
+
+heroes = {
+    'Spiderman': 80,
+    'Batman': 65,
+    'Superman': 85,
+    'Wonder Woman': 70,
+    'Flash': 70,
+    'Ironman': 65,
+    'Thor': 90,
+    'Aquaman': 65,
+    'Captain America': 65,
+    'Hulk': 87,
+}
+
+# Сортировка сначала по значению, потом - по ключу
+for x in sorted(heroes.items(), key=lambda pair: (pair[1], pair(0))):
+    print(x)
+
+d = lambda x: 'Like' if x > 100 else ('Subscribe' if x > 0 else 'Follow')
+print(d(10))

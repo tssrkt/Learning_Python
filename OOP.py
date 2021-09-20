@@ -724,7 +724,7 @@ class Architect(Person):
         print('I can build')
 
 d1 = Doctor('Panteleymon')
-a1 = Architect('Evlampiy')
+a1 = Architect('Evlampiy', 25)
 print(issubclass(Doctor, Person))
 
 #############################################################################################
@@ -761,13 +761,28 @@ print(d.name, d.surname, d.age)
 #############################################################################
 
 
-class MyEx(Exception):
-    pass
+# class MyEx(Exception):
+#     pass
+#
+# try:
+#     raise MyEx('Error')
+# except AttributeError:
+#     print('Attribute Error')
 
-try:
-    raise MyEx('Error')
-except AttributeError:
-    print('Attribute Error')
 
+########################################
 
+from abc import ABC, abstractmethod
 
+class Experiment(ABC):
+    @abstractmethod
+    def some(self):
+        return 'One'
+
+class Nxt(Experiment):
+    def some(self):
+        one = super().some()
+        return one + ' Two'
+
+a = Nxt()
+print(a.some())
