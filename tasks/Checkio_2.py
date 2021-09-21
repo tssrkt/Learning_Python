@@ -720,8 +720,9 @@ def name_spell(name, spell):
             spell = spell.replace(letter, '', 1)
         else:
             return False
-    spell = '1' if spell=='' else spell
+    spell = '1' if spell == '' else spell
     return spell
+
 
 def monsters(spell: str, MONSTERS) -> int:
     names = []
@@ -737,7 +738,9 @@ def monsters(spell: str, MONSTERS) -> int:
                     names.append(name)
     return len(names)
 
+
 import itertools as it
+
 
 def halloween_monsters(spell: str):
     MONSTERS = ['jack', 'ghost', 'witch', 'mummy', 'zombie', 'vampire', 'skeleton', 'werewolf', 'frankenstein']
@@ -746,6 +749,7 @@ def halloween_monsters(spell: str):
     for variant in variations:
         res.append(monsters(spell, variant))
     return max(res)
+
 
 # print(halloween_monsters("sqcnxsqhtrxmhoslaykktvocxmjkwmuzewulwuotncvgebbqvdbyjpzirzmscporjklfiefzuaiynpyljdqbdpwighggfdv"))
 # print(halloween_monsters("kenoistcepajmlvre")) # == 2
@@ -758,21 +762,22 @@ def halloween_monsters(spell: str):
 def checkio(ptrn, image):
     rows = len(ptrn)
     cols = len(ptrn[0])
-    for x in range(len(image)-len(ptrn)+1):
-        for y in range(len(image[0])-len(ptrn[0])+1):
+    for x in range(len(image) - len(ptrn) + 1):
+        for y in range(len(image[0]) - len(ptrn[0]) + 1):
             pikcha = True
-            for x1, row in enumerate(image[x:x+rows], start=0):
+            for x1, row in enumerate(image[x:x + rows], start=0):
                 if pikcha == False:
                     break
-                for y1, col in enumerate(row[y:y+cols], start=0):
-                    if col!=ptrn[x1][y1]:
+                for y1, col in enumerate(row[y:y + cols], start=0):
+                    if col != ptrn[x1][y1]:
                         pikcha = False
                         break
-            if pikcha==True:
+            if pikcha == True:
                 for x1, row in enumerate(image[x:x + rows], start=x):
                     for y1, col in enumerate(row[y:y + cols], start=y):
-                        image[x1][y1]=image[x1][y1]+2
+                        image[x1][y1] = image[x1][y1] + 2
     return image
+
 
 # print(checkio([[0,0,0],[0,0,0],[0,0,0]],[[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,1,0,0,0,1,0,0,0,0,0],[0,0,0,1,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,1,0,0,0],[0,0,0,0,0,1,0,0,0,0,0,0],[0,0,1,0,0,0,0,0,1,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,1,0,0,0,0,1,0,0,0,1,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,1,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,1,0,0]]))
 # print(checkio([[1, 0], [1, 1]],
@@ -822,17 +827,17 @@ def encode(msg, sa, kw):
     # Create new matrix by keyword
     kw_matrix = []
     kw_matrix.append(kw)
-    while len(shifr)>0:
+    while len(shifr) > 0:
         kw_matrix.append('')
         for x in range(len(kw)):
-            if len(shifr)==0:
+            if len(shifr) == 0:
                 break
             kw_matrix[-1] += shifr[0]
             shifr = shifr.replace(shifr[0], '', 1)
 
     # Reorganize matrix by alphabet and keyword
     kw = ''.join(sorted(kw))
-    neo_matrix = ['']*len(kw_matrix)
+    neo_matrix = [''] * len(kw_matrix)
     for s in kw:
         for y in range(len(kw_matrix)):
             try:
@@ -843,11 +848,11 @@ def encode(msg, sa, kw):
     # Read the neo_matrix by columns
     res = ''
     del neo_matrix[0]
-    neo_matrix = list(filter(lambda x: x!='', neo_matrix))
+    neo_matrix = list(filter(lambda x: x != '', neo_matrix))
 
     for x in range(len(neo_matrix[0])):
         for row in neo_matrix:
-            if row[x]!=' ':
+            if row[x] != ' ':
                 res += row[x]
     return res
 
@@ -861,31 +866,31 @@ def decode(msg, sa, kw):
     kw = kw2
     kw2 = ''.join(sorted(kw))
 
-    if len(msg)%len(kw):
-        rows = len(msg)//len(kw) + 1
-        spaces = kw[(len(msg)%len(kw)):]
+    if len(msg) % len(kw):
+        rows = len(msg) // len(kw) + 1
+        spaces = kw[(len(msg) % len(kw)):]
     else:
-        rows = len(msg)//len(kw)
+        rows = len(msg) // len(kw)
         spaces = ''
 
     # Create keyword matrix
-    kw_matrix = ['']*rows
+    kw_matrix = [''] * rows
     for s in kw2:
         if s not in spaces:
             for y in range(rows):
                 kw_matrix[y] += msg[0]
                 msg = msg[1:]
         else:
-            for y in range(rows-1):
+            for y in range(rows - 1):
                 kw_matrix[y] += msg[0]
                 msg = msg[1:]
-            kw_matrix[y+1] += ' '
+            kw_matrix[y + 1] += ' '
 
     # Create neo_matrix by keyword
     neo_matrix = []
     for x in kw:
         for y in range(rows):
-            if y>len(neo_matrix)-1:
+            if y > len(neo_matrix) - 1:
                 neo_matrix.append([])
             neo_matrix[y].append(kw_matrix[y][kw2.index(x)])
 
@@ -893,7 +898,7 @@ def decode(msg, sa, kw):
     shifr = ''
     for x in range(rows):
         for s in neo_matrix[x]:
-            if s!=' ':
+            if s != ' ':
                 shifr += s
 
     # Create matrix of secret alphabet
@@ -908,8 +913,9 @@ def decode(msg, sa, kw):
     # Decode using matrix of secret alphabet
     res = ''
     for x in range(0, len(shifr), 2):
-        res += sa_matrix.get(shifr[x])[ptrn.index(shifr[x+1])]
+        res += sa_matrix.get(shifr[x])[ptrn.index(shifr[x + 1])]
     return res
+
 
 # print(encode("I am going", "dhxmu4p3j6aoibzv9w1n70qkfslyc8tr5e2g", "cipher"))
 # print(decode("DXGAXAAXXVDDFGFX", "dhxmu4p3j6aoibzv9w1n70qkfslyc8tr5e2g", "weasel"))
@@ -919,26 +925,26 @@ def decode(msg, sa, kw):
 # print(encode("One 1, Two 2, Three 3, Four 4, Five 5, Six 6, Seven 7, Eight 8, Nine 9, Zero 0", "d9sr4qxvaz75yu2hkwpm8j63b1legot0ifnc", "monty")) # == 'VGFFAGVGXGXVDVXGXVDGXDVAVXFVDXDFVVVAXGVXXVXXGGXAFDFADDFXVVGVVXXFGXDXDAAVGVVGFAGXVAFGVGAGVFGGXGFFXDAD'
 
 
-
 def steps_finder(x, y):
     # All steps of horse
     STEPS = {
-        1: lambda x, y: [x-2, y-1],
-        2: lambda x, y: [x-2, y+1],
-        3: lambda x, y: [x-1, y+2],
-        4: lambda x, y: [x+1, y+2],
-        5: lambda x, y: [x+2, y+1],
-        6: lambda x, y: [x+2, y-1],
-        7: lambda x, y: [x+1, y-2],
-        8: lambda x, y: [x-1, y-2]
+        1: lambda x, y: [x - 2, y - 1],
+        2: lambda x, y: [x - 2, y + 1],
+        3: lambda x, y: [x - 1, y + 2],
+        4: lambda x, y: [x + 1, y + 2],
+        5: lambda x, y: [x + 2, y + 1],
+        6: lambda x, y: [x + 2, y - 1],
+        7: lambda x, y: [x + 1, y - 2],
+        8: lambda x, y: [x - 1, y - 2]
     }
 
     res = []
     for num in range(1, 9):
         stp = STEPS[num](x, y)
-        if 8>stp[0]>=0 and 8>stp[1]>=0:
+        if 8 > stp[0] >= 0 and 8 > stp[1] >= 0:
             res.append(stp)
     return res
+
 
 def chess_knight(start, moves):
     row = 'abcdefgh'
@@ -947,7 +953,7 @@ def chess_knight(start, moves):
     steps = []
     prev_move = []
     prev_move.append([x, y])
-    while moves>0:
+    while moves > 0:
         next_move = []
         for z in prev_move:
             next_move.extend(steps_finder(z[0], z[1]))
@@ -972,10 +978,10 @@ def sum_consecutives(a):
     res = []
     same = []
     for x, n in enumerate(a):
-        if x<len(a)-1 and n==a[x+1]:
+        if x < len(a) - 1 and n == a[x + 1]:
             same.append(n)
         else:
-            if same==[]:
+            if same == []:
                 res.append(n)
             else:
                 same.append(n)
@@ -994,15 +1000,16 @@ def sum_consecutives(a):
 def simple_areas(*args):
     from math import pi
     # Circle
-    if len(args)==1:
-        return round(pi*(args[0]/2)**2, 2)
+    if len(args) == 1:
+        return round(pi * (args[0] / 2) ** 2, 2)
     # Rectangle
-    elif len(args)==2:
-        return round(args[0]*args[1], 2)
+    elif len(args) == 2:
+        return round(args[0] * args[1], 2)
     # Triangle
     else:
-        p = (args[0]+args[1]+args[2])/2
-        return round((p*(p-args[0])*(p-args[1])*(p-args[2]))**0.5, 2)
+        p = (args[0] + args[1] + args[2]) / 2
+        return round((p * (p - args[0]) * (p - args[1]) * (p - args[2])) ** 0.5, 2)
+
 
 # print(simple_areas(3)) # == 7.07
 # print(simple_areas(2, 2)) # == 4
@@ -1013,13 +1020,13 @@ def simple_areas(*args):
 
 def check_command(ptrn, cmd):
     a = str(bin(ptrn))
-    a = '0'*(len(cmd)-len(a[2:])) + a[2:]
+    a = '0' * (len(cmd) - len(a[2:])) + a[2:]
 
-    if len(cmd)<len(a):
+    if len(cmd) < len(a):
         return False
 
     for n, s in enumerate(cmd):
-        if a[n]=='0' and s.isalpha() or a[n]=='1' and s.isdigit():
+        if a[n] == '0' and s.isalpha() or a[n] == '1' and s.isdigit():
             return False
     return True
 
@@ -1041,24 +1048,17 @@ def weak_point(m):
 
     return [rows.index(min(rows)), cols.index(min(cols))]
 
+
 #################################################################
-
-
-
-
-
-
-
-
-
-
 
 
 def next_stages(x, y, obs, psh=True):
     pass
 
+
 def first_stage(x, y, obs, psh=True):
     pass
+
 
 def landing_site(obs):
     ALPHA = 'ABCDEFGHIJKL'
@@ -1066,32 +1066,300 @@ def landing_site(obs):
     for x in range(9):
         hexa.append([])
         for y in range(12):
-            hexa[-1].append(ALPHA[y]+str(x+1))
+            hexa[-1].append(ALPHA[y] + str(x + 1))
 
     sites = []
     site = False
     for x, row in enumerate(hexa[1:-1], start=1):
         for y, s in enumerate(row[1:-1], start=1):
             if s not in obs:
-                psh = (y+1)%2
+                psh = (y + 1) % 2
                 site = first_stage(x, y, obs, psh)
                 if site:
                     sites.append(site)
 
-
     mx_site = (sorted(sites, key=len))[-1]
     # sites = list(filter(sites, lambda x: x if len(x)==len(mx_site)))
-
-
 
     for x in hexa:
         print(x)
 
     return sites
 
+
 # print(landing_site({'E5', 'E7', 'F4', 'F6', 'G4', 'G6', 'H3', 'H5'})) # == {'C3', 'J7'}
 # print(landing_site({'A4', 'C2', 'C6', 'C9', 'D4', 'D7', 'F1', 'F5',
 #                      'F8', 'G4', 'H7', 'I2', 'I5', 'I9', 'K3', 'K8', 'L5'})) # == {'B7', 'E3', 'J6'}
 
 
+def convert(code):
+    bin_code = bin(code)[2:].zfill(6)[::-1]
+    return [[int(bin_code[j + i * 3]) for i in range(2)] for j in range(3)]
 
+
+LETTERS_NUMBERS = list(map(convert,
+                           [1, 3, 9, 25, 17, 11, 27, 19, 10, 26,
+                            5, 7, 13, 29, 21, 15, 31, 23, 14, 30,
+                            37, 39, 62, 45, 61, 53, 47, 63, 55, 46, 26]))
+CAPITAL_FORMAT = convert(32)
+NUMBER_FORMAT = convert(60)
+PUNCTUATION = {",": convert(2), "-": convert(18), "?": convert(38),
+               "!": convert(22), ".": convert(50), "_": convert(36)}
+WHITESPACE = convert(0)
+
+
+def braille_page(text: str):
+    from string import ascii_lowercase as al
+
+    nums_caps = len([x for x in text if x.isdigit()]) + len([x for x in text if x.isupper()])
+    ln = (len(text) + nums_caps)
+    if ln <= 10:
+        rows = 1
+        cols = ln * 3 - 1
+    else:
+        num = 0
+        if ln % 10:
+            num = 1
+        rows = ln // 10 + num
+        cols = 29
+
+    m = []
+    for x in range(rows):
+        for y in range(3):
+            m.append([0] * cols)
+        if x < rows - 1:
+            m.append([0] * cols)
+
+    step = [0, 0]
+    for x in text:
+        a = []
+        if x.isalpha():
+            if x.isupper():
+                a.append(CAPITAL_FORMAT)
+            a.append(LETTERS_NUMBERS[al.index(x.lower())])
+        elif x.isdigit():
+            a.append(NUMBER_FORMAT)
+            a.append(LETTERS_NUMBERS[int(x) - 1])
+        elif x.isspace():
+            a.append(WHITESPACE)
+        else:
+            a.append(PUNCTUATION.get(x))
+
+        for n, y in enumerate(a):
+            for z in range(3):
+                m[step[0] + z][step[1]] = y[z][0]
+                m[step[0] + z][step[1] + 1] = y[z][1]
+            if step[1] < (cols - 3):
+                step[1] += 3
+            else:
+                step[0] += 4
+                step[1] = 0
+    return m
+
+
+# print(braille_page(u"0123456789"))
+# print(braille_page(u"42"))
+# print(braille_page("hello 1st World!"))
+
+
+FIRST_TEN = ["one", "two", "three", "four", "five", "six", "seven",
+             "eight", "nine"]
+SECOND_TEN = ["ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen",
+              "sixteen", "seventeen", "eighteen", "nineteen"]
+OTHER_TENS = ["twenty", "thirty", "forty", "fifty", "sixty", "seventy",
+              "eighty", "ninety"]
+HUNDRED = "hundred"
+
+
+def checkio(num):
+    num = str(num)
+
+    res = ''
+    if len(num) == 3:
+        res += FIRST_TEN[int(num[0]) - 1] + ' ' + HUNDRED + ' '
+        num = num[1:]
+        if num == '00':
+            return res.strip()
+
+    if len(num) == 2:
+        if num[0] != '0' and int(num) < 20:
+            res += SECOND_TEN[int(num) - 10]
+        else:
+            n2 = str(OTHER_TENS[int(num[0]) - 2]) + ' ' if num[0] != '0' else ''
+            n3 = str(FIRST_TEN[int(num[1]) - 1]) if num[1] != '0' else ''
+            res += n2 + n3
+
+    if len(num) == 1:
+        res += FIRST_TEN[int(num) - 1]
+    return res.strip()
+
+
+# print(checkio(4))  # =='four'
+# print(checkio(143))  # =='one hundred forty three'
+# print(checkio(12))  # =='twelve'
+# print(checkio(101))  # =='one hundred one'
+# print(checkio(212))  # =='two hundred twelve'
+# print(checkio(40))  # =='forty'
+
+class Friends:
+    cons = []
+
+    @classmethod
+    def add(cls, bond):
+        if bond not in cls.cons:
+            cls.cons.append(bond)
+
+    @classmethod
+    def connected(cls, name):
+        names = set()
+        for bond in cls.cons:
+            if name in bond:
+                for x in bond:
+                    if x != name:
+                        names.add(x)
+        return names
+
+    @classmethod
+    def clear(cls):
+        cls.cons = []
+
+
+def check_connection(nw, f1, f2):
+    f = Friends()
+    for x in nw:
+        a, b = x.split('-')
+        if a==f1 and b==f2 or a==f2 and b==f1:
+            Friends.clear()
+            return True
+        f.add({a, b})
+
+    nxt1, nxt2 = [], []
+    nxt1.extend(f.connected(f1))
+    nxt2.extend(f.connected(f2))
+    res = list(filter(lambda x: x in nxt1, nxt2))
+    if len(res) > 0:
+        Friends.clear()
+        return True
+
+    z = 0
+    fs1, fs2 = [], []
+    cons = f.cons
+    while z < len(cons):
+        nxt1 = set(nxt1)
+        nxt2 = set(nxt2)
+        fs1.extend([x for x in nxt1 if fs1.count(x)==0])
+        fs2.extend([x for x in nxt2 if fs2.count(x)==0])
+        nxt1 = []
+        nxt2 = []
+        for x in fs1:
+            nxt1.extend(f.connected(x))
+        for x in fs2:
+            nxt2.extend(f.connected(x))
+        res = list(filter(lambda x: x in nxt1, nxt2))
+        if len(res) > 0:
+            Friends.clear()
+            return True
+        z += 1
+    Friends.clear()
+    return False
+
+
+####################################################################################################
+
+def grid():
+    for x in range(1, 17):
+        yield x
+
+def identify_block(nums):
+    m = []
+    gen = grid()
+    for x in range(4):
+        m.append([])
+        for y in range(4):
+            m[-1].append(next(gen))
+
+    for x in m:
+        print(x)
+
+    return None
+
+print(identify_block({1, 2, 3, 4})) # == 'I'
+print(identify_block({1, 2, 3, 6})) # == 'T'
+print(identify_block({1, 5, 6, 10})) # == 'S'
+
+
+
+
+
+
+
+
+
+
+
+
+def step(a):
+    for x in range(1, a):
+        yield x
+
+
+def signpost(m, dirs):
+    DIRS = {
+        'N': lambda x, y: [x - 1, y],
+        'NE': lambda x, y: [x - 1, y + 1],
+        'E': lambda x, y: [x, y + 1],
+        'SE': lambda x, y: [x + 1, y + 1],
+        'S': lambda x, y: [x + 1, y],
+        'SW': lambda x, y: [x + 1, y - 1],
+        'W': lambda x, y: [x, y - 1],
+        'NW': lambda x, y: [x - 1, y - 1]
+    }
+
+    cell = len(m) * len(m[0])
+    for num1, x in enumerate(m):
+        if x.count(1):
+            gen = step(cell)
+            stp = next(gen)
+            nxt_stp = [num1, x.index(1)]
+            break
+
+    while stp < cell - 1:
+        aim = dirs[nxt_stp[0]][nxt_stp[1]]
+        nxt_stp = DIRS[aim](nxt_stp[0], nxt_stp[1])
+        stp = next(gen)
+        if m[nxt_stp[0]][nxt_stp[1]] == 0:
+            m[nxt_stp[0]][nxt_stp[1]] = stp
+    return m
+
+# print(signpost([[1, 0, 0],
+#           [0, 0, 0],
+#           [0, 0, 9]],
+#          (('S' , 'E' , 'S' ),
+#           ('S' , 'S' , 'NW'),
+#           ('NE', 'NE', ''  )))) # == [[1, 7, 8],
+#                                 #   [2, 4, 6],
+#                                 #   [3, 5, 9]]
+# print(signpost([[1, 0, 0, 0,  0],
+#           [0, 0, 9, 0, 18],
+#           [0, 0, 0, 0,  0],
+#           [0, 0, 0, 0,  0],
+#           [0, 0, 0, 0, 25]],
+#          (('SE', 'E' , 'SW', 'S' , 'S' ),
+#           ('E' , 'W' , 'S' , 'NE', 'SW'),
+#           ('S' , 'N' , 'N' , 'N' , 'S' ),
+#           ('NE', 'N' , 'NE', 'SE', 'W' ),
+#           ('NE', 'NE', 'W' , 'W' , ''  )))) # == [[ 1, 13,  3, 14, 21],
+#                                             #   [ 8,  7,  9, 20, 18],
+#                                             #   [ 4,  6,  2, 19, 22],
+#                                             #   [ 5, 12, 17, 24, 23],
+#                                             #   [11, 16, 10, 15, 25]]
+#
+#
+# print(signpost([[1, 0, 0, 0, 0, 0],
+#                [0, 0, 0, 0, 0, 0],
+#                [0, 0, 0, 0, 0, 0],
+#                [0, 0, 0, 0, 0, 24]],
+#               (('SE', 'E', 'SW', 'W', 'S', 'S'),
+#                ('E', 'E', 'SE', 'W', 'NW', 'S'),
+#                ('E', 'E', 'SW', 'W', 'SW', 'S'),
+#                ('E', 'W', 'NE', 'NW', 'NW', ''))))
