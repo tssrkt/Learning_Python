@@ -95,49 +95,146 @@ def checkio(matrix: List[List[int]]) -> bool:
 # Пока не знаю как решить задачку с диагоналями
 
 
-def checkio(s, s3=None):
-    a = [s.count('(') - s.count(')'), s.count('[') - s.count(']'), s.count('{') - s.count('}')]
-    b = ['(', '[', '{']
-    c = [')', ']', '}']
-    d = c + b
+def hits(x, y, chess, tp=False):
+    if type(chess)==tuple:
+        chess=list(chess)
+    for n, a in enumerate(chess):
+        if type(a)==tuple:
+            chess[n]=list(a)
 
-    for x in range(len(a)):
-        if a[x] != 0:
-            return False
-
-    if s3 != None:
-        res = checkio(s3)
-        if res==True:
-            s3==None
-
-    ou = [x for x in d if x in s]
-    if len(ou)==0 and s3==None:
-        return True
-
-    res = False
-    for x in range(len(s)):
-        if s[x] in b:
-            z = b.index(s[x])
-            if c[z] in s:
-                n = s.rfind(c[z])
-                s2 = s[x + 1:n]
-                if n!=len(s)-1:
-                    s3 = s[n:]
-                else:
-                    s3 = None
-                res = checkio(s2, s3)
-                if res==True:
-                    break
+    x1, x2 = x + 1, x - 1
+    y1, y2 = y + 1, y - 1
+    # straight hits of queens
+    while x1 < 8 or x2 >= 0 or y1 < 8 or y2 >= 0:
+        if x1 < 8:
+            if chess[x1][y]==3:
+                if tp: return False
+                x1 += 1
             else:
-                break
+                chess[x1][y] = 1
+                x1 += 1
+        if x2 >= 0:
+            if chess[x2][y]==3:
+                if tp: return False
+                x2 -= 1
+            else:
+                chess[x2][y] = 1
+                x2 -= 1
+        if y1 < 8:
+            if chess[x][y1]==3:
+                if tp: return False
+                y1 += 1
+            else:
+                chess[x][y1] = 1
+                y1 += 1
+        if y2 >= 0:
+            if chess[x][y2]==3:
+                if tp: return False
+                y2 -= 1
+            else:
+                chess[x][y2] = 1
+                y2 -= 1
 
-    return res
+    x1, x2 = x + 1, x - 1
+    y1, y2 = y + 1, y - 1
+    x3, x4 = x + 1, x - 1
+    y3, y4 = y - 1, y + 1
+    # diagonal hits of queens
+    while x1 < 8 and y1 < 8 or x2 >= 0 and y2 >= 0:
+        if x1 < 8 and y1 < 8:
+            if chess[x1][y1]==3:
+                if tp: return False
+                x1 += 1
+                y1 += 1
+            else:
+                chess[x1][y1] = 1
+                x1 += 1
+                y1 += 1
+        if x2 >= 0 and y2 >= 0:
+            if chess[x2][y2]==3:
+                if tp: return False
+                x2 += 1
+                y2 += 1
+            else:
+                chess[x2][y2] = 1
+                x2 -= 1
+                y2 -= 1
+
+        if x3 < 8 and y3 >= 0:
+            if chess[x3][y3]==3:
+                if tp: return False
+                x3 += 1
+                y3 -= 1
+            else:
+                chess[x3][y3] = 1
+                x3 += 1
+                y3 -= 1
+        if x4 >= 0 and y4 < 8:
+            if chess[x4][y4]==3:
+                if tp: return False
+                x4 -= 1
+                y4 += 1
+            else:
+                chess[x4][y4] = 1
+                x4 -= 1
+                y4 += 1
+
+    if tp: return True
+    return chess
 
 
-# print(checkio("[1+202]*3*({4+3)}"))
-# print(checkio("((5+3)*2+1)"))
-# print(checkio("(3+{1-1)}"))
+def place_queens(placed):
+    signs = 'abcdefgh'
 
+    chess = []
+    for x in range(8):
+        chess.append([0] * 8)
+
+    for x in placed:
+        a = 8 - int(x[1])
+        b = signs.index(x[0])
+        chess[a][b] = 3
+        chess = hits(a, b, chess)
+
+    chess2 = chess.copy()
+    for n, x in enumerate(chess2):
+        chess2[n] = tuple(x)
+    chess2 = tuple(chess2)
+
+    zeros = []
+    for a, x in enumerate(chess):
+        for b, y in enumerate(x):
+            if y == 0:
+                zeros.append([a, b])
+
+    import itertools as it
+    variations = list(it.permutations(zeros, r=len(zeros)))
+
+    res = []
+    for x in variations:
+        res.append([])
+        for y in x:
+            neo = hits(y[0], y[1], chess, True)
+            if neo:
+                chess[a][b] = 3
+                new_queen = signs[b] + str(8 - a)
+                res[-1].append(new_queen)
+        for n, x in enumerate(chess2):
+            chess[n] = list(x)
+
+    res = sorted(res, key=len)
+
+    print('CHESS2')
+    for x in chess2:
+        print(x)
+    print()
+
+
+    return res[-1]
+
+
+# print(place_queens({"b2", "c4", "d6", "e8"}))  # {"b2", "c4", "d6", "e8", "a5", "f3", "g1", "h7"},
+# print(place_queens({"b2", "c4", "d6", "e8", "a7", "g5"}))  # == set())
 
 
 

@@ -786,3 +786,61 @@ class Nxt(Experiment):
 
 a = Nxt()
 print(a.some())
+
+#####################################################################
+print()
+
+class Animal:
+    def __init__(self):
+        self.fly = False
+        self.run = False
+
+    def abilities(self):
+        print(type(self).__name__ + ':')
+        print('Run:', self.run)
+        print('Fly:', self.fly)
+        print()
+
+class Horse(Animal):
+    def __init__(self):
+        super().__init__()
+        self.run = True
+
+class Bird(Animal):
+    def __init__(self):
+        super().__init__()
+        self.fly = True
+
+class Pegasus(Horse, Bird):
+    pass
+
+horse = Horse()
+horse.abilities()
+bird = Bird()
+bird.abilities()
+pegasus = Pegasus()
+pegasus.abilities()
+
+
+def check_instance(obj, cls):
+    return cls in type(obj).mro()
+
+def check_subclass(child, base):
+    for dir_base in child.__bases__:
+        if base == dir_base:
+            return True
+        return check_subclass(dir_base, base)
+    return False
+    # return base in child.mro()
+
+def show_parents(obj):
+    print(type(obj).mro())
+    print(type(obj).__bases__)
+
+print(check_instance(pegasus, Pegasus))
+print(check_subclass(Pegasus, Animal))
+
+print(type(pegasus).mro())
+print(Pegasus.mro())
+print()
+show_parents(pegasus)

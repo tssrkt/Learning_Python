@@ -1228,7 +1228,7 @@ def check_connection(nw, f1, f2):
     f = Friends()
     for x in nw:
         a, b = x.split('-')
-        if a==f1 and b==f2 or a==f2 and b==f1:
+        if a == f1 and b == f2 or a == f2 and b == f1:
             Friends.clear()
             return True
         f.add({a, b})
@@ -1247,8 +1247,8 @@ def check_connection(nw, f1, f2):
     while z < len(cons):
         nxt1 = set(nxt1)
         nxt2 = set(nxt2)
-        fs1.extend([x for x in nxt1 if fs1.count(x)==0])
-        fs2.extend([x for x in nxt2 if fs2.count(x)==0])
+        fs1.extend([x for x in nxt1 if fs1.count(x) == 0])
+        fs2.extend([x for x in nxt2 if fs2.count(x) == 0])
         nxt1 = []
         nxt2 = []
         for x in fs1:
@@ -1264,11 +1264,55 @@ def check_connection(nw, f1, f2):
     return False
 
 
-####################################################################################################
+###################################################################################################
+
 
 def grid():
     for x in range(1, 17):
         yield x
+
+
+def clean_slepok(x, slepok):
+    while sum(slepok[x]) == 0:
+        del slepok[x]
+
+    col = 0
+    while col == 0:
+        for n, y in enumerate(slepok):
+            col += slepok[n][x]
+        if col == 0:
+            for n, y in enumerate(slepok):
+                del slepok[n][x]
+    return slepok
+
+
+def rotate(slepok):
+    res = []
+    for x in range(len(slepok[0])):
+        res.append([])
+        for y in reversed(range(len(slepok))):
+            res[-1].append(slepok[y][x])
+    return res
+
+
+def patterns(slepok):
+    PATTERNS = {
+        'I': [[1], [1], [1], [1]],
+        'J': [[0, 1], [0, 1], [1, 1]],
+        'L': [[1, 0], [1, 0], [1, 1]],
+        'O': [[1, 1], [1, 1]],
+        'S': [[0, 1, 1], [1, 1, 0]],
+        'T': [[1, 1, 1], [0, 1, 0]],
+        'Z': [[1, 1, 0], [0, 1, 1]]
+    }
+    signs = 'IJLOSTZ'
+    for y in range(4):
+        for x in signs:
+            if PATTERNS[x] == slepok:
+                return x
+        slepok = rotate(slepok)
+    return None
+
 
 def identify_block(nums):
     m = []
@@ -1278,14 +1322,85 @@ def identify_block(nums):
         for y in range(4):
             m[-1].append(next(gen))
 
-    for x in m:
-        print(x)
+    slepok = []
+    for x in range(4):
+        slepok.append([])
+        for y in range(4):
+            slepok[-1].append(0)
 
-    return None
+    for x in nums:
+        for n, y in enumerate(m):
+            if x in y:
+                slepok[n][y.index(x)] = 1
 
-print(identify_block({1, 2, 3, 4})) # == 'I'
-print(identify_block({1, 2, 3, 6})) # == 'T'
-print(identify_block({1, 5, 6, 10})) # == 'S'
+    slepok = clean_slepok(0, slepok)
+    slepok = clean_slepok(-1, slepok)
+
+    if len(slepok) == 1 and sum(slepok[0]) == 4:
+        return 'I'
+
+    res = patterns(slepok)
+    return res
+
+
+# print(identify_block({1, 2, 3, 4})) # == 'I'
+# print(identify_block({1, 2, 3, 6})) # == 'T'
+# print(identify_block({1, 5, 6, 10})) # == 'S'
+# print(identify_block({10, 13, 14, 15})) # == 'T', 'T'
+# print(identify_block({1, 5, 9, 6})) # == 'T', 'T'
+# print(identify_block({2, 3, 7, 11})) # == 'L', 'L'
+# print(identify_block({4, 8, 12, 16})) # == 'I', 'I'
+# print(identify_block({3, 1, 5, 8})) # == None, 'None'
+
+
+def checkio(s):
+    b = ['(', '[', '{', ')', ']', '}']
+
+    x = 0
+    while x < len(s):
+        if s[x] in b:
+            x += 1
+            continue
+        s = s.replace(s[x], '')
+
+    while '()' in s or '[]' in s or '{}' in s:
+        s = s.replace('()', '')
+        s = s.replace('[]', '')
+        s = s.replace('{}', '')
+
+    if s == '':
+        return True
+    return False
+
+
+# print(checkio("((5+3)*2+1)"))  # == True
+# print(checkio("{[(3+1)+2]+}"))  # == True
+# print(checkio("(3+{1-1)}"))  # == False
+# print(checkio("[1+1]+(2*2)-{3/3}"))  # == True
+# print(checkio("(({[(((1)-2)+3)-3]/3}-3)"))  # == False
+# print(checkio("2+3"))  # == True)
+
+
+def double_substring(s):
+    """
+        length of the longest substring that non-overlapping repeats more than once.
+    """
+    res = []
+    for a in range(len(s) - 1):
+        for b in range(a + 1, len(s)):
+            if s.count(s[a:b]) > 1:
+                res.append(len(s[a:b]))
+    if res == []:
+        return 0
+    return max(res)
+
+
+# print(double_substring('aaaa'))  # == 2
+# print(double_substring('abc'))  # == 0
+# print(double_substring('aghtfghkofgh'))  # == 3 # fgh
+
+
+
 
 
 

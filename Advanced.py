@@ -375,3 +375,19 @@ print('Mutable & immutable')
 # Muttable: list, dict, set
 
 
+import numpy as np
+
+a = np.array([[1,2,3], [4,5,6]])  # создаём массив
+print(a)  # смотрим на массив
+print(a.shape)
+print(np.eye(3, 4, k=1))
+print(np.eye(3, 4, k=2))
+print(np.eye(3,4) * 2 + np.eye(3,4,1))
+
+import random
+w = np.array(random.sample(range(1000), 12)) # одномерный массив из 12 случайных чисел от 1 до 1000
+w = w.reshape((2,2,3)) # превратим w в трёхмерную матрицу
+print(w)
+print(w.transpose(0,2,1))
+w.flatten()
+print(w)
