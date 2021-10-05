@@ -2010,17 +2010,110 @@ def checkio(image: List[List[int]]) -> int:
         if image[0]==[]: break
     return int(res)
 
-print(checkio([ [0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0],
-                [0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
-                [0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0],
-                [0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0],
-                [0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0]]))  # == 394
-print(checkio([[0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0],
-         [0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
-         [0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0],
-         [0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0],
-         [0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0]]))  # == 394)
+# print(checkio([ [0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0],
+#                 [0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
+#                 [0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0],
+#                 [0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0],
+#                 [0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0]]))  # == 394
+# print(checkio([[0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0],
+#          [0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
+#          [0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0],
+#          [0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0],
+#          [0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0]]))  # == 394)
 
 
+def completely_empty(val):
+    if val==[]: return True
+    for x in val:
+        if isinstance(x, (tuple, list)):
+            if not completely_empty(x): return False
+        elif isinstance(x, dict):
+            for k in x.keys():
+                if k!='': return False
+        elif type(x)==type(iter(())):
+            if not completely_empty(list(x)): return False
+        elif x != '': return False
+    return True
 
+# print(completely_empty([iter(())]))  # == True
+# print(completely_empty([]))  # == True
+# print(completely_empty([1]))  # == False
+# print(completely_empty([[]]))  # == True
+# print(completely_empty([[],[]]))  # == True
+# print(completely_empty([[[]]]))  # == True
+# print(completely_empty(['']))  # == True
+# print(completely_empty([[],[{'':'No WAY'}]]))  # == True)
+
+
+from typing import Iterable, List, Tuple, Union
+Node = Union[int, str]
+Tree = Tuple[Node, List['Tree']]
+
+def built_tree(tree):
+    tree = list(tree)
+    derevo = {}
+
+    while tree!=[]:
+        derevo = derevo | {k:[] for k in tree if isinstance(k, (str, int))}
+
+        for t in tree:
+            if isinstance(t, (str, int)):
+                name = t
+            if isinstance(t, (tuple, list)):
+                for y in t:
+                    if not isinstance(y, (str, int)):
+                        for z in y:
+                            if isinstance(z, (str, int)):
+                                derevo[name].append(z)
+
+        tree = [w for w in tree if not isinstance(w, (str, int))]
+        if len(tree)==1: tree = tree[0]
+
+        tree2 = []
+        for branch in tree:
+            tree2.extend(branch)
+        tree = tree2
+    return derevo
+
+
+def there(a, b, derevo):
+    if derevo[a]!=[]:
+        x = 0
+        nxt = derevo[a]
+        nxt2 = []
+        while x<len(derevo):
+            for z in nxt:
+                if derevo[z]!=[]:
+                    nxt2.extend(derevo[z])
+            if b in nxt2: return True
+            nxt = nxt2[:]
+            nxt2 = []
+            x += 1
+    return False
+
+def is_there(pair, derevo):
+    a, b = pair[0], pair[1]
+    if a in derevo[b] or b in derevo[a]:
+        return True
+    if there(a, b, derevo): return True
+    if there(b, a, derevo): return True
+    return False
+
+
+def on_same_path(tree: Tree, pairs: List[Tuple[Node, Node]]) -> Iterable[bool]:
+    """For each given pair of tree's nodes, say if there are on a same path."""
+    res = []
+    derevo = built_tree(tree)
+
+    for x in pairs:
+        res.append(is_there(x, derevo))
+    return res
+
+print(on_same_path([1,[[2,[[4,[]],[5,[[7,[]],[8,[]],[9,[]]]]]],[3,[[6,[]]]]]],[[1,5],[2,9],[2,6]]))
+print(on_same_path(
+    ('Me', [('Daddy', [('Grandpa', []),
+                       ('Grandma', [])]),
+            ('Mom', [('Granny', []),
+                     ('?', [])])]),
+    [('Grandpa', 'Me'), ('Daddy', 'Granny')],))  # == [True, False])
 
