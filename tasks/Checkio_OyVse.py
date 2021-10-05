@@ -237,7 +237,104 @@ def place_queens(placed):
 # print(place_queens({"b2", "c4", "d6", "e8", "a7", "g5"}))  # == set())
 
 
+def step(a):
+    for x in range(1, a):
+        yield x
 
+
+def signpost(m, dirs):
+    DIRS = {
+        'N': lambda x, y: [x - 1, y],
+        'NE': lambda x, y: [x - 1, y + 1],
+        'E': lambda x, y: [x, y + 1],
+        'SE': lambda x, y: [x + 1, y + 1],
+        'S': lambda x, y: [x + 1, y],
+        'SW': lambda x, y: [x + 1, y - 1],
+        'W': lambda x, y: [x, y - 1],
+        'NW': lambda x, y: [x - 1, y - 1]
+    }
+
+    cell = len(m) * len(m[0])
+    for num1, x in enumerate(m):
+        if x.count(1):
+            gen = step(cell)
+            stp = next(gen)
+            nxt_stp = [num1, x.index(1)]
+            break
+
+    while stp < cell - 1:
+        aim = dirs[nxt_stp[0]][nxt_stp[1]]
+        nxt_stp = DIRS[aim](nxt_stp[0], nxt_stp[1])
+        stp = next(gen)
+        if m[nxt_stp[0]][nxt_stp[1]] == 0:
+            m[nxt_stp[0]][nxt_stp[1]] = stp
+    return m
+
+# print(signpost([[1, 0, 0],
+#           [0, 0, 0],
+#           [0, 0, 9]],
+#          (('S' , 'E' , 'S' ),
+#           ('S' , 'S' , 'NW'),
+#           ('NE', 'NE', ''  )))) # == [[1, 7, 8],
+#                                 #   [2, 4, 6],
+#                                 #   [3, 5, 9]]
+# print(signpost([[1, 0, 0, 0,  0],
+#           [0, 0, 9, 0, 18],
+#           [0, 0, 0, 0,  0],
+#           [0, 0, 0, 0,  0],
+#           [0, 0, 0, 0, 25]],
+#          (('SE', 'E' , 'SW', 'S' , 'S' ),
+#           ('E' , 'W' , 'S' , 'NE', 'SW'),
+#           ('S' , 'N' , 'N' , 'N' , 'S' ),
+#           ('NE', 'N' , 'NE', 'SE', 'W' ),
+#           ('NE', 'NE', 'W' , 'W' , ''  )))) # == [[ 1, 13,  3, 14, 21],
+#                                             #   [ 8,  7,  9, 20, 18],
+#                                             #   [ 4,  6,  2, 19, 22],
+#                                             #   [ 5, 12, 17, 24, 23],
+#                                             #   [11, 16, 10, 15, 25]]
+#
+#
+# print(signpost([[1, 0, 0, 0, 0, 0],
+#                [0, 0, 0, 0, 0, 0],
+#                [0, 0, 0, 0, 0, 0],
+#                [0, 0, 0, 0, 0, 24]],
+#               (('SE', 'E', 'SW', 'W', 'S', 'S'),
+#                ('E', 'E', 'SE', 'W', 'NW', 'S'),
+#                ('E', 'E', 'SW', 'W', 'SW', 'S'),
+#                ('E', 'W', 'NE', 'NW', 'NW', ''))))
+
+
+def checkio(radius):
+    """count tiles"""
+
+    return [0, 0]
+
+
+print(checkio(2))  # == [4, 12]
+print(checkio(3))  # == [16, 20]
+print(checkio(2.1))  # == [4, 20]
+print(checkio(2.5))  # == [12, 20]
+
+
+def divide_pie(groups):
+    from fractions import Fraction
+    res = 6
+    for x in groups:
+        if x>0 or res==6:
+            res -= abs(x)
+        else:
+            res -= (res/6)*abs(x)
+    if res == 0:
+        return (0, 1)
+    res = round(res, 2)
+    if res<1:
+        return (1, int(6//res))
+    return 6/res
+
+    # 6/27*8=1.77
+print(divide_pie((2, -1, 3)))  # == (1, 18)
+print(divide_pie((1, 2, 3)))  # == (0, 1))
+print(divide_pie([-1,-1,-1]))  # == (8, 27)
 
 
 

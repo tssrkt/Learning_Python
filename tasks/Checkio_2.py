@@ -1400,81 +1400,627 @@ def double_substring(s):
 # print(double_substring('aghtfghkofgh'))  # == 3 # fgh
 
 
+def non_empty_lines(text: str) -> int:
+    return len(list((text.replace(' ', '')).split()))
 
 
+# print(non_empty_lines('one simple line')) # == 1
+# print(non_empty_lines('')) # == 0
+# print(non_empty_lines('\nonly one line\n            ')) # == 1
+# print(non_empty_lines('''
+# Lorem ipsum dolor sit amet,
+#
+# consectetur adipiscing elit
+# Nam odio nisi, aliquam
+#             ''')) # == 3
 
 
+def checkio(n, m):
+    n, m = bin(n)[2:], bin(m)[2:]
+    dif = len(n) - len(m)
+    if dif < 0:
+        n = '0' * abs(dif) + n
+    else:
+        m = '0' * dif + m
+    res = 0
+    for a, x in enumerate(n):
+        if x != m[a]:
+            res += 1
+    return res
 
 
+# print(checkio(117, 17)) # == 3
+# print(checkio(1, 2)) # == 2
+# print(checkio(16, 15)) # == 5)
+
+def square_board(side: int, token: int, steps: int):
+    board = []
+    for x in range(side):
+        board.append([0] * side)
+
+    nums = iter([x for x in range((side - 1) * 4)])
+    for x in reversed(range(side)):
+        board[-1][x] = next(nums)
+    for x in reversed(range(side - 1)):
+        board[x][0] = next(nums)
+    for x in range(1, side):
+        board[0][x] = next(nums)
+    for x in range(1, side - 1):
+        board[x][-1] = next(nums)
+
+    nums = (side - 1) * 4
+    fin = token + steps
+    fin = nums + fin if fin < 0 else fin
+    while fin >= nums:
+        fin -= nums
+
+    res = []
+    for x in range(side):
+        for y in range(side):
+            if fin == board[x][y]:
+                res = [x, y]
+    return res
 
 
+# print(square_board(4, 1, 4))  # == (1, 0)
+# print(square_board(6, 2, -3))  # == (4, 5)
 
 
+def subnetworks(net, crushes):
+    for x in net:
+        for y in crushes:
+            if y in x:
+                x.remove(y)
+
+    net = list(filter(lambda x: x != [], net))
+    if len(net) == 1: return 1
+
+    x = 0
+    while x < len(net):
+        lol = True
+        if len(net[x]) == 1:
+            for y in net:
+                if net[x] != y and net[x][0] in y:
+                    del net[x]
+                    lol = False
+            if lol:
+                x += 1
+        else:
+            x += 1
+    return len(net)
 
 
+# print(subnetworks([["A", "B"],
+#                    ["A", "C"],
+#                    ["A", "D"],
+#                    ["D", "F"],
+#                    ["B", "C"]
+#                    ], ["A"]))  # = 2
+# print(subnetworks([
+#         ['A', 'B'],
+#         ['B', 'C'],
+#         ['C', 'D']
+#     ], ['B']))  # == 2
+# print(subnetworks([
+#         ['A', 'B'],
+#         ['A', 'C'],
+#         ['A', 'D'],
+#         ['D', 'F']
+#     ], ['A']))  # == 3
+# print(subnetworks([
+#         ['A', 'B'],
+#         ['B', 'C'],
+#         ['C', 'D']
+#     ], ['C', 'D']))  # == 1
 
-def step(a):
-    for x in range(1, a):
-        yield x
+
+# Наконец задачка по системах счисления! Ура!)))))
+
+def checkio(str_number: str, radix: int) -> int:
+    if radix == 10:
+        try:
+            str_number = int(str_number)
+            return str_number
+        except:
+            return -1
+
+    if radix < 10 and any([x for x in str_number if x.isalpha()]):
+        return -1
+
+    res = 0
+    str_number = str_number[::-1]
+    from string import ascii_uppercase as au
+    for n, x in enumerate(str_number):
+        if x.isalpha():
+            if (10 + au.index(x)) >= radix: return -1
+            res += (10 + au.index(x)) * radix ** n
+        else:
+            if int(x) == radix: return -1
+            res += int(x) * radix ** n
+    return res
 
 
-def signpost(m, dirs):
-    DIRS = {
-        'N': lambda x, y: [x - 1, y],
-        'NE': lambda x, y: [x - 1, y + 1],
-        'E': lambda x, y: [x, y + 1],
-        'SE': lambda x, y: [x + 1, y + 1],
-        'S': lambda x, y: [x + 1, y],
-        'SW': lambda x, y: [x + 1, y - 1],
-        'W': lambda x, y: [x, y - 1],
-        'NW': lambda x, y: [x - 1, y - 1]
+# print(checkio('705', 8))
+# print(checkio("255",7))  # == 138
+# print(checkio("AF", 16))  # == 175
+# print(checkio("101", 2))  # == 5
+# print(checkio("101", 5))  # == 26
+# print(checkio("Z", 36))  # == 35
+# print(checkio("AB", 10))  # == -1
+# print(checkio("AB", 5))  # == -1
+# print(checkio("23", 10))  # == 23
+# print(checkio("10110101110011", 2))
+# print(checkio("12FD", 16))  # == 4861
+# print(checkio("1100", 2))  # == 12
+# print(checkio("ASD",15))  # == -1
+# print(checkio("909",9))  # == -1
+
+
+def weekly_calendar(year: int, month: int, day: int, firstweekday: int):
+    import datetime as dt
+    wd = dt.datetime(year, month, day).weekday()
+    if wd > firstweekday:
+        fd = dt.datetime(year, month, day) - dt.timedelta(days=(wd - firstweekday))
+    elif wd == firstweekday:
+        fd = dt.datetime(year, month, day)
+    else:
+        fd = dt.datetime(year, month, day) - dt.timedelta(days=(wd + (7 - firstweekday)))
+
+    res = []
+    for x in range(7):
+        d = fd + dt.timedelta(days=x)
+        res.append(d.day)
+    return res
+
+
+# print(list(weekly_calendar(2020, 1, 1, 0)))  # == [30, 31, 1, 2, 3, 4, 5]
+# print(list(weekly_calendar(2020, 9, 20, 6)))  # == [20, 21, 22, 23, 24, 25, 26]
+# print(list(weekly_calendar(2020, 9, 30, 0)))  # == [28, 29, 30, 1, 2, 3, 4])
+# print(weekly_calendar(7239,10,26,5))  # == [22,23,24,25,26,27,28]
+
+from typing import Dict, Tuple
+
+Date = Tuple[int, int, int]
+
+
+def next_birthday(today: Date, birthdates: Dict[str, Date]) -> Tuple[int, Dict[str, int]]:
+    import datetime as dt
+    today = dt.datetime(today[0], today[1], today[2])
+    bd = {k: dt.datetime(v[0], v[1], v[2]) for k, v in birthdates.items()}
+    bd = {k: v for k, v in sorted(bd.items(), key=lambda para: para[1])}
+    bd_keys = list(bd.keys())
+    bd_values = list(bd.values())
+
+    y = 0
+    ages = {}
+    bds = {}
+    while y < len(bd_keys):
+        today2 = None
+        # check if birthday is 29 February
+        if bd_values[y].month == 2 and bd_values[y].day == 29:
+            year = today.year
+            if today.month > 2:
+                if year % 4 == 0 and year % 100 != 0 or year % 400 == 0:
+                    today2 = today
+                    today = dt.datetime(today.year + 1, today.month, today.day)
+                year = today.year + 1
+            # check if year is without 29 February
+            if year % 4 == 0 and year % 100 != 0 or year % 400 == 0:
+                pass
+            else:
+                bd_values[y] = dt.datetime(bd_values[y].year, 3, 1)
+
+        for x in range(365):
+            nxt_day = today + dt.timedelta(days=x)
+            if nxt_day.month == bd_values[y].month and nxt_day.day == bd_values[y].day:
+                to_bd = nxt_day - today2 if today2 else nxt_day - today
+                age = nxt_day.year - bd_values[y].year
+                ages[bd_keys[y]] = age  # how old he/she will be
+                bds[bd_keys[y]] = to_bd  # how long to birthday
+                y += 1
+                break
+
+    bds_values = list(bds.values())
+    best = min(bds_values)
+
+    rs = {}
+    for k, v in bds.items():
+        if v == best:
+            rs[k] = ages[k]
+
+    res = (best.days, rs)
+    return res
+
+
+# print(next_birthday([2024, 3, 1], {"Baby": [2020, 2, 29]}))  # [365,{"Baby":5}]
+# print(next_birthday([2014, 3, 29], {"Emilie": [1990, 7, 31], "Jean-Baptiste": [1985, 6, 3], "Cameron": [1995, 11, 12],
+#                                     "Mia": [1999, 4, 5], "Elena": [1980, 1, 8], "Alexei": [1993, 10, 28],
+#                                     "Youssef": [1992, 4, 5], "Soraya": [1996, 12, 27], "Jiao": [1988, 2, 29],
+#                                     "Kang": [2012, 8, 15], "Pedro": [1959, 5, 2], "Manuela": [1961, 3, 18],
+#                                     "Inaya": [1968, 9, 22], "Moussa": [1976, 2, 29]}))
+# # == [7,{"Mia":15, "Youssef":22}]
+#
+# birthdates = {
+#     'Emma': (2000, 12, 25),
+#     'Brian': (1967, 5, 31),
+#     'Léna': (1970, 10, 3),
+#     'Philippe': (1991, 6, 15),
+#     'Yasmine': (1996, 2, 29),
+# }
+# print(next_birthday((2020, 9, 8), birthdates))  # == (25, {'Léna': 50})
+# print(next_birthday((2021, 10, 4), birthdates))  # == (82, {'Emma': 21})
+# print(next_birthday((2022, 3, 1), birthdates))  # == (0, {'Yasmine': 26})
+
+
+def nbrs(g, row, col):
+    NBRS = {
+        1: lambda x, y: [x - 1, y - 1],  # left upper square
+        2: lambda x, y: [x - 1, y],
+        3: lambda x, y: [x - 1, y + 1],
+        4: lambda x, y: [x, y + 1],
+        5: lambda x, y: [x + 1, y + 1],
+        6: lambda x, y: [x + 1, y],
+        7: lambda x, y: [x + 1, y - 1],
+        8: lambda x, y: [x, y - 1]
     }
 
-    cell = len(m) * len(m[0])
-    for num1, x in enumerate(m):
-        if x.count(1):
-            gen = step(cell)
-            stp = next(gen)
-            nxt_stp = [num1, x.index(1)]
-            break
+    res = 0
+    for x in range(1, 9):
+        a, b = NBRS[x](row, col)
+        if len(g) > a >= 0 and len(g[0]) > b >= 0:
+            res = res + 1 if g[a][b] == 1 else res
+    return res
 
-    while stp < cell - 1:
-        aim = dirs[nxt_stp[0]][nxt_stp[1]]
-        nxt_stp = DIRS[aim](nxt_stp[0], nxt_stp[1])
-        stp = next(gen)
-        if m[nxt_stp[0]][nxt_stp[1]] == 0:
-            m[nxt_stp[0]][nxt_stp[1]] = stp
-    return m
 
-# print(signpost([[1, 0, 0],
-#           [0, 0, 0],
-#           [0, 0, 9]],
-#          (('S' , 'E' , 'S' ),
-#           ('S' , 'S' , 'NW'),
-#           ('NE', 'NE', ''  )))) # == [[1, 7, 8],
-#                                 #   [2, 4, 6],
-#                                 #   [3, 5, 9]]
-# print(signpost([[1, 0, 0, 0,  0],
-#           [0, 0, 9, 0, 18],
-#           [0, 0, 0, 0,  0],
-#           [0, 0, 0, 0,  0],
-#           [0, 0, 0, 0, 25]],
-#          (('SE', 'E' , 'SW', 'S' , 'S' ),
-#           ('E' , 'W' , 'S' , 'NE', 'SW'),
-#           ('S' , 'N' , 'N' , 'N' , 'S' ),
-#           ('NE', 'N' , 'NE', 'SE', 'W' ),
-#           ('NE', 'NE', 'W' , 'W' , ''  )))) # == [[ 1, 13,  3, 14, 21],
-#                                             #   [ 8,  7,  9, 20, 18],
-#                                             #   [ 4,  6,  2, 19, 22],
-#                                             #   [ 5, 12, 17, 24, 23],
-#                                             #   [11, 16, 10, 15, 25]]
+def life_counter(m, n):
+    matrix = [list(x) for x in m]
+    steps = 1
+    while steps<=n:
+        if sum(matrix[-1])>0:
+            matrix.append([0] * len(matrix[0]))
+        elif sum(matrix[-1])==0 and sum(matrix[-2])==0:
+            del matrix[-1]
+        if sum(matrix[0])>0:
+            matrix.insert(0, [0] * len(matrix[0]))
+        elif sum(matrix[0])==0 and sum(matrix[1])==0:
+            del matrix[0]
+
+        left = [matrix[x][0] for x in range(len(matrix))]
+        left2 = [matrix[x][1] for x in range(len(matrix))]
+        if sum(left)>0:
+            for a, row in enumerate(matrix):
+                row = [0] + row
+                matrix[a] = row
+        elif sum(left)==0 and sum(left2)==0:
+            for a, row in enumerate(matrix):
+                matrix[a] = row[1:]
+
+        right = [matrix[x][-1] for x in range(len(matrix))]
+        right2 = [matrix[x][-2] for x in range(len(matrix))]
+        if sum(right) > 0:
+            for a, row in enumerate(matrix):
+                row.append(0)
+                matrix[a] = row
+        elif sum(right)==0 and sum(right2)==0:
+            for a, row in enumerate(matrix):
+                matrix[a] = row[:-1]
+
+        born = [[0] * len(matrix[0]) for _ in matrix]
+        die = [[1] * len(matrix[0]) for _ in matrix]
+
+        for a, row in enumerate(matrix):
+            for b, x in enumerate(row):
+                alive = nbrs(matrix, a, b)
+                if x == 0 and alive == 3:
+                    born[a][b] = 1
+                elif x == 1 and alive not in [2, 3]:
+                    die[a][b] = 0
+
+        for a, row in enumerate(matrix):
+            for b, x in enumerate(row):
+                if born[a][b] == 1: matrix[a][b] = 1
+                if die[a][b] == 0: matrix[a][b] = 0
+        steps += 1
+    return sum([sum(x) for x in matrix])
+
+
+# print(life_counter(((0, 1, 0, 0, 0, 0, 0),
+#                     (0, 0, 1, 0, 0, 0, 0),
+#                     (1, 1, 1, 0, 0, 0, 0),
+#                     (0, 0, 0, 0, 0, 1, 1),
+#                     (0, 0, 0, 0, 0, 1, 1),
+#                     (0, 0, 0, 0, 0, 0, 0),
+#                     (1, 1, 1, 0, 0, 0, 0)), 4))  # == 15
 #
-#
-# print(signpost([[1, 0, 0, 0, 0, 0],
-#                [0, 0, 0, 0, 0, 0],
-#                [0, 0, 0, 0, 0, 0],
-#                [0, 0, 0, 0, 0, 24]],
-#               (('SE', 'E', 'SW', 'W', 'S', 'S'),
-#                ('E', 'E', 'SE', 'W', 'NW', 'S'),
-#                ('E', 'E', 'SW', 'W', 'SW', 'S'),
-#                ('E', 'W', 'NE', 'NW', 'NW', ''))))
+# print(life_counter(((0, 1, 0, 0, 0, 0, 0), (0, 0, 1, 0, 0, 0, 0), (1, 1, 1, 0, 0, 0, 0),
+#            (0, 0, 0, 0, 0, 1, 1), (0, 0, 0, 0, 0, 1, 1), (0, 0, 0, 0, 0, 0, 0),
+#            (1, 1, 1, 0, 0, 0, 0)), 15))  # 14 (0, 7, -3, 6)
+# print(life_counter(((0, 1, 0), (0, 0, 1), (1, 1, 1)), 50))  # 5 (0, 15, 0, 14)
+# print(life_counter(((1, 1, 0, 1, 1), (1, 1, 0, 1, 1), (0, 0, 0, 0, 0), (1, 1, 0, 1, 1),
+#            (1, 1, 0, 1, 1)), 100))  # == 16 (0, 4, 0, 4),
+# print(life_counter(((0, 0, 0, 0, 0, 0, 1, 0), (1, 1, 0, 0, 0, 0, 0, 0), (0, 1, 0, 0, 0, 1, 1, 1)),  129))
+# # 2 (-4, 18, -6, 11),
+# print(life_counter(((0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0),
+#            (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+#            (1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1),
+#            (1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1),
+#            (1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1),
+#            (0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0),
+#            (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+#            (0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0),
+#            (1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1),
+#            (1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1),
+#            (1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1),
+#            (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+#            (0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0)), 100))  # 56 (-1, 13, -1, 13),
+# print(life_counter(((0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0),
+#            (0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0),
+#            (1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1),
+#            (0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0),
+#            (0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0),
+#            (0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0),
+#            (0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0),
+#            (0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0),
+#            (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+#            (0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0),
+#            (0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0)), 42))  # 36 (-12, 10, -1, 16),
+# print(life_counter(((0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1), (0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1),
+#            (1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0), (0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1),
+#            (0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1), (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+#            (0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1), (0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1),
+#            (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), (0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1),
+#            (0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1), (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+#            (0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1), (0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1)), 100))  # 33 (-9, 15, -5, 22),
+# print(life_counter(((0, 1, 0), (0, 0, 1), (1, 1, 1)), 999))  # 5 None,
+# print(life_counter(((0, 1, 0, 0, 0, 0, 1, 0), (1, 0, 0, 0, 0, 0, 0, 1), (1, 1, 1, 0, 0, 1, 1, 1)),
+#     999))  # 10 None,
+# print(life_counter(((0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1), (0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1),
+#            (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), (0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1),
+#            (0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1), (0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0),
+#            (1, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1), (0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1),
+#            (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), (0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1),
+#            (0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1), (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+#            (0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1), (0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1)), 100))  # 52 (-18, 20, -5, 20),
+# print(life_counter(((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+#            (0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0),
+#            (0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0),
+#            (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+#            (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+#            (0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0),
+#            (0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0),
+#            (0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0),
+#            (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+#            (0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0),
+#            (0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0),
+#            (0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0),
+#            (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+#            (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+#            (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+#            (0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0),
+#            (0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0),
+#            (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)), 10))  # 22 (0, 17, 0, 16),
+# print(life_counter(((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+#            (0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0),
+#            (0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0),
+#            (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+#            (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+#            (0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0),
+#            (0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0),
+#            (0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0),
+#            (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+#            (0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0),
+#            (0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0),
+#            (0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0),
+#            (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+#            (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+#            (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+#            (0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0),
+#            (0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0),
+#            (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)), 20))  # 0 (0, 17, 0, 16),
+# print(life_counter(((0, 0, 0, 0, 0, 0, 0, 0), (1, 1, 1, 0, 0, 1, 1, 1), (0, 0, 0, 0, 0, 1, 0, 0),
+#            (0, 0, 0, 0, 0, 0, 1, 0), (0, 0, 0, 0, 0, 0, 0, 0), (1, 1, 1, 0, 0, 0, 0, 0),
+#            (0, 0, 0, 0, 0, 1, 1, 1), (0, 0, 0, 0, 0, 1, 0, 0), (0, 0, 0, 0, 0, 0, 1, 0),
+#            (1, 1, 1, 0, 0, 0, 0, 0)), 100))  # 3 (-1, 10, -2, 7),
+# print(life_counter([[0, 1, 1, 1, 1, 1, 1, 1, 0, 0], [0, 1, 1, 0, 0, 0, 0, 1, 1, 1],
+#            [0, 0, 1, 0, 0, 0, 0, 0, 1, 1], [1, 0, 0, 1, 0, 0, 1, 1, 1, 1],
+#            [1, 0, 1, 0, 0, 1, 0, 1, 1, 0], [0, 1, 1, 0, 0, 1, 0, 1, 1, 1],
+#            [1, 0, 1, 0, 1, 1, 1, 0, 1, 1], [0, 1, 1, 1, 0, 0, 1, 1, 1, 1],
+#            [0, 0, 1, 0, 1, 1, 0, 0, 0, 1], [1, 0, 1, 0, 0, 0, 1, 1, 1, 1]], 50))  # 74 (-6, 13, -5, 24),
+# print(life_counter([[1, 1, 1, 1, 0, 1, 1, 0, 1, 1], [0, 0, 0, 0, 1, 0, 0, 0, 1, 0],
+#            [0, 1, 0, 1, 1, 0, 1, 1, 1, 1], [0, 0, 1, 1, 1, 0, 1, 0, 0, 1],
+#            [0, 1, 1, 1, 0, 1, 1, 1, 0, 0], [1, 1, 0, 1, 0, 1, 0, 1, 1, 0],
+#            [1, 0, 1, 0, 0, 0, 0, 0, 1, 1], [1, 1, 1, 0, 1, 0, 1, 1, 0, 1],
+#            [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], [0, 0, 0, 1, 1, 0, 1, 0, 1, 1]], 50))  # 79 (-5, 17, -14, 16),
+# print(life_counter([[0, 0, 1, 1, 1, 1, 0, 1, 0, 0], [1, 1, 0, 0, 1, 0, 1, 1, 1, 0],
+#            [0, 1, 1, 1, 1, 1, 0, 0, 1, 0], [0, 0, 0, 1, 0, 1, 0, 1, 0, 1],
+#            [1, 1, 0, 1, 0, 0, 0, 0, 1, 0], [1, 1, 0, 0, 0, 0, 1, 1, 1, 1],
+#            [1, 0, 0, 0, 0, 1, 1, 1, 0, 0], [0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
+#            [1, 0, 0, 1, 0, 0, 1, 1, 1, 1], [1, 0, 0, 0, 0, 0, 1, 0, 1, 0]], 50))  # 81 (-9, 15, -4, 24),
+# print(life_counter([[1, 0, 0, 0, 1, 0, 0, 0, 1, 0], [1, 1, 0, 0, 1, 0, 1, 0, 1, 0],
+#            [1, 0, 0, 0, 0, 1, 1, 1, 1, 1], [0, 0, 1, 0, 1, 0, 1, 0, 1, 0],
+#            [0, 1, 1, 1, 1, 1, 0, 1, 1, 0], [0, 1, 0, 1, 0, 0, 0, 0, 0, 1],
+#            [0, 1, 0, 0, 1, 0, 0, 0, 0, 0], [1, 1, 0, 1, 0, 0, 0, 0, 1, 1],
+#            [0, 1, 1, 1, 1, 1, 0, 0, 0, 1], [1, 1, 0, 0, 0, 1, 1, 1, 1, 0]], 50))  # 18 (-3, 16, -5, 13),
+
+
+def is_stressful(subj):
+    """
+        recognize stressful subject
+    """
+    if len([x for x in subj if x.isupper() or not x.isalpha()])==len(subj) or subj[-3:]=='!!!' or \
+            len([x for x in ['help', 'asap', 'urgent'] if x in subj.lower() or \
+                x in ''.join([x for x in subj if x.isalpha()]).lower()]):
+        return True
+
+    res = ''
+    for x in subj:
+        if res.count(x)<1:
+            res += x
+
+    if len([x for x in ['help', 'asap', 'urgent'] if x in res.lower()]):
+        return True
+    return False
+
+# print(is_stressful("HI HOW ARE YOU?"))  # == True
+# print(is_stressful("UUUURGGGEEEEENT here"))  # == True
+# print(is_stressful("Hi"))  # == False
+# print(is_stressful("I neeed HELP"))  # == True
+# print(is_stressful("HELP"))  # == True
+# print(is_stressful("Attention!!!"))  # == True
+# print(is_stressful("HHHEEEEEEEEELLP"))  # == True
+# print(is_stressful("H-E-L-P"))  # == True
+# print(is_stressful("H! E! L! P!"))  # == True
+
+
+dic = {1: 'I', 4: 'IV', 5: 'V', 9: 'IX', 10: 'X', 40: 'XL', 50: 'L', 90: 'XC',
+       100: 'C', 400: 'CD', 500: 'D', 900: 'CM', 1000: 'M'}
+
+def roman(n):
+    res = ''
+    for k in sorted(dic.keys(), reverse=True):
+        while n>=k:
+            res += dic[k]
+            n -= k
+    return res
+
+def reverse_roman(s):
+    for x in range(1, 4000):
+        if roman(x) == s:
+            return x
+
+# print(reverse_roman('VI'))  # == 6
+# print(reverse_roman('LXXVI'))  # == 76
+# print(reverse_roman('CDXCIX'))  # == 499
+# print(reverse_roman('MMMDCCCLXXXVIII'))  # == 3888
+
+
+def count_consecutive_summers(num):
+    res, n, sm = 1, 1, 0
+    while n < num:
+        for x in range(n, num+1):
+            sm += x
+            if sm == num:
+                res += 1
+                n += 1
+                sm = 0
+                break
+            elif sm > num:
+                n += 1
+                sm = 0
+                break
+    return res
+
+# print(count_consecutive_summers(42))  # == 4
+# print(count_consecutive_summers(99))  # == 6
+
+
+def add_fractions(*args):
+    from fractions import Fraction
+    if len(list(args))==1: fracts = args[0]
+    else: fracts = list(args)
+
+    res = 0
+    for x in fracts:
+        res += Fraction(x[0], x[1])
+
+    if type(res)==int or res==1: return 1
+    if res.denominator==1: return res.numerator
+
+    frst = 0
+    numer = res.numerator
+    while numer>res.denominator:
+        numer -= res.denominator
+        frst += 1
+
+    if frst and numer:
+        res = f'{frst} and {numer}/{res.denominator}'
+    return str(res)
+
+# print(add_fractions([1,3],[1,3]))  # == 2/3
+# print(add_fractions([2,1],[3,1],[4,2],[5,1]))  # == 12
+# print(add_fractions([2,3],[2,3]))  # == "1 and 1/3"
+# print(add_fractions(((2, 3), (2, 3))))  # == "1 and 1/3"
+# print(add_fractions(((1, 3), (1, 3))))  # == "2/3"
+# print(add_fractions(((1, 3), (1, 3), (1, 3))))  # == 1)
+
+from typing import List
+
+nums = [[[1,1,0],
+    [1,0,1],
+    [1,0,1],
+    [1,0,1],
+    [0,1,1]],[[0,1,0],
+             [1,1,0],
+             [0,1,0],
+             [0,1,0],
+             [0,1,0]], [[1,1,1],
+                        [0,0,1],
+                        [0,1,1],
+                        [1,0,0],
+                        [1,1,1]], [[1,1,1],
+                                   [0,0,1],
+                                   [0,1,0],
+                                   [0,0,1],
+                                   [1,1,1]], [[1,0,1],
+                                              [1,0,1],
+                                              [1,1,1],
+                                              [0,0,1],
+                                              [0,0,1]], [[1,1,1],
+                                                         [1,0,0],
+                                                         [1,1,0],
+                                                         [0,0,1],
+                                                         [1,1,0]], [[0,1,1],
+                                                                    [1,0,0],
+                                                                    [1,1,1],
+                                                                    [1,0,1],
+                                                                    [0,1,1]], [[1,1,1],
+                                                                               [0,0,1],
+                                                                               [0,1,0],
+                                                                               [1,0,0],
+                                                                               [1,0,0]], [[1,1,1],
+                                                                                          [1,0,1],
+                                                                                          [1,1,1],
+                                                                                          [1,0,1],
+                                                                                          [1,1,1]], [[0,1,1],
+                                                                                                     [1,0,1],
+                                                                                                     [1,1,1],
+                                                                                                     [0,0,1],
+                                                                                                     [1,1,0]]]
+
+def checkio(image: List[List[int]]) -> int:
+    res = ''
+    while image!=[]:
+        num = []
+        for n, row in enumerate(image):
+            num.append(row[1:4])
+            image[n] = row[4:]
+
+        for n, matrix in enumerate(nums):
+            if num[0] == []: break
+            noise = 0
+            for a, row in enumerate(matrix):
+                if row != num[a]:
+                    for b, x in enumerate(row):
+                        if x != num[a][b]:
+                            noise += 1
+                if noise>1: break
+            if noise<=1:
+                res += str(n)
+                break
+        if image[0]==[]: break
+    return int(res)
+
+print(checkio([ [0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0],
+                [0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
+                [0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0],
+                [0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0],
+                [0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0]]))  # == 394
+print(checkio([[0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0],
+         [0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
+         [0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0],
+         [0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0],
+         [0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0]]))  # == 394)
+
+
+
+

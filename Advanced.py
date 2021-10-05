@@ -391,3 +391,33 @@ print(w)
 print(w.transpose(0,2,1))
 w.flatten()
 print(w)
+
+################################################################################################
+
+# ITERTOOLS
+
+from itertools import product, chain, compinations, combinations_with_replacement as cwr, takewhile, dropwhile
+
+for x, y in product(range(1,5 ), range(1, 5)):
+    print(f'{x} {y}: {x*y}')
+
+for x in chain(range(1,5 ), range(1, 5)):
+    print(x)
+
+abc = 'ABC'
+elem = 2
+
+print(list(permutations(abc, elem)))
+print(list(combinations(abc, elem)))
+print(list(cwr(abc, elem)))
+
+values = [1, 4, 3, 5, 3, 2, 8]
+predicate = lambda x: x < 5
+
+for x in takewhile(predicate, values):
+    print(x)
+
+for x in dropwhile(predicate, values):
+    print(x)
+
+
