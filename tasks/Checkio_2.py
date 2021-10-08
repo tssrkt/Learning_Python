@@ -1675,23 +1675,23 @@ def nbrs(g, row, col):
 def life_counter(m, n):
     matrix = [list(x) for x in m]
     steps = 1
-    while steps<=n:
-        if sum(matrix[-1])>0:
+    while steps <= n:
+        if sum(matrix[-1]) > 0:
             matrix.append([0] * len(matrix[0]))
-        elif sum(matrix[-1])==0 and sum(matrix[-2])==0:
+        elif sum(matrix[-1]) == 0 and sum(matrix[-2]) == 0:
             del matrix[-1]
-        if sum(matrix[0])>0:
+        if sum(matrix[0]) > 0:
             matrix.insert(0, [0] * len(matrix[0]))
-        elif sum(matrix[0])==0 and sum(matrix[1])==0:
+        elif sum(matrix[0]) == 0 and sum(matrix[1]) == 0:
             del matrix[0]
 
         left = [matrix[x][0] for x in range(len(matrix))]
         left2 = [matrix[x][1] for x in range(len(matrix))]
-        if sum(left)>0:
+        if sum(left) > 0:
             for a, row in enumerate(matrix):
                 row = [0] + row
                 matrix[a] = row
-        elif sum(left)==0 and sum(left2)==0:
+        elif sum(left) == 0 and sum(left2) == 0:
             for a, row in enumerate(matrix):
                 matrix[a] = row[1:]
 
@@ -1701,7 +1701,7 @@ def life_counter(m, n):
             for a, row in enumerate(matrix):
                 row.append(0)
                 matrix[a] = row
-        elif sum(right)==0 and sum(right2)==0:
+        elif sum(right) == 0 and sum(right2) == 0:
             for a, row in enumerate(matrix):
                 matrix[a] = row[:-1]
 
@@ -1847,19 +1847,20 @@ def is_stressful(subj):
     """
         recognize stressful subject
     """
-    if len([x for x in subj if x.isupper() or not x.isalpha()])==len(subj) or subj[-3:]=='!!!' or \
+    if len([x for x in subj if x.isupper() or not x.isalpha()]) == len(subj) or subj[-3:] == '!!!' or \
             len([x for x in ['help', 'asap', 'urgent'] if x in subj.lower() or \
-                x in ''.join([x for x in subj if x.isalpha()]).lower()]):
+                                                          x in ''.join([x for x in subj if x.isalpha()]).lower()]):
         return True
 
     res = ''
     for x in subj:
-        if res.count(x)<1:
+        if res.count(x) < 1:
             res += x
 
     if len([x for x in ['help', 'asap', 'urgent'] if x in res.lower()]):
         return True
     return False
+
 
 # print(is_stressful("HI HOW ARE YOU?"))  # == True
 # print(is_stressful("UUUURGGGEEEEENT here"))  # == True
@@ -1875,18 +1876,21 @@ def is_stressful(subj):
 dic = {1: 'I', 4: 'IV', 5: 'V', 9: 'IX', 10: 'X', 40: 'XL', 50: 'L', 90: 'XC',
        100: 'C', 400: 'CD', 500: 'D', 900: 'CM', 1000: 'M'}
 
+
 def roman(n):
     res = ''
     for k in sorted(dic.keys(), reverse=True):
-        while n>=k:
+        while n >= k:
             res += dic[k]
             n -= k
     return res
+
 
 def reverse_roman(s):
     for x in range(1, 4000):
         if roman(x) == s:
             return x
+
 
 # print(reverse_roman('VI'))  # == 6
 # print(reverse_roman('LXXVI'))  # == 76
@@ -1897,7 +1901,7 @@ def reverse_roman(s):
 def count_consecutive_summers(num):
     res, n, sm = 1, 1, 0
     while n < num:
-        for x in range(n, num+1):
+        for x in range(n, num + 1):
             sm += x
             if sm == num:
                 res += 1
@@ -1910,31 +1914,35 @@ def count_consecutive_summers(num):
                 break
     return res
 
+
 # print(count_consecutive_summers(42))  # == 4
 # print(count_consecutive_summers(99))  # == 6
 
 
 def add_fractions(*args):
     from fractions import Fraction
-    if len(list(args))==1: fracts = args[0]
-    else: fracts = list(args)
+    if len(list(args)) == 1:
+        fracts = args[0]
+    else:
+        fracts = list(args)
 
     res = 0
     for x in fracts:
         res += Fraction(x[0], x[1])
 
-    if type(res)==int or res==1: return 1
-    if res.denominator==1: return res.numerator
+    if type(res) == int or res == 1: return 1
+    if res.denominator == 1: return res.numerator
 
     frst = 0
     numer = res.numerator
-    while numer>res.denominator:
+    while numer > res.denominator:
         numer -= res.denominator
         frst += 1
 
     if frst and numer:
         res = f'{frst} and {numer}/{res.denominator}'
     return str(res)
+
 
 # print(add_fractions([1,3],[1,3]))  # == 2/3
 # print(add_fractions([2,1],[3,1],[4,2],[5,1]))  # == 12
@@ -1945,51 +1953,53 @@ def add_fractions(*args):
 
 from typing import List
 
-nums = [[[1,1,0],
-    [1,0,1],
-    [1,0,1],
-    [1,0,1],
-    [0,1,1]],[[0,1,0],
-             [1,1,0],
-             [0,1,0],
-             [0,1,0],
-             [0,1,0]], [[1,1,1],
-                        [0,0,1],
-                        [0,1,1],
-                        [1,0,0],
-                        [1,1,1]], [[1,1,1],
-                                   [0,0,1],
-                                   [0,1,0],
-                                   [0,0,1],
-                                   [1,1,1]], [[1,0,1],
-                                              [1,0,1],
-                                              [1,1,1],
-                                              [0,0,1],
-                                              [0,0,1]], [[1,1,1],
-                                                         [1,0,0],
-                                                         [1,1,0],
-                                                         [0,0,1],
-                                                         [1,1,0]], [[0,1,1],
-                                                                    [1,0,0],
-                                                                    [1,1,1],
-                                                                    [1,0,1],
-                                                                    [0,1,1]], [[1,1,1],
-                                                                               [0,0,1],
-                                                                               [0,1,0],
-                                                                               [1,0,0],
-                                                                               [1,0,0]], [[1,1,1],
-                                                                                          [1,0,1],
-                                                                                          [1,1,1],
-                                                                                          [1,0,1],
-                                                                                          [1,1,1]], [[0,1,1],
-                                                                                                     [1,0,1],
-                                                                                                     [1,1,1],
-                                                                                                     [0,0,1],
-                                                                                                     [1,1,0]]]
+nums = [[[1, 1, 0],
+         [1, 0, 1],
+         [1, 0, 1],
+         [1, 0, 1],
+         [0, 1, 1]], [[0, 1, 0],
+                      [1, 1, 0],
+                      [0, 1, 0],
+                      [0, 1, 0],
+                      [0, 1, 0]], [[1, 1, 1],
+                                   [0, 0, 1],
+                                   [0, 1, 1],
+                                   [1, 0, 0],
+                                   [1, 1, 1]], [[1, 1, 1],
+                                                [0, 0, 1],
+                                                [0, 1, 0],
+                                                [0, 0, 1],
+                                                [1, 1, 1]], [[1, 0, 1],
+                                                             [1, 0, 1],
+                                                             [1, 1, 1],
+                                                             [0, 0, 1],
+                                                             [0, 0, 1]], [[1, 1, 1],
+                                                                          [1, 0, 0],
+                                                                          [1, 1, 0],
+                                                                          [0, 0, 1],
+                                                                          [1, 1, 0]], [[0, 1, 1],
+                                                                                       [1, 0, 0],
+                                                                                       [1, 1, 1],
+                                                                                       [1, 0, 1],
+                                                                                       [0, 1, 1]], [[1, 1, 1],
+                                                                                                    [0, 0, 1],
+                                                                                                    [0, 1, 0],
+                                                                                                    [1, 0, 0],
+                                                                                                    [1, 0, 0]],
+        [[1, 1, 1],
+         [1, 0, 1],
+         [1, 1, 1],
+         [1, 0, 1],
+         [1, 1, 1]], [[0, 1, 1],
+                      [1, 0, 1],
+                      [1, 1, 1],
+                      [0, 0, 1],
+                      [1, 1, 0]]]
+
 
 def checkio(image: List[List[int]]) -> int:
     res = ''
-    while image!=[]:
+    while image != []:
         num = []
         for n, row in enumerate(image):
             num.append(row[1:4])
@@ -2003,12 +2013,13 @@ def checkio(image: List[List[int]]) -> int:
                     for b, x in enumerate(row):
                         if x != num[a][b]:
                             noise += 1
-                if noise>1: break
-            if noise<=1:
+                if noise > 1: break
+            if noise <= 1:
                 res += str(n)
                 break
-        if image[0]==[]: break
+        if image[0] == []: break
     return int(res)
+
 
 # print(checkio([ [0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0],
 #                 [0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
@@ -2023,17 +2034,19 @@ def checkio(image: List[List[int]]) -> int:
 
 
 def completely_empty(val):
-    if val==[]: return True
+    if val == []: return True
     for x in val:
         if isinstance(x, (tuple, list)):
             if not completely_empty(x): return False
         elif isinstance(x, dict):
             for k in x.keys():
-                if k!='': return False
-        elif type(x)==type(iter(())):
+                if k != '': return False
+        elif type(x) == type(iter(())):
             if not completely_empty(list(x)): return False
-        elif x != '': return False
+        elif x != '':
+            return False
     return True
+
 
 # print(completely_empty([iter(())]))  # == True
 # print(completely_empty([]))  # == True
@@ -2046,15 +2059,17 @@ def completely_empty(val):
 
 
 from typing import Iterable, List, Tuple, Union
+
 Node = Union[int, str]
 Tree = Tuple[Node, List['Tree']]
+
 
 def built_tree(tree):
     tree = list(tree)
     derevo = {}
 
-    while tree!=[]:
-        derevo = derevo | {k:[] for k in tree if isinstance(k, (str, int))}
+    while tree != []:
+        derevo = derevo | {k: [] for k in tree if isinstance(k, (str, int))}
 
         for t in tree:
             if isinstance(t, (str, int)):
@@ -2067,7 +2082,7 @@ def built_tree(tree):
                                 derevo[name].append(z)
 
         tree = [w for w in tree if not isinstance(w, (str, int))]
-        if len(tree)==1: tree = tree[0]
+        if len(tree) == 1: tree = tree[0]
 
         tree2 = []
         for branch in tree:
@@ -2077,19 +2092,20 @@ def built_tree(tree):
 
 
 def there(a, b, derevo):
-    if derevo[a]!=[]:
+    if derevo[a] != []:
         x = 0
         nxt = derevo[a]
         nxt2 = []
-        while x<len(derevo):
+        while x < len(derevo):
             for z in nxt:
-                if derevo[z]!=[]:
+                if derevo[z] != []:
                     nxt2.extend(derevo[z])
             if b in nxt2: return True
             nxt = nxt2[:]
             nxt2 = []
             x += 1
     return False
+
 
 def is_there(pair, derevo):
     a, b = pair[0], pair[1]
@@ -2109,11 +2125,235 @@ def on_same_path(tree: Tree, pairs: List[Tuple[Node, Node]]) -> Iterable[bool]:
         res.append(is_there(x, derevo))
     return res
 
-print(on_same_path([1,[[2,[[4,[]],[5,[[7,[]],[8,[]],[9,[]]]]]],[3,[[6,[]]]]]],[[1,5],[2,9],[2,6]]))
-print(on_same_path(
-    ('Me', [('Daddy', [('Grandpa', []),
-                       ('Grandma', [])]),
-            ('Mom', [('Granny', []),
-                     ('?', [])])]),
-    [('Grandpa', 'Me'), ('Daddy', 'Granny')],))  # == [True, False])
+
+# print(on_same_path([1,[[2,[[4,[]],[5,[[7,[]],[8,[]],[9,[]]]]]],[3,[[6,[]]]]]],[[1,5],[2,9],[2,6]]))
+# print(on_same_path(
+#     ('Me', [('Daddy', [('Grandpa', []),
+#                        ('Grandma', [])]),
+#             ('Mom', [('Granny', []),
+#                      ('?', [])])]),
+#     [('Grandpa', 'Me'), ('Daddy', 'Granny')],))  # == [True, False])
+
+
+import math
+
+
+def dist(x, y):
+    point1 = math.sqrt((x - 1) ** 2 + (y - 1) ** 2)
+    point2 = math.sqrt((x - 0) ** 2 + (y - 0) ** 2)
+    return [point1, point2]
+
+
+def checkio(radius):
+    """count tiles"""
+    points = []
+    for x in range(2, math.ceil(radius) + 4):
+        for y in range(1, x):
+            points.append([y, x - y])
+
+    res = [0, 0]
+    for x in points:
+        a, b = dist(x[0], x[1])
+        if a < radius > b:
+            res[0] += 4
+        elif a < radius < b:
+            res[1] += 4
+    return res
+
+
+# print(checkio(2))  # == [4, 12]
+# print(checkio(3))  # == [16, 20]
+# print(checkio(2.1))  # == [4, 20]
+# print(checkio(2.5))  # == [12, 20]
+# print(checkio(1))  # "answer": [0, 4]
+# print(checkio(4))  # "answer": [32, 28]
+# print(checkio(0.5)) # "answer": [0, 4]
+# print(checkio(3.5))  #"answer": [24, 28]
+# print(checkio(3.8))  # "answer": [32, 28]
+# print(checkio(1.1))  # "answer": [0, 12]
+# print(checkio(2.2))  # "answer": [4, 20]
+# print(checkio(3.3))  # "answer": [24, 28]
+# print(checkio(0.9))  # "answer": [0, 4]
+# print(checkio(2.7))  # "answer": [12, 20]
+# print(checkio(3.4))  # "answer": [24, 28]
+# print(checkio(0.1))  # "answer": [0, 4]
+
+from math import pi, asin, atanh
+
+
+def checkio(h, w):
+    a, b = h / 2, w / 2
+    if h > w:  # prolate
+        e = (1 - (b ** 2 / a ** 2)) ** 0.5
+        s = 2 * pi * b ** 2 * (1 + (a / (b * e)) * asin(e))
+    elif h < w:  # oblate
+        e = (1 - (a ** 2 / b ** 2)) ** 0.5
+        s = 2 * pi * b ** 2 * (1 + ((1 - e ** 2) / e) * atanh(e))
+    else:  # sphere
+        s = 4 * pi * a ** 2
+    return [round((pi / 6) * w ** 2 * h, 2), round(s, 2)]
+
+
+# print(checkio(4, 2))  # == [8.38, 21.48]
+# print(checkio(2, 2))  # == [4.19, 12.57]
+# print(checkio(2, 4))  # == [16.76, 34.69]
+
+
+def lopata(state, rang1, rang2, move, step_n=0, step_a=0):
+    excepts = []
+    MOVES = {
+        'up' :   lambda x, y: [x-1, y],
+        'down':  lambda x, y: [x+1, y],
+        'right': lambda x, y: [x, y+1],
+        'left' : lambda x, y: [x, y-1]
+    }
+
+    for n in rang1:
+        if sum(state[n])!=0:
+            for a in rang2:
+                if move == 'up' and n==0 or move == 'down' and n==3: break
+                if move == 'left' and a==0 or move == 'right' and a==3: continue
+                if state[n][a]:
+                    if move in ('up', 'down'): x = n
+                    if move in ('left', 'right'): x = a
+                    step = step_n + step_a
+                    n2, a2 = n, a
+                    while move in ('down', 'right') and x<3 or move in ('up', 'left') and x>0:
+                        x += step
+                        n2, a2 = MOVES[move](n2,a2)
+                        if state[n2][a2]:
+                            if [n2, a2] not in excepts and state[n2][a2]==state[n][a]:
+                                state[n2][a2] += state[n][a]
+                                state[n][a] = 0
+                                excepts.append([n2, a2])
+                                break
+                            else:
+                                num = state[n][a]
+                                state[n][a] = 0
+                                state[n2-step_n][a2-step_a] = num
+                                break
+                        else:
+                            if 0<=n2+step_n<=3 and 0<=a2+step_a<=3:
+                                num = state[n2+step_n][a2+step_a]
+                                if num and [n2+step_n, a2+step_a] not in excepts and state[n2][a2]==state[n][a]:
+                                    state[n2+step_n][a2+step_a] += state[n][a]
+                                    state[n][a] = 0
+                                    excepts.append([n2+step_n, a2+step_a])
+                                    break
+                                elif num and [n2+step_n, a2+step_a] in excepts:
+                                    if [n2, a2] in excepts:
+                                        state[n2-step_n, a2-step_a] = state[n][a]
+                                        state[n][a] = 0
+                                    else:
+                                        state[n2][a2] += state[n][a]
+                                        state[n][a] = 0
+                                    break
+                                elif num == 0:
+                                    continue
+                            else:
+                                state[n2][a2] = state[n][a]
+                                state[n][a] = 0
+                                break
+    return state
+
+
+def move2048(state, move):
+    # Counting next step
+    rang1, rang2 = range(4), range(4)
+    if move == 'up':
+        state = lopata(state, rang1, rang2, move, -1, 0)
+    elif move == 'down':
+        rang1 = range(3, -1, -1)
+        state = lopata(state, rang1, rang2, move, 1, 0)
+    elif move == 'right':
+        rang2 = range(3, -1, -1)
+        state = lopata(state, rang1, rang2, move, 0, 1)
+    elif move == 'left':
+        state = lopata(state, rang1, rang2, move, 0, -1)
+
+    # Last 2
+    ext = False
+    for x in range(3, -1, -1):
+        if ext: break
+        for y in range(3, -1, -1):
+            if state[x][y] == 0:
+                state[x][y] = 2
+                ext = True
+                break
+
+    # GAME OVER
+    game_over = True
+    for row in state:
+        if 0 in row:
+            game_over = False
+
+    if game_over:
+        state = []
+        for _ in range(2):
+            state.append(list('GAME'))
+            state.append(list('OVER'))
+
+    # VICTORY
+    for row in state:
+        if 2048 in row:
+            state = [list('UWIN') for _ in range(4)]
+            break
+
+    # for x in state:
+    #     print(x)
+    return state
+
+
+# print(move2048([[8,32,4,128],[8,32,4,128],[0,32,0,256],[8,64,4,128]],"up"))
+# [[16,64,8,256],
+#  [8,32,4,256],
+#  [0,64,0,128],
+#  [0,0,0,2]]
+
+# print(move2048([[0, 2, 0, 0],
+#                 [0, 0, 0, 0],
+#                 [0, 0, 0, 0],
+#                 [0, 2, 0, 0]], 'up'))  # == [[0, 4, 0, 0],
+#                                        #    [0, 0, 0, 0],
+#                                        #    [0, 0, 0, 0],
+#                                        #    [0, 0, 0, 2]]
+# print(move2048([[4, 0, 0, 0],
+#                 [0, 4, 0, 0],
+#                 [0, 0, 0, 0],
+#                 [0, 0, 8, 8]], 'right'))  # == [[0, 0, 0, 4],
+#                                           #    [0, 0, 0, 4],
+#                                           #    [0, 0, 0, 0],
+#                                           #    [0, 0, 2, 16]]
+# print(move2048([[2, 0, 2, 2],
+#           [0, 4, 4, 4],
+#           [8, 8, 8, 16],
+#           [0, 0, 0, 0]], 'right'))  # == [[0, 0, 2, 4],
+#                                     #    [0, 0, 4, 8],
+#                                     #    [0, 8, 16, 16],
+#                                     #    [0, 0, 0, 2]]
+# print(move2048([[256, 0, 256, 4],
+#           [16, 8, 8, 0],
+#           [32, 32, 32, 32],
+#           [4, 4, 2, 2]], 'right'))  # == [[0, 0, 512, 4],
+#                                     #    [0, 0, 16, 16],
+#                                     #    [0, 0, 64, 64],
+#                                     #    [0, 2, 8, 4]]
+# print(move2048([[4, 4, 0, 0],
+#           [0, 4, 1024, 0],
+#           [0, 256, 0, 256],
+#           [0, 1024, 1024, 8]], 'down'))  # == [['U', 'W', 'I', 'N'],
+#                                          #    ['U', 'W', 'I', 'N'],
+#                                          #    ['U', 'W', 'I', 'N'],
+#                                          #    ['U', 'W', 'I', 'N']]
+# print(move2048([[2, 4, 8, 16],
+#           [32, 64, 128, 256],
+#           [512, 1024, 2, 4],
+#           [8, 16, 32, 64]], 'left'))  # == [['G', 'A', 'M', 'E'],
+#                                       #    ['O', 'V', 'E', 'R'],
+#                                       #    ['G', 'A', 'M', 'E'],
+#                                       #    ['O', 'V', 'E', 'R']])
+
+
+
+
 

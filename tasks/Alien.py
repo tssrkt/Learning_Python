@@ -283,12 +283,36 @@ def is_stressful(subj):
             any(re.search('+[.!-]*'.join(c for c in word), subj.lower())
                 for word in ['help', 'asap', 'urgent']))
 
-print(is_stressful("HI HOW ARE YOU?"))  # == True
-print(is_stressful("UUUURGGGEEEEENT here"))  # == True
-print(is_stressful("Hi"))  # == False
-print(is_stressful("I neeed HELP"))  # == True
-print(is_stressful("HELP"))  # == True
-print(is_stressful("Attention!!!"))  # == True
-print(is_stressful("HHHEEEEEEEEELLP"))  # == True
-print(is_stressful("H-E-L-P"))  # == True
-print(is_stressful("H! E! L! P!"))  # == True
+
+# print(is_stressful("HI HOW ARE YOU?"))  # == True
+# print(is_stressful("UUUURGGGEEEEENT here"))  # == True
+# print(is_stressful("Hi"))  # == False
+# print(is_stressful("I neeed HELP"))  # == True
+# print(is_stressful("HELP"))  # == True
+# print(is_stressful("Attention!!!"))  # == True
+# print(is_stressful("HHHEEEEEEEEELLP"))  # == True
+# print(is_stressful("H-E-L-P"))  # == True
+# print(is_stressful("H! E! L! P!"))  # == True
+
+from typing import Iterable, List, Tuple, Union
+Node = Union[int, str]
+Tree = Tuple[Node, List['Tree']]
+
+def on_same_path(tree: Tree, pairs: List[Tuple[Node, Node]]) -> Iterable[bool]:
+    def walk(pair, tree, path):
+        return (
+            tree[0] == pair[0] and pair[1] in path
+            or
+            tree[0] == pair[1] and pair[0] in path
+            or
+            any(walk(pair, subtree, path + [tree[0]]) for subtree in tree[1])
+        )
+    return [walk(pair, tree, []) for pair in pairs]
+
+print(on_same_path([1,[[2,[[4,[]],[5,[[7,[]],[8,[]],[9,[]]]]]],[3,[[6,[]]]]]],[[1,5],[2,9],[2,6]]))
+print(on_same_path(
+    ('Me', [('Daddy', [('Grandpa', []),
+                       ('Grandma', [])]),
+            ('Mom', [('Granny', []),
+                     ('?', [])])]),
+    [('Grandpa', 'Me'), ('Daddy', 'Granny')],))  # == [True, False])

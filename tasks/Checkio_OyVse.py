@@ -673,3 +673,30 @@ def decode_amsco(msg, key):
     return res
 
 print(decode_amsco("oruoreemdstmioitlpslam", 4123)) # == "loremipsumdolorsitamet"
+
+
+def nonogram_row(s, nums):
+    if nums in [[], [0]]: return 'X' * len(s)
+    if len((sorted(s.split('X'), key=len))[-1]) < max(nums): return None
+
+    ships = ['O' * x for x in nums]
+    print(ships)
+    for x in ships:
+
+    return s
+
+
+print(nonogram_row('??????????', [8]))  # == '??OOOOOO??'
+print(nonogram_row('???O????O?', [3, 1]))  # == 'X??O??XXOX'
+print(nonogram_row('????X?X???', [3, 2]))  # == '?OO?XXX?O?'
+print(nonogram_row('???X?', [0]))  # == 'XXXXX'
+print(nonogram_row('?????', []))  # == 'XXXXX'
+print(nonogram_row('??X??', [3]))  # is None
+
+
+def super_root(n):
+    return [x for x in range(1, n) if x**x==n][0]
+
+print(super_root(4))  # == 2
+print(super_root(27))  # == 3
+print(super_root(81))  # == 3.504339593597054)

@@ -1,12 +1,65 @@
+def is_even(num: int) -> bool:
+    # return not num%2
+    return not num & 1
+
+
+# print(is_even(2))  # == True
+# print(is_even(5))  # == False
+# print(is_even(0))  # == True
+
+
+def correct_sentence(text: str) -> str:
+    """
+        returns a corrected sentence which starts with a capital letter
+        and ends with a dot.
+    """
+    text = text[0].upper() + text[1:]
+    return text + '' if text.endswith('.') else text + '.'
+
+
+# print(correct_sentence("greetings, friends"))  # == "Greetings, friends."
+# print(correct_sentence("Greetings, friends"))  # == "Greetings, friends."
+# print(correct_sentence("Greetings, friends."))  # == "Greetings, friends."
+# print(correct_sentence("hi"))  # == "Hi."
+# print(correct_sentence("welcome to New York"))  # == "Welcome to New York."
+
+from typing import Iterable
+
+
+def remove_all_before(items: list, border: int) -> Iterable:
+    return items[items.index(border):] if border in items else items
+
+
+# print(remove_all_before([1, 2, 3, 4, 5], 3))  # == [3, 4, 5]
+# print(remove_all_before([1, 1, 2, 2, 3, 3], 2))  # == [2, 2, 3, 3]
+# print(remove_all_before([1, 1, 2, 4, 2, 3, 4], 2))  # == [2, 4, 2, 3, 4]
+# print(remove_all_before([1, 1, 5, 6, 7], 2))  # == [1, 1, 5, 6, 7]
+# print(remove_all_before([], 0))  # == []
+# print(remove_all_before([7, 7, 7, 7, 7, 7, 7, 7, 7], 7))  # == [7, 7, 7, 7, 7, 7, 7, 7, 7]
+
+
+def end_zeros(num: int) -> int:
+    return len(str(num)) - len(str(num).rstrip('0'))
+
+
+# print(end_zeros(0))  # == 1
+# print(end_zeros(1))  # == 0
+# print(end_zeros(10))  # == 1
+# print(end_zeros(101))  # == 0
+# print(end_zeros(245))  # == 0
+# print(end_zeros(100100))  # == 2
+
+
 def split_pairs(a):
-    # your code here
-    b = []
-    for x in range(0, len(a), 2):
-        if x == len(a) - 1:
-            b.append(a[x] + '_')
-        else:
-            b.append(a[x] + a[x + 1])
-    return b
+    # return [''.join(x) for x in zip(a[::2], a[1::2] + '_')]
+    return [a + b for a, b in zip(a[::2], a[1::2] + '_')]
+
+
+# print(split_pairs('abcd'))  # == ['ab', 'cd']
+# print(split_pairs('abc'))  # == ['ab', 'c_']
+# print(split_pairs('abcdf'))  # == ['ab', 'cd', 'f_']
+# print(split_pairs('a'))  # == ['a_']
+# print(split_pairs(''))  # == []
 
 
 ##############################
@@ -74,22 +127,14 @@ def left_join(a: tuple):
     """
     Join strings and replace "right" to "left"
     """
-    res = []
-    n = 0
-    for x in a:
-        while 'right' in x:
-            n = x.find('right')
-            x = x[:n] + 'left' + x[n + 5:]
-        res.append(x)
-    s = ''
-    n = 0
-    for x in res:
-        if n == len(res) - 1:
-            s += x
-        else:
-            s += x + ','
-        n += 1
-    return s
+    return ','.join(a).replace('right', 'left')
+
+
+# print(left_join(("left", "right", "left", "stop")))
+# print(left_join(("left", "right", "left", "stop")))  # == "left,left,left,stop"
+# print(left_join(("bright aright", "ok")))  # == "bleft aleft,ok", "Bright Left"
+# print(left_join(("brightness wright",)))  # == "bleftness wleft", "One phrase"
+# print(left_join(("enough", "jokes")))  # == "enough,jokes", "Nothing to replace"
 
 
 lorem = ["lorem", "ipsum", "dolor", "sit", "amet", "consectetuer", "adipiscing", "elit", "aenean", "commodo", "ligula",
@@ -104,20 +149,16 @@ def first_word(text: str):
     """
         returns the first word in a given text.
     """
-    from string import punctuation
-    punk = punctuation.replace("'", '')
-    for x in text:
-        if x.isalpha():
-            break
-        elif x in punk:
-            text = text.replace(x, '')
+    return ([x for x in text.replace('.', ' ').replace(',', '').split() if x[0].isalpha()])[0]
 
-    s = list(text.split())[0]
 
-    for x in s:
-        if x in punk or x == ' ':
-            s = list(text.split(x))[0]
-    return s
+# print(first_word("Hello world"))  # == "Hello"
+# print(first_word(" a word "))  # == "a"
+# print(first_word("don't touch it"))  # == "don't"
+# print(first_word("greetings, friends"))  # == "greetings"
+# print(first_word("... and so on ..."))  # == "and"
+# print(first_word("hi"))  # == "hi"
+# print(first_word("Hello.World"))  # == "Hello"
 
 
 #################################
@@ -133,12 +174,33 @@ def days_diff(a, b):
 #################################
 
 def backward_string_by_word(text: str) -> str:
-    import re
-    return re.sub(r'[a-zA-Z]+', lambda x: x.group()[::-1], text)
-    # Переворачивает слова, оставляя порядок слов и пунктуацию прежними
+    return ' '.join([x[::-1] for x in text.split()])
+
+
+# print(backward_string_by_word(''))  # == ''
+# print(backward_string_by_word('world'))  # == 'dlrow'
+# print(backward_string_by_word('hello world'))  # == 'olleh dlrow'
+# print(backward_string_by_word('hello   world'))  # == 'olleh   dlrow'
+# print(backward_string_by_word('welcome to a game'))  # == 'emoclew ot a emag')
 
 
 #################################
+
+
+def count_digits(text: str) -> int:
+    # return len([x for x in text if x.isdigit()])
+    return sum(map(str.isdigit, text))
+
+
+# print(count_digits('hi'))  # == 0
+# print(count_digits('who is 1st here'))  # == 1
+# print(count_digits('my numbers is 2'))  # == 1
+# print(count_digits('This picture is an oil on canvas '
+#  'painting by Danish artist Anna '
+#  'Petersen between 1845 and 1910 year'))  # == 8
+# print(count_digits('5 plus 6 is'))  # == 2
+# print(count_digits(''))  # == 0)
+
 
 def bigger_price(limit: int, data: list) -> list:
     """
@@ -176,40 +238,33 @@ def between_markers(text: str, begin: str, end: str) -> str:
     """
         returns substring between two given markers
     """
-    res = ''
-
-    if (begin not in text) and (end not in text):
-        return text
-    elif (begin not in text) and (end in text):
-        res = text.split(end)[0]
-
-    elif (begin in text) and (end not in text):
-        res = text.split(begin)[1]
-
-    elif (begin in text) and (end in text):
-        b = text.find(begin)
-        e = text.find(end)
-        if b > e:
-            return ''
-
-        res = text.split(begin)[1]
-        res = res.split(end)[0]
-
-    return res
+    if begin in text and end in text and text.find(begin) > text.find(end): return ''
+    return text[text.find(begin) if begin in text else 0:text.find(end) if end in text else None].replace(begin, '')
 
 
 # print(between_markers("No [b]hi","[b]","[/b]"))
+# print(between_markers('What is >apple<', '>', '<'))  # == "apple", "One sym"
+# print(between_markers("<head><title>My new site</title></head>",
+#                            "<title>", "</title>"))  # == "My new site", "HTML"
+# print(between_markers('No[/b] hi', '[b]', '[/b]'))  # == 'No', 'No opened'
+# print(between_markers('No [b]hi', '[b]', '[/b]'))  # == 'hi', 'No close'
+# print(between_markers('No hi', '[b]', '[/b]'))  # == 'No hi', 'No markers at all'
+# print(between_markers('No <hi>', '>', '<'))  # == '', 'Wrong direction'
 
-def second_index(text: str, symbol: str) -> [int, None]:
+
+def second_index(text: str, s: str) -> [int, None]:
     """
         returns the second index of a symbol in a given text
     """
-    if text.count(symbol) < 2:
-        return None
-    else:
-        import re
-        res = [m.start() for m in re.finditer(symbol, text)]
-        return res[1]
+    import re
+    return [m.start() for m in re.finditer(s, text)][1] if text.count(s) >= 2 else None
+
+
+# print(second_index("sims", "s"))  # == 3, "First"
+# print(second_index("find the river", "e"))  # == 12, "Second"
+# print(second_index("hi", " "))  # is None, "Third"
+# print(second_index("hi mayor", " "))  # is None, "Fourth"
+# print(second_index("hi mr Mayor", " "))  # == 5, "Fifth")
 
 
 ######################################
@@ -225,45 +280,47 @@ def frequency_sort(items):
     v = list(d.values())
     for x in v:
         if v.count(x) > 1:
-            res = sorted(res, key=lambda x: items.index(x))
+            res = sorted(res, key=lambda x: res.count(x))
 
     return res
 
 
 # print(frequency_sort([4,6,2,2,6,4,4,4]))
 
-def safe_pawns(pawns: set) -> int:
-    desk = []
-    for x in range(8):
-        desk.append([0] * 8)
 
+def safe_pawns(pawns: set) -> int:
+    desk = [[0] * 8 for _ in range(8)]
     d = {'a': 0, 'b': 1, 'c': 2, 'd': 3, 'e': 4, 'f': 5, 'g': 6, 'h': 7}
 
-    pawns = list(pawns)
-    for x in pawns:
+    for x in list(pawns):
         desk[abs(int(x[1]) - 8)][d.get(x[0])] = 1
 
     res = 0
-    for y in range(8):
-        if sum(desk[y]) == 0:
-            continue
-        elif y < 7:
+    for y in range(7):
+        if sum(desk[y]) != 0:
             for x in range(8):
                 if desk[y][x] == 1:
-                    if 0 < x < 7 and (desk[y + 1][x - 1] == 1 or desk[y + 1][x + 1] == 1):
+                    if 0 < x < 7 and (desk[y + 1][x - 1] or desk[y + 1][x + 1]) or \
+                            x == 0 and desk[y + 1][x + 1] or x == 7 and desk[y + 1][x - 1]:
                         res += 1
-                    elif x == 0 and desk[y + 1][x + 1] == 1:
-                        res += 1
-                    elif x == 7 and desk[y + 1][x - 1] == 1:
-                        res += 1
-
-    # for x in desk:
-    #     print(x)
-
     return res
 
 
-# print(safe_pawns(["a2","b2","c2","d2","e2","f2","g2","h2"]))
+# print(safe_pawns(["a2", "b2", "c2", "d2", "e2", "f2", "g2", "h2"]))
+# print(safe_pawns({"b4", "d4", "f4", "c3", "e3", "g5", "d2"}))  # == 6
+# print(safe_pawns({"b4", "c4", "d4", "e4", "f4", "g4", "e5"}))  # == 1
+# print(safe_pawns(["e4"]))  # 0,
+# print(safe_pawns(["e8"]))  # 0,
+# print(safe_pawns(["a1", "b2", "c3", "d4", "e5", "f6", "g7", "h8"]))  # 7,
+# print(safe_pawns(["a8", "b7", "c6", "d5", "e4", "f3", "g2", "h1"]))  # 7,
+# print(safe_pawns(["a1", "b2", "c3", "d4", "e5", "f6", "g7", "h8"]))  # 7,
+# print(safe_pawns(["a2", "b2", "c2", "d2", "e2", "f2", "g2", "h2"]))  # 0,
+# print(safe_pawns(["a1", "a2", "a3", "a4", "h1", "h2", "h3", "h4"]))  # 0,
+# print(safe_pawns(["b4", "c4", "d4", "e4", "f4", "g4", "e3"]))  # 2,
+# print(safe_pawns(["e7", "e6", "d5", "f5", "c4", "e4", "g4", "e8"]))  # 3,
+# print(safe_pawns(["a2", "b4", "c6", "d8", "e1", "f3", "g5", "h8"]))  # 0,
+# print(safe_pawns(["b6", "a7", "b8", "c7", "g1", "f2", "h2", "g3"]))  # 6,
+
 
 def words_order(text: str, words: list) -> bool:
     if len(words) >= 2 and words[0] == words[1]:
@@ -292,17 +349,17 @@ def checkio(number: int) -> int:
 # print(checkio(123405))
 
 def is_all_upper(text: str) -> bool:
-    text = text.replace(' ', '')
-    if text == '' or text.isdigit() or text.islower():
-        return False
-    else:
-        for x in text:
-            if x.islower():
-                return False
-    return True
+    return text == text.upper()
 
 
 # print(is_all_upper("ALL UPPER"))
+# print(is_all_upper('ALL UPPER'))  # == True
+# print(is_all_upper('all lower'))  # == False
+# print(is_all_upper('mixed UPPER and lower'))  # == False
+# print(is_all_upper(''))  # == True
+# print(is_all_upper('     '))  # == True
+# print(is_all_upper('444'))  # == True
+# print(is_all_upper('55 55 5'))  # == True
 
 from typing import Iterable
 
@@ -554,6 +611,9 @@ def reverse_roman(s):
 # print(reverse_roman("MMMCMXCIX"))
 
 def isometric_strings(a, b):
+    if a == b or a == b == '':
+        return True
+
     for x in range(len(a)):
         if a[x].isalpha():
             a = a.replace(a[x], str(x))
@@ -565,6 +625,12 @@ def isometric_strings(a, b):
 
 
 # print(isometric_strings("bar","foo"))
+# print(isometric_strings("add", "egg"))  # == True
+# print(isometric_strings("foo", "bar"))  # == False
+# print(isometric_strings("", ""))  # == True
+# print(isometric_strings("all", "all"))  # == True
+# print(isometric_strings("gogopy", "doodle"))  # == False
+
 
 d = {1: 'January', 2: 'February', 3: 'March', 4: 'April', 5: 'May', 6: 'June',
      7: 'July', 8: 'August', 9: 'September', 10: 'October', 11: 'November', 12: 'December'}
@@ -593,42 +659,11 @@ def date_time(time: str) -> str:
 
 def yaml(a):
     d = {}
-    a = a.split()
-    v = ''
-    lk = []
-    lv = []
-    for x in a:
-        if ':' in x:
-            if a.index(x) > 0 and a[a.index(x) - 1].count(':') > 0:
-                v = None
-            if v == 'false':
-                lv.append(False)
-                v = ''
-            elif v == 'true':
-                lv.append(True)
-                v = ''
-            elif v != '':
-                lv.append(v)
-                v = ''
-            lk.append(x[:-1])
-        else:
-            v = v + ' ' + x
-
-    if v != '':
-        lv.append(v)
-        v = ''
-
-    for x in range(len(lk)):
-        y = lv[x].strip().replace('\\', '')
-        if y.isdigit():
-            y = int(y)
-        else:
-            y = y.replace('"', '')
-
-        print(y)
-
-        d.setdefault(lk[x], y)
-
+    for x in a.splitlines():
+        if x != '':
+            k, v = x.split(':')[0].strip(), x.split(':')[1].strip()
+            v = int(v) if v.isdigit() else v
+            d[k] = v
     return d
 
 
@@ -807,57 +842,26 @@ def checkio(line: str) -> str:
 # print(checkio("To take a trivial example, which of us ever undertakes laborious physical exercise, except to obtain some advantage from it?"))
 # print(checkio("1st 2a ab3er root rate"))
 
-def binar_morze(n):
-    if n == '0':
-        return '.'
 
-    n = int(n)
-    a = [1]
-    while a[-1] <= n:
-        a.append(a[-1] * 2)
-        if a[-1] > n:
-            del a[-1]
-            break
-
-    a = a[::-1]
-    res = ''
-    sm = 0
-    for x in a:
-        if a.index(x) == 0 or sm + x <= n:
-            sm += x
-            res += '-'
-        elif sm + x > n:
-            res += '.'
-    return res
+def binm(n):
+    return str(bin(int(n))[2:]).replace('1', '-').replace('0', '.')
 
 
 def checkio(time_string: str) -> str:
-    a = time_string.split(':')
-    res = ''
-    nums = [2, 4, 3, 4, 3, 4]
-    i = 0
-
-    for x in a:
-        if len(x) <= 1:
-            a[a.index(x)] = '0' + x
-
-    zuka = 0
-    for x in a:
-        for n in x:
-            bm = binar_morze(n)
-            bm = '.' * (nums[i] - len(bm)) + bm
-            res += bm + ' '
-            i += 1
-        if zuka < 2:
-            res += ': '
-        zuka += 1
-    res = res.strip()
-    return res
+    a, b, c, d, e, f = ''.join(['0' + x if len(x) <= 1 else x for x in time_string.split(':')])
+    a = binm(a) if len(binm(a)) == 2 else '.' * (2 - len(binm(a))) + binm(a)
+    b = binm(b) if len(binm(b)) == 4 else '.' * (4 - len(binm(b))) + binm(b)
+    c = binm(c) if len(binm(c)) == 3 else '.' * (3 - len(binm(c))) + binm(c)
+    d = binm(d) if len(binm(d)) == 4 else '.' * (4 - len(binm(d))) + binm(d)
+    e = binm(e) if len(binm(e)) == 3 else '.' * (3 - len(binm(e))) + binm(e)
+    f = binm(f) if len(binm(f)) == 4 else '.' * (4 - len(binm(f))) + binm(f)
+    return f'{a} {b} : {c} {d} : {e} {f}'
 
 
-# print(checkio("10:37:49"))
-# print(checkio("00:1:02"))
-# print(checkio("23:59:59"))
+# print(checkio("10:37:49"))  # == ".- .... : .-- .--- : -.. -..-"
+# print(checkio("21:34:56"))  # == "-. ...- : .-- .-.. : -.- .--."
+# print(checkio("00:1:02"))  # == ".. .... : ... ...- : ... ..-."
+# print(checkio("23:59:59"))  # == "-. ..-- : -.- -..- : -.- -..-"
 
 from typing import List
 import math
@@ -885,7 +889,6 @@ def total_cost(calls: List[str]) -> int:
 
 
 # print(total_cost(["2014-01-01 01:12:13 181","2014-01-02 20:11:10 600","2014-01-03 01:12:13 6009","2014-01-03 12:13:55 200"]))
-
 
 
 def flat_list(a, neo=None):
@@ -1312,7 +1315,6 @@ def text_formatting(text: str, width: int, style: str) -> str:
 # old."""
 
 
-
 def reverse_ascending(items):
     a = []
     res = []
@@ -1502,6 +1504,7 @@ def non_repeat(s):
 # ЗАДАЧКА С ЛАМПОЧКАМИ #
 ########################
 from datetime import datetime, timedelta
+
 
 # Находится ли время начала или конца отсчета перед включением лампочки
 def is_before(sw, dt):
@@ -1810,7 +1813,6 @@ def sum_light(els: List[datetime], start_watching=None, end_watching=None, opera
     res = lopata(lamps, sw, se)
     return res
 
-
 # print(sum_light([
 #     (datetime(2015, 1, 12, 10, 0, 10), 3),
 #     datetime(2015, 1, 12, 10, 0, 20),
@@ -1958,3 +1960,11 @@ def sum_light(els: List[datetime], start_watching=None, end_watching=None, opera
 #     datetime(2015, 1, 12, 10, 5, 0)))  # == 300
 
 
+def time_converter(time):
+    n, m = map(int, time.split(':'))
+    return f'{str(n-12) if 12<n<=23 else str(n)}:{str(m) if m!=0 else "00"} ' + ('a.m', 'p.m.')[12<=n<=23]
+
+
+# print(time_converter('12:30'))  # == '12:30 p.m.'
+# print(time_converter('09:00'))  # == '9:00 a.m.'
+# print(time_converter('23:15'))  # == '11:15 p.m.'
