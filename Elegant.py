@@ -62,3 +62,23 @@ for x in sorted(heroes.items(), key=lambda pair: (pair[1], pair(0))):
 
 d = lambda x: 'Like' if x > 100 else ('Subscribe' if x > 0 else 'Follow')
 print(d(10))
+
+
+x = 512
+y = len(f'{x-1:b}')
+print(y)
+print(2**y)
+
+print(f'{31:010b}')
+print(f'{31:015b}')
+print(f'{31.743:0.2f}')
+print(f'*{31:^10}*')
+print(f'*{31:!=10}*')
+print(f'*{31:x}*')
+print(f'*{65:c}*')
+a, b = 71, 13
+print(f'*{a:0{b}b}*')
+aaa, bbb = 71, 13
+print(f'*{aaa:0{bbb}b}*--*{bbb:^20}*')
+
+

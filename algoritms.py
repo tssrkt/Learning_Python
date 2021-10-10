@@ -26,9 +26,6 @@ def bubble_sort(a):
                 a[k], a[k+1] = a[k+1], a[k]
 
 
-
-
-
 def test_sort(sort_algorithm):
     print('Test:', sort_algorithm.__doc__)
     print('1: ', end="")

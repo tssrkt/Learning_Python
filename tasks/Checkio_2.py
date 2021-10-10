@@ -2354,6 +2354,94 @@ def move2048(state, move):
 #                                       #    ['O', 'V', 'E', 'R']])
 
 
+def checkio(in_string):
+    "remove accents"
+    dic = {271: 'd', 357: 't', 356: 'T', 7805: 'v', 7804: 'V', 7686: 'B', 7687: 'b',
+           7743: 'm', 7765: 'p', 7742: 'M', 323: 'N',
+           7764: 'P'}
+    res = ''
+    for x in in_string:
+        if ord(x) in list(range(224, 230)) + [259, 513, 7857, 7847, 7855, 7845, 462, 515, 7861, 7851, 257]: res += 'a'
+        elif ord(x) in list(range(232, 236)) + [7873, 517, 7871, 283, 277, 519, 7869, 7877, 275]: res += 'e'
+        elif ord(x) in list(range(242, 247)) + [417, 525, 7891, 7901, 7889, 7899, 337, 466, 335, 527, 7895, 7905, 333]: res += 'o'
+        elif ord(x) in list(range(236, 239)) + [521, 464, 301, 523, 297, 299]: res += 'i'
+        elif ord(x) in list(range(249, 253)) + [7915, 533, 7913, 369, 468, 365, 535, 361, 7919, 363]: res += 'u'
+        elif ord(x) in [496, 309]: res += 'j'
+        elif ord(x) in [314, 318]: res += 'l'
+        elif ord(x) in [489, 7729]: res += 'k'
+        elif ord(x) in [293, 543, 7723]: res += 'h'
+        elif ord(x) in [378, 7825, 382]: res += 'z'
+        elif ord(x) in [347, 349, 353]: res += 's'
+        elif ord(x) in [501, 285, 487, 287, 7713]: res += 'g'
+        elif ord(x) in [241, 505, 324, 328]: res += 'n'
+        elif ord(x) in [253, 255, 7923, 375, 7929, 563]: res += 'y'
+        elif ord(x) in [7809, 7811, 373]: res += 'w'
+        elif ord(x) in [341, 529, 345, 531]: res += 'r'
+        elif ord(x) in [265, 263, 269]: res += 'c'
+        elif ord(x) in [270, 7694]: res += 'D'
+        elif ord(x) in [313, 317]: res += 'L'
+        elif ord(x) in [488, 7728]: res += 'K'
+        elif ord(x) in [308]: res += 'J'
+        elif ord(x) in [542, 292, 7722]: res += 'H'
+        elif ord(x) in [262, 264, 268]: res += 'C'
+        elif ord(x) in [500, 284, 486, 286, 7712]: res += 'G'
+        elif ord(x) in [7808, 7810, 372]: res += 'W'
+        elif ord(x) in [221, 7922, 374, 7928, 562]: res += 'Y'
+        elif ord(x) in [528, 340, 344, 530]: res += 'R'
+        elif ord(x) in [346, 348, 352]: res += 'S'
+        elif ord(x) in list(range(192, 198)) + [7854, 7856, 7846, 512, 7844, 461, 258, 514, 7860, 7850, 256]: res += 'A'
+        elif ord(x) in list(range(200, 204)) + [7872, 516, 7870, 282, 276, 518, 7868, 7876, 274]: res += 'E'
+        elif ord(x) in list(range(204, 208)) + [520, 463, 300, 522, 296, 298]: res += 'I'
+        elif ord(x) in list(range(210, 215)) + [7890, 7900, 524, 7888, 7898, 336, 465, 334, 526, 7894, 7904, 332]: res += 'O'
+        elif ord(x) in list(range(217, 221)) + [7914, 532, 7912, 368, 467, 364, 534, 360, 7918, 362]: res += 'U'
+        elif ord(x) in [209, 504, 327]: res += 'N'
+        elif ord(x) in [377, 7824, 381]: res += 'Z'
+        elif ord(x) in [832, 833]: continue
+        elif ord(x) in dic.keys(): res += dic.get(ord(x))
+        else: res += x
+    return res
 
+for x in "ḏẖḴḵḺḻṈṉṞṟṮṯẔẕ":
+    print(x, ord(x))
+
+
+print(checkio(u"ḆḇḎḏẖḴḵḺḻṈṉṞṟṮṯẔẕ"))
+print(checkio(u"äëḧïöẗüẅẍÿÄËḦÏÖÜẄẌŸ"))
+print(checkio(u"åÅůŮẘẙ"))
+print(checkio(u"ȧȦḃḂċĊḋḊėĖḟḞġĠḣḢİṁṀṅṄȯȮṗṖṙṘṡṠṫṪẇẆẋẊẏẎżŻ"))
+print(checkio(u"ẠạḄḅḌḍẸẹḤḥỊịḲḳḶḷṂṃṆṇỌọṚṛṢṣṬṭỤụṾṿẈẉỴỵẒẓ"))
+print(checkio(u"ąĄçÇḑḐęĘģĢḩḨįĮķĶļĻņŅǫǪŗŖşŞţŢųŲ"))
+print(checkio(u"ảẢẻẺỉỈỏỎủỦỷỶ"))
+print(checkio(u"ẳẲ"))
+print(checkio(u"ẩẨểỂổỔ"))
+print(checkio(u"ởỞửỬ"))
+print(checkio(u"ặẶ"))
+print(checkio(u"ậẬệỆộỘ"))
+print(checkio(u"ợỢựỰ"))
+print(checkio(u"蟒蛇"))
+print(checkio(u"   "))
+print(checkio(u"!@#$%^&*()_+,./<>?"))
+print(checkio(u""))
+
+print(checkio(u"ĀāĒēḠḡĪīŌōŪūȲȳ"))
+print(checkio(u"ỡỠữỮ"))
+print(checkio(u"ẫẪễỄỗỖ"))
+print(checkio(u"ȃȂȇȆȋȊȏȎȗȖȓȒ"))
+print(checkio(u"ãÃẽẼĩĨñÑõÕũŨṽṼỹỸ"))
+print(checkio(u"ẵẴ"))
+print(checkio("ăĂĕĔğĞḫḪĭĬŏŎŭŬ"))
+print(checkio("ǎǍčČďĎěĚǧǦȟȞǐǏǰǩǨľĽňŇǒǑřŘšŠťŤǔǓžŽ"))
+print(checkio("âĉêĝĥîĵôŝûŵŷẑÂĈÊĜĤÎĴÔŜÛŴŶẐ"))
+print(checkio("őűŐŰ"))
+print(checkio("ớỚứỨ"))
+print(checkio("ấẤếẾốỐ"))
+print(checkio("áćéǵíḱĺḿńóṕŕśúẃýźÁĆÉǴÍḰĹḾŃÓṔŔŚÚẂÝŹ"))
+print(checkio("ȁȅȉȍȑȕȀȄȈȌȐȔ"))
+print(checkio("ờỜừỪ"))
+print(checkio("ầẦềỀồỒ"))
+print(checkio("ằẰ"))
+print(checkio("àèìǹòùẁỳÀÈÌǸÒÙẀỲ"))
+print(checkio(u"préfèrent"))  # == u"preferent"
+print(checkio(u"loài trăn lớn"))  # == u"loai tran lon")
 
 

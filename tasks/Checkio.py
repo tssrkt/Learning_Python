@@ -663,10 +663,21 @@ def yaml(a):
         if x != '':
             k, v = x.split(':')[0].strip(), x.split(':')[1].strip()
             v = int(v) if v.isdigit() else v
+            v = None if v in ['', 'null'] else v
+            v = 'null' if v=='\"null\"' else v
+            v = v.replace('\"', '').replace('\\', '"') if type(v)==str else v
+            v = False if v=='false' else v
+            v = True if v=='true' else v
             d[k] = v
     return d
 
-
+# print(yaml("name: \"Bob Dylan\"\nchildren: 6\ncoding: \"null\" "))
+# print(yaml("name: \"Bob Dylan\"\nchildren: 6\ncoding: null"))
+# print(yaml("name: \"Bob Dylan\"\nchildren: 6\ncoding:"))
+# print(yaml("name: \"Bob Dylan\"\nchildren: 6\nalive: false"))
+# print(yaml("name: \"Alex \\\"Fox\\\"\"\nage: 12\n\nclass: 12b"))
+# print(yaml("name: \"Alex Fox\"\nage: 12\n\nclass: 12b"))
+# print(yaml("name: Alex\nage: 12"))
 # print(yaml("name: Alex\nage: 12"))
 # print(yaml("name: Alex Fox\nage: 12\n\nclass: 12b"))
 # print(yaml("name: \"Bob Dylan\"\nchildren: 6\nalive: false"))

@@ -316,3 +316,8 @@ print(on_same_path(
             ('Mom', [('Granny', []),
                      ('?', [])])]),
     [('Grandpa', 'Me'), ('Daddy', 'Granny')],))  # == [True, False])
+
+# Morse clock
+def checkio(time_string: str) -> str:
+    h1, h2, m1, m2, s1, s2 = [f'{int(d):04b}' for x in time_string.split(':') for d in x.zfill(2)]
+    return f'{h1[2:]} {h2} : {m1[1:]} {m2} : {s1[1:]} {s2}'.replace('0', '.').replace('1', '-')

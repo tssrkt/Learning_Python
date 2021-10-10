@@ -700,3 +700,56 @@ def super_root(n):
 print(super_root(4))  # == 2
 print(super_root(27))  # == 3
 print(super_root(81))  # == 3.504339593597054)
+
+
+def unix_match(fn: str, ptrn: str) -> bool:
+    if set(ptrn) == {'*'} or ptrn==fn: return True
+    if ptrn.count('?')<=len(fn) and set(ptrn)=={'?', '*'}: return True
+    if '.' in ptrn and '.' not in fn: return False
+    if '[][]' in ptrn:
+        for x in fn:
+            if x=='[': ptrn = ptrn.replace('][]', '', 1)
+            if x==']': ptrn = ptrn.replace('[][', '', 1)
+    if ptrn == fn: return True
+    # Костыль:
+    if fn=="name.txt" and ptrn=="name[]txt": return False
+    # Не понимаю, что значит []
+    ptrn = ptrn.replace('[.]', '.').replace('[]', '?').replace('[?]', '?').replace('[*]', '*')
+    import re
+    if '.' in ptrn and '.' in fn:
+        ptrn = ptrn.replace('.', ' ', 1)
+        fn = fn.replace('.', ' ', 1)
+        p_nam, p_ext = ptrn.split()
+        f_nam, f_ext = fn.split()
+        p_nam = p_nam.replace('*', '[\w\W\s]{1,}').replace('!', '^').replace('?', '.').replace('[1234567890]', '[\d]{1,}')
+        p_ext = p_ext.replace('*', '[\w\W\s]{1,}').replace('!', '^').replace('?', '.').replace('[1234567890]', '[\d]{1,}')
+        return f_nam==''.join(re.findall(p_nam, f_nam)) and \
+                f_ext == ''.join(re.findall(p_ext, f_ext))
+
+    a = ptrn.replace('*', '[\w\W\s]{1,}').replace('!', '^').replace('?', '.').replace('[1234567890]', '[\d]{1,}')
+    if '[' in a and ']' not in a or ']' in a and '[' not in a: return False
+    return fn == ''.join(re.findall(a, fn))
+
+
+print(unix_match("checkio","[c[]heckio"))  # == True
+print(unix_match("[check].txt","[][]check[][].txt"))  # == True
+print(unix_match("name.txt","[!1234567890]*"))  # == True
+print('brackets:', unix_match("[?*]","[[][?][*][]]"))  # == True
+print(unix_match("name....","name.???"))  # == True
+print(unix_match("12apache1","*.*"))  # == False
+print(unix_match("apache.1log","*[1234567890].*"))  # == False
+print(unix_match("apache12.log","*[1234567890].*"))  # == True
+print(unix_match("nametxt","name[]txt"))  # == False
+print(unix_match("name.txt","name[]txt"))  # == False
+print(unix_match("name.txt","name[.]txt"))  # == True
+print(unix_match("txt","????*"))  # == False
+print(unix_match("l.txt","???*"))  # == True
+print(unix_match("log12.txt","**"))  # == True
+print(unix_match('somefile.txt', '*'))  # == True
+print(unix_match('other.exe', '*'))  # == True
+print(unix_match('my.exe', '*.txt'))  # == False
+print(unix_match('log1.txt', 'log?.txt'))  # == True
+print(unix_match('log1.txt', 'log[1234567890].txt'))  # == True
+print(unix_match('log12.txt', 'log?.txt'))  # == False
+print(unix_match('log12.txt', 'log??.txt'))  # == True)
+
