@@ -902,21 +902,15 @@ def total_cost(calls: List[str]) -> int:
 # print(total_cost(["2014-01-01 01:12:13 181","2014-01-02 20:11:10 600","2014-01-03 01:12:13 6009","2014-01-03 12:13:55 200"]))
 
 
-def flat_list(a, neo=None):
-    if a == []:
-        return []
-
-    for x in a:
-        if neo is None:
-            neo = []
-        if type(x) == list:
-            neo = neo + flat_list(x)
-        else:
-            neo.append(x)
-    return neo
+def flat_list(a):
+    # neo = []
+    # for x in a:
+    #     neo.extend(flat_list(x) if type(x) == list else [x])
+    # return neo
+    for i in a: yield from [i] if i * 0 == 0 else flat_list(i)
 
 
-# print(flat_list([-1, [1, [-2], 1], -1]))
+# print(list(flat_list([-1, [1, [-2], 1], -1])))  # == [-1, 1, -2, 1, -1]
 
 def how_deep(structure, res=1):
     for x in structure:
@@ -1979,3 +1973,34 @@ def time_converter(time):
 # print(time_converter('12:30'))  # == '12:30 p.m.'
 # print(time_converter('09:00'))  # == '9:00 a.m.'
 # print(time_converter('23:15'))  # == '11:15 p.m.'
+
+
+def best_stock(d: dict) -> str:
+    # return [k for k,v in d.items() if v==max(list(d.values()))][0]
+    return max(d, key=d.get)
+
+# print(best_stock({"CAC": 10.0, "ATX": 390.2, "WIG": 1.2}))  # == "ATX"
+# print(best_stock({"CAC": 91.1, "ATX": 1.01, "TASI": 120.9}))  # == "TASI"
+
+
+def is_acceptable_password(p: str) -> bool:
+    return (any(x for x in p if x.isdigit()) or any(x for x in p if x.isalpha())) and len(p)>6 or len(p)>9
+
+
+def is_acceptable_password(p: str) -> bool:
+    dig = any(x for x in p if x.isdigit())
+    alp = any(x for x in p if x.isalpha())
+    return ('password' not in p.lower() and (dig or alp) and len(p)>6) or len(p)>9
+
+
+def is_acceptable_password(p: str) -> bool:
+    dig = any(x for x in p if x.isdigit())
+    alp = any(x for x in p if x.isalpha())
+    pas = 'password' not in p.lower()
+    return (dig or alp or len(p)>9) and pas and len(p)>6 and len(set(p))>3
+
+
+
+
+
+

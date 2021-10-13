@@ -1885,6 +1885,10 @@ def roman(n):
             n -= k
     return res
 
+def solution(n):
+    if n == 0: return ""
+    return next(c + solution(n-v) for c,v in dic if v <= n)
+
 
 def reverse_roman(s):
     for x in range(1, 4000):
@@ -2282,11 +2286,7 @@ def move2048(state, move):
                 break
 
     # GAME OVER
-    game_over = True
-    for row in state:
-        if 0 in row:
-            game_over = False
-
+    game_over = not any(0 in row for row in state)
     if game_over:
         state = []
         for _ in range(2):
