@@ -36,6 +36,14 @@ def valid_solution(board):
 #                                    [3, 4, 5, 2, 8, 6, 1, 7, 9]]))  # True
 
 
+def int32_to_ip(num):
+    m = []
+    for _ in range(4):
+        m.append(num & 255)
+        num >>= 8
+    return '.'.join([str(x) for x in m[::-1]])
+
+
 
 
 

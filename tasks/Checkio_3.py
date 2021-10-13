@@ -212,12 +212,155 @@ def broken_clock(st_time, wr_time=None, error=None):
     return str(datetime.strptime(st_time, '%H:%M:%S') + timedelta(seconds=secs))[-8:]
 
 
-print(broken_clock(["13:21:11", "20:20:30", "-1 hour at 10600 seconds"]))
-print(broken_clock(["01:16:43", "04:22:30", "+1 minute at 150 seconds"]))
-print(broken_clock('00:00:00', '00:00:15', '+5 seconds at 10 seconds'))  # ==  '00:00:10'
-print(broken_clock('06:10:00', '06:10:15', '-5 seconds at 10 seconds'))  # ==  '06:10:30'
-print(broken_clock('13:00:00', '14:01:00', '+1 second at 1 minute'))  # ==  '14:00:00'
-print(broken_clock('01:05:05', '04:05:05', '-1 hour at 2 hours'))  # ==  '07:05:05'
-print(broken_clock('00:00:00', '00:00:30', '+2 seconds at 6 seconds'))  # ==  '00:00:22')
+# print(broken_clock(["13:21:11", "20:20:30", "-1 hour at 10600 seconds"]))
+# print(broken_clock(["01:16:43", "04:22:30", "+1 minute at 150 seconds"]))
+# print(broken_clock('00:00:00', '00:00:15', '+5 seconds at 10 seconds'))  # ==  '00:00:10'
+# print(broken_clock('06:10:00', '06:10:15', '-5 seconds at 10 seconds'))  # ==  '06:10:30'
+# print(broken_clock('13:00:00', '14:01:00', '+1 second at 1 minute'))  # ==  '14:00:00'
+# print(broken_clock('01:05:05', '04:05:05', '-1 hour at 2 hours'))  # ==  '07:05:05'
+# print(broken_clock('00:00:00', '00:00:30', '+2 seconds at 6 seconds'))  # ==  '00:00:22')
+
+######################################################################################################
+
+
+def caps_lock(text: str) -> str:
+    up, res = False, ''
+    for x in text:
+        if x=='a':
+            if up: up = False
+            else: up = True
+        else:
+            if up and x.isupper(): res += x.lower()
+            elif up and x.islower(): res += x.upper()
+            else: res += x
+    return res
+
+
+# print(caps_lock("Why are you asking me that?"))  # == "Why RE YOU sking me thT?"
+# print(caps_lock("Madder than Mad Brian of Madcastle"))  # == "MDDER THn MD BRIn of MDCstle"
+
+def decode_vigenere(od, oe, nw):
+    from string import ascii_uppercase as alf
+
+    word = ''
+    for n, x in enumerate(od):
+        a = alf.index(oe[n]) - alf.index(x)
+        word += alf[a]
+
+    if len(nw)>len(od):
+        fr_word = {}
+        for x in range(2, len(word)):
+            fr_word[word[0:x]] = word.count(word[0:x])
+
+        for x in fr_word.keys():
+            if x==word[len(x):(len(x))*2]:
+                word = x
+
+        word = word*len(nw) if len(nw)>len(word) else word
+
+    res = ''
+    for n, x in enumerate(nw):
+        a = alf.index(nw[n]) - alf.index(word[n])
+        res += alf[a]
+    return res
+
+# print(decode_vigenere(u"AAAAAAAAA", u"ABABABABC", u"ABABABABC"))
+# print(decode_vigenere(u"NOBODYEXPECTSTHESPANISHINQUISITION", u"PVFQNGSZWIEDAHJLWRKVWUOMPACWUPXKYV", u"QBVGHXSTAWFOAQTPFGIWICZEPKXDCSPKXOZAKYNVNSNSSYEVWOHKKXIHKCIVSUWFSEEUQBIPRKXQHKHXKFMGRPRGVMGULEUSTMFVQKXIHGKRQCMBULSHRCAQBVVOLWQBWEYUDCUCCXLWTYIRBMGUPFNILFCIEPNIKHBPCXLKJLVGKAWPTSUDXFQMIUCQCPZXJOASYVYNNJSEVRUSLSTHFNOLFCDFCMSGKUGJKZHGYIFKKQQBRVKVQAALGIIFGHTQCQHKCIDYWB"))
+# print(decode_vigenere(u"ANDNOWFORSOMETHINGCOMPLETELYDIFFERENT", u"PLWUCJUMKZCZTRAPBTRMFWZRICEFRVUDXYSAI", u"XKTSIZQCKQOPZYGKWZDIBZZRTNTSZAXEAAOASGPVFXPJEKOLXANARBLLMYSRHGLRWCPLWQIZEGEPYRIMIYSFHUBSRSAMPLFFXNNACALMFLBFRJHAVVCETURUPLZHFBJLWPBOPPL"))
+# print(decode_vigenere('DONTWORRYBEHAPPY',
+#                            'FVRVGWFTFFGRIDRF',
+#                            'DLLCZXMFVRVGWFTF'))  # == "BEHAPPYDONTWORRY", "CHECKIO"
+# print(decode_vigenere('HELLO', 'OIWWC', 'ICP'))  # == "BYE")
+
+
+def most_frequent_days(a):
+    from calendar import day_name
+    from datetime import date
+    days = sorted(list(set([date(a, 1, 1).weekday(), date(a, 12, 31).weekday()])))
+    return [day_name[x] for x in days]
+
+# print(most_frequent_days(1084))  # == ['Tuesday', 'Wednesday']
+# print(most_frequent_days(1167))  # == ['Sunday'])
+# print(most_frequent_days(1216))  # == ['Friday', 'Saturday']
+# print(most_frequent_days(1492))  # == ['Friday', 'Saturday']
+# print(most_frequent_days(1770))  # == ['Monday']
+# print(most_frequent_days(1785))  # == ['Saturday']
+# print(most_frequent_days(212))  # == ['Wednesday', 'Thursday']
+# print(most_frequent_days(1))  # == ['Monday']
+# print(most_frequent_days(2135))  # == ['Saturday']
+# print(most_frequent_days(3043))  # == ['Sunday']
+# print(most_frequent_days(2001))  # == ['Monday']
+# print(most_frequent_days(3150))  # == ['Sunday']
+# print(most_frequent_days(3230))  # == ['Tuesday']
+# print(most_frequent_days(328))  # == ['Monday', 'Sunday']
+
+
+COW = r'''
+        \   ^__^
+         \  (oo)\_______
+            (__)\       )\/\
+                ||----w |
+                ||     ||
+'''
+
+def cowsay(text):
+    text = ' '.join(text.split())
+    if len(text.split())==1 and len(text)>39:
+        a = []
+        while len(text)>39:
+            a.append(text[:39])
+            text = text[39:]
+        a.append(text)
+        text = ' '.join(a)
+    n = 41 if len(text) >= 40 else len(text)+2
+    res = '\n ' + '_' * n + '\n'
+    if len(text)<40: res += '< ' + text + ' >\n'
+    else:
+        a = []
+        line, line2 = [], []
+        ready = False
+        for word in text.split():
+            line.append(word)
+            while len(' '.join(line))>39:
+                line2.append(line.pop())
+                ready = True
+            if ready:
+                a.append(' '.join(line))
+                line, ready = line2, False
+                line2 = []
+        a.append(' '.join(line))
+
+        res += '/ ' + a[0] + ' '*(39-len(a[0])) + ' \\\n'
+        if len(a)>2:
+            for x in a[1:-1]:
+                res += '| ' + x + ' '*(39-len(x)) + ' |\n'
+        res += '\\ ' + a[-1] + ' '*(39-len(a[-1])) + ' /\n'
+    res += ' ' + '-'*n + COW
+    return res
+
+print(cowsay("onehundredtwentytwo and one hundredfiftyone"))
+print(cowsay("looooooooooooooooooooooooooooooooooooong"))
+print(cowsay("loooooooooooooooooooooooooooooooooooong"))
+print(cowsay("loooooooooooooooooooooooooooooooooooong"))
+print(cowsay("spaces                           inside"))
+print(cowsay('Your bunny wrote'))
+print(cowsay('A longtextwithonlyonespacetofittwolines.'))
+print(cowsay('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'))\
+
+"""
+
+ _________________________________________
+/ looooooooooooooooooooooooooooooooooooon \
+\ g                                       /
+ -----------------------------------------
+        \   ^__^
+         \  (oo)\_______
+            (__)\       )\/\
+                ||----w |
+                ||     ||
+"""
+
+
+
 
 

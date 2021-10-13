@@ -767,3 +767,176 @@ def rgb(r, g, b):
 # print(rgb(255,255,255)) # "FFFFFF", "testing max values")
 # print(rgb(254,253,252)) # "FEFDFC", "testing near max values")
 # print(rgb(-20,275,125)) # "00FF7D", "testing out of range values")
+
+
+from collections import defaultdict
+
+# Класс направленного графа, использует представление списка смежности
+class Graph:
+    def __init__(self, vertices):
+        self.V = vertices
+
+        # Словарь для хранения графа
+        self.graph = defaultdict(list)
+
+    # Добавить ребро в граф
+    def addEdge(self, a, v):
+        self.graph[a].append(v)
+
+    '''Рекурсивная функция для печати всех путей от 'a' до 'b'.
+    visit отслеживает вершины в текущем пути.
+    path хранит актуальные вершины, а path_index является текущим
+    индексом в path'''
+
+    def print(self, a, b, visited, path):
+        # Пометить текущий узел как посещенный и сохранить в path
+        visited[list(self.graph.keys()).index(a)] = True
+        path.append(a)
+
+        # Если текущая вершина совпадает с точкой назначения, то
+        # print(current path[])
+        if a == b:
+            print(path)
+        else:
+            # Если текущая вершина не является пунктом назначения
+            # Повторить для всех вершин, смежных с этой вершиной
+            for x in self.graph[a]:
+                if visited[list(self.graph.keys()).index(i)] == False:
+                    self.print(x, b, visited, path)
+
+        # Удалить текущую вершину из path[] и пометить ее как непосещенную
+        path.pop()
+        visited[list(self.graph.keys()).index(a)] = False
+
+    # Печатает все пути от 's' до 'b'
+    def printAllPaths(self, s, b):
+
+        # Отметить все вершины как не посещенные
+        visited = [False] * (self.V)
+
+        # Создать массив для хранения путей
+        path = []
+
+        # Рекурсивный вызов вспомогательной функции печати всех путей
+        self.print(s, b, visited, path)
+
+
+
+# Создаём граф
+graph = {'A': ['B', 'C'],
+         'B': ['C', 'D'],
+         'C': ['D'],
+         'D': ['C'],
+         'E': ['F'],
+         'F': ['C']}
+
+graph = {
+    'A': ['C', 'B', 'F', 'D'],
+    'C': ['A', 'B', 'F', 'E'],
+    'B': ['A', 'C', 'D'],
+    'D': ['E', 'B', 'A'],
+    'E': ['D', 'C'],
+    'F': ['A', 'C']
+}
+
+g = Graph(len(graph.keys()))
+for i, v in graph.items():
+    for e in v:
+        g.addEdge(i, e)
+
+s = 'A'
+d = 'C'
+print ("Ниже приведены все различные пути от {} до {} :".format(s, d))
+g.printAllPaths(s, d)
+
+
+
+
+from typing import List
+
+def add_fly(x, y, fly):
+    if x in fly.keys():
+        if y not in fly[x]:
+            fly[x].append(y)
+    else:
+        fly[x] = [y]
+    return fly
+
+def find_prices(a, b, fly, path=None, visited=None, start=None, end=None):
+    path = path or []
+    visited = visited or set()
+    start = start or a
+    end = end or b
+    if a==b:
+        path.pop()
+        return path
+
+    for x in fly[a]:
+        if x==start:
+            continue
+        elif x not in visited:
+            path.append(x)
+            visited.add(x)
+            path.append(find_prices(x, b, fly, path, visited, start, end))
+            visited.remove(x)
+            path.pop()
+    return path
+
+def cheapest_flight(costs: List, a: str, b: str) -> int:
+    fly = {}
+    for x in costs:
+        fly = add_fly(x[0], x[1], fly)
+        fly = add_fly(x[1], x[0], fly)
+
+    prices = set()
+    if b in fly[a]: prices.update([x[2] for x in costs if a in x and b in x])
+    for k, v in fly.items():
+        if a in v and b in v:
+            prices.add(sum([x[2] for x in costs if a in x and k in x or b in x and k in x]))
+
+    path = find_prices(a, b, fly)
+    print('path:', path)
+
+    # res = []
+    # temp = a + path[0]
+    # for x in range(1, len(path)):
+    #     if path[x] in fly[path[x-1]]:
+    #         temp += path[x]
+    #     elif b in fly[path[x]]:
+    #         temp += b
+    #         res.append(temp)
+    #         temp = ''
+    # print(res)
+
+
+
+    for k,v in fly.items():
+        print(k, v)
+    print(prices)
+
+
+    return None
+
+
+print(cheapest_flight([['A', 'C', 100],
+  ['A', 'B', 20],
+  ['B', 'C', 50],
+  ['D', 'E', 20],
+  ['A', 'F', 20],
+  ['F', 'C', 50],
+  ['D', 'B', 20],
+  ['A', 'F', 20],
+  ['E', 'C', 50],
+  ['A', 'D', 50]],
+ 'C',
+ 'A'))  #
+print(cheapest_flight([['A', 'C', 100],
+  ['A', 'B', 20],
+  ['B', 'C', 50]],
+ 'A',
+ 'C'))  # == 70
+print(cheapest_flight([['A', 'C', 100],
+  ['A', 'B', 20],
+  ['B', 'C', 50]],
+ 'C',
+ 'A'))  # == 70

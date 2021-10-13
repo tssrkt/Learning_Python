@@ -467,7 +467,6 @@ class Node:
 
 
 
-
 # def main():
 #     G = read_graph()
 #     start = input('Insert start vertex: ')

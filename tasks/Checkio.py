@@ -980,6 +980,7 @@ def create_zigzag(rows: int, cols: int, start: int = 1) -> List[List[int]]:
     return res
 
 
+# print(create_zigzag(3, 3, 5))
 # print(create_zigzag(3,5))
 
 def non_repeat(line):
@@ -2000,7 +2001,18 @@ def is_acceptable_password(p: str) -> bool:
     return (dig or alp or len(p)>9) and pas and len(p)>6 and len(set(p))>3
 
 
+#########################
 
+def boolean(x, y, operation):
+    res = {
+        "conjunction": x & y,  # logical AND
+        "disjunction": x | y,  # logical OR
+        "implication": x ^ 1 | y,  # y if x else 1
+        "exclusive"  : x ^ y,  # logical XOR
+        "equivalence": x ^ y ^ 1  # logical XNOR: int(x==y)
+    }
+    return res[operation]
 
+# print(boolean(1, 0, "conjunction"))
 
 
