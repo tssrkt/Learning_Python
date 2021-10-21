@@ -361,17 +361,26 @@ def is_all_upper(text: str) -> bool:
 # print(is_all_upper('444'))  # == True
 # print(is_all_upper('55 55 5'))  # == True
 
+from time import time
 from typing import Iterable
-
-
 def is_ascending(items: Iterable[int]) -> bool:
-    srt = sorted(items)
-    if srt == items:
-        return True
-    return False
+    return items==sorted(items) and len(set(items))==len(items)
+    # return all(a < b for a, b in zip(items, items[1:]))
+    # return all(items[i] < items[i + 1] for i in range(len(items) - 1))
+    # return all(items[i - 1] < items[i] for i in range(1, len(items)))  # 0.53
 
+# Скорость выполнения программы
+st_time, n, lst = time(), 999999, list(range(20))
+for i in range(n):
+    x = is_ascending(lst)
+print(f'{n} iterations, {time() - st_time:.3f} seconds')
 
 # print(is_ascending([-5,10,99,123456]))
+# print(is_ascending([1, 2, 2, 3]))
+
+
+# good solution! but it isn’t speedy )
+# you may use all + (comprehension + zip or comprehension + range)
 
 
 def goes_after(word: str, f: str, s: str) -> bool:
@@ -880,26 +889,25 @@ import math
 
 def total_cost(calls: List[str]) -> int:
     a = []
-    for x in calls:
-        if calls.index(x) == 0:
-            a.append(math.ceil((int(x.split()[-1]) / 60)))
+    for n, x in enumerate(calls):
+        if n == 0:
+            a.append(math.ceil((int(x[20:]) / 60)))
         else:
-            if x[8:10] == calls[calls.index(x) - 1][8:10]:
-                a[-1] += int(math.ceil((int(x.split()[-1]) / 60)))
+            if x[8:10] == calls[n - 1][8:10]:
+                a[-1] += int(math.ceil((int(x[20:]) / 60)))
             else:
-                a.append(int(math.ceil((int(x.split()[-1]) / 60))))
+                a.append(int(math.ceil((int(x[20:]) / 60))))
 
-    res = 0
-    for x in a:
-        if x <= 100:
-            res += x
-        else:
-            res += 100 + (x - 100) * 2
-
-    return res
+    return sum([x if x<=100 else 100 + (x - 100) * 2 for x in a])
 
 
 # print(total_cost(["2014-01-01 01:12:13 181","2014-01-02 20:11:10 600","2014-01-03 01:12:13 6009","2014-01-03 12:13:55 200"]))
+# # == 124
+# print(total_cost(("2014-02-05 01:00:00 1",
+#                        "2014-02-05 02:00:00 1",
+#                        "2014-02-05 03:00:00 1",
+#                        "2014-02-05 04:00:00 1")))  # == 4
+
 
 
 def flat_list(a):
@@ -1080,25 +1088,14 @@ def except_zero(items: list) -> Iterable:
 
 def recall_password(gri: List[str], pas: List[str]) -> str:
     res = ''
-    zuza = 1
-
-    while zuza < 5:
-        a = []
-        for x in range(len(pas)):
-            for y in range(len(gri)):
-                if gri[x][y] == 'X':
-                    res += pas[x][y]
-
-        for x in range(len(pas)):
-            a.append('')
-            for y in range(len(gri) - 1, -1, -1):
-                a[x] += gri[y][x]
-        gri = a
-        zuza += 1
+    for _ in range(4):
+        res += ''.join(x for p, g in zip(pas, gri) for x, y in zip(p, g) if y == 'X')
+        gri = list(zip(*gri[::-1]))
     return res
 
 
 # print(recall_password(['X...', '..X.', 'X..X', '....'],  ['itdf', 'gdce', 'aton', 'qrdi']))
+# == 'icantforgetiddqd'
 
 
 def checkio(year: int) -> int:

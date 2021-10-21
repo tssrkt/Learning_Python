@@ -926,32 +926,15 @@ def decode(msg, sa, kw):
 
 
 def steps_finder(x, y):
-    # All steps of horse
-    STEPS = {
-        1: lambda x, y: [x - 2, y - 1],
-        2: lambda x, y: [x - 2, y + 1],
-        3: lambda x, y: [x - 1, y + 2],
-        4: lambda x, y: [x + 1, y + 2],
-        5: lambda x, y: [x + 2, y + 1],
-        6: lambda x, y: [x + 2, y - 1],
-        7: lambda x, y: [x + 1, y - 2],
-        8: lambda x, y: [x - 1, y - 2]
-    }
-
-    res = []
-    for num in range(1, 9):
-        stp = STEPS[num](x, y)
-        if 8 > stp[0] >= 0 and 8 > stp[1] >= 0:
-            res.append(stp)
-    return res
+    STEPS = [(1, 2), (1, -2), (-1, 2), (-1, -2), (2, 1), (2, -1), (-2, 1), (-2, -1)]
+    return [[x + dx, y + dy] for dx, dy in STEPS if 8 > x + dx >= 0 and 8 > y + dy >= 0]
 
 
 def chess_knight(start, moves):
     row = 'abcdefgh'
     x, y = (8 - int(list(start)[1])), row.index(list(start)[0])
 
-    steps = []
-    prev_move = []
+    steps, prev_move = [], []
     prev_move.append([x, y])
     while moves > 0:
         next_move = []
@@ -960,14 +943,7 @@ def chess_knight(start, moves):
         prev_move = next_move
         steps.extend(prev_move)
         moves -= 1
-
-    res = []
-    for x in steps:
-        res.append(row[x[1]] + str(8 - int(x[0])))
-
-    res = list(set(res))
-    res = sorted(res, key=lambda x: int(x[1]))
-    return sorted(res)
+    return sorted({row[x[1]] + str(8 - x[0]) for x in steps})
 
 
 # print(chess_knight('h8', 2)) # == ['d6', 'd8', 'e5', 'e7', 'f4', 'f7', 'f8', 'g5', 'g6', 'h4', 'h6', 'h8'])
@@ -1267,32 +1243,12 @@ def check_connection(nw, f1, f2):
 ###################################################################################################
 
 
-def grid():
-    for x in range(1, 17):
-        yield x
-
-
-def clean_slepok(x, slepok):
-    while sum(slepok[x]) == 0:
-        del slepok[x]
-
-    col = 0
-    while col == 0:
-        for n, y in enumerate(slepok):
-            col += slepok[n][x]
-        if col == 0:
-            for n, y in enumerate(slepok):
-                del slepok[n][x]
-    return slepok
-
-
-def rotate(slepok):
-    res = []
-    for x in range(len(slepok[0])):
-        res.append([])
-        for y in reversed(range(len(slepok))):
-            res[-1].append(slepok[y][x])
-    return res
+def clean_slepok(slepok):
+    while sum(slepok[0])==0:
+        del slepok[0]
+    while sum(slepok[-1])==0:
+        del slepok[-1]
+    return [list(x) for x in slepok]
 
 
 def patterns(slepok):
@@ -1305,42 +1261,20 @@ def patterns(slepok):
         'T': [[1, 1, 1], [0, 1, 0]],
         'Z': [[1, 1, 0], [0, 1, 1]]
     }
-    signs = 'IJLOSTZ'
     for y in range(4):
-        for x in signs:
-            if PATTERNS[x] == slepok:
-                return x
-        slepok = rotate(slepok)
-    return None
+        for k, v in PATTERNS.items():
+            if v == slepok:
+                return k
+        slepok = [list(x) for x in list(zip(*slepok[::-1]))]
 
 
 def identify_block(nums):
-    m = []
-    gen = grid()
-    for x in range(4):
-        m.append([])
-        for y in range(4):
-            m[-1].append(next(gen))
-
-    slepok = []
-    for x in range(4):
-        slepok.append([])
-        for y in range(4):
-            slepok[-1].append(0)
-
-    for x in nums:
-        for n, y in enumerate(m):
-            if x in y:
-                slepok[n][y.index(x)] = 1
-
-    slepok = clean_slepok(0, slepok)
-    slepok = clean_slepok(-1, slepok)
-
-    if len(slepok) == 1 and sum(slepok[0]) == 4:
-        return 'I'
-
-    res = patterns(slepok)
-    return res
+    gen = iter(range(1, 17))
+    m = [[next(gen) for _ in range(4)] for _ in range(4)]
+    slepok = [[int(x in nums) for x in y] for y in m]
+    slepok = clean_slepok(slepok)
+    slepok = clean_slepok(list(zip(*slepok[::-1])))
+    return patterns(slepok)
 
 
 # print(identify_block({1, 2, 3, 4})) # == 'I'
@@ -2401,47 +2335,47 @@ def checkio(in_string):
         else: res += x
     return res
 
-for x in "ḏẖḴḵḺḻṈṉṞṟṮṯẔẕ":
-    print(x, ord(x))
+# for x in "ḏẖḴḵḺḻṈṉṞṟṮṯẔẕ":
+#     print(x, ord(x))
 
 
-print(checkio(u"ḆḇḎḏẖḴḵḺḻṈṉṞṟṮṯẔẕ"))
-print(checkio(u"äëḧïöẗüẅẍÿÄËḦÏÖÜẄẌŸ"))
-print(checkio(u"åÅůŮẘẙ"))
-print(checkio(u"ȧȦḃḂċĊḋḊėĖḟḞġĠḣḢİṁṀṅṄȯȮṗṖṙṘṡṠṫṪẇẆẋẊẏẎżŻ"))
-print(checkio(u"ẠạḄḅḌḍẸẹḤḥỊịḲḳḶḷṂṃṆṇỌọṚṛṢṣṬṭỤụṾṿẈẉỴỵẒẓ"))
-print(checkio(u"ąĄçÇḑḐęĘģĢḩḨįĮķĶļĻņŅǫǪŗŖşŞţŢųŲ"))
-print(checkio(u"ảẢẻẺỉỈỏỎủỦỷỶ"))
-print(checkio(u"ẳẲ"))
-print(checkio(u"ẩẨểỂổỔ"))
-print(checkio(u"ởỞửỬ"))
-print(checkio(u"ặẶ"))
-print(checkio(u"ậẬệỆộỘ"))
-print(checkio(u"ợỢựỰ"))
-print(checkio(u"蟒蛇"))
-print(checkio(u"   "))
-print(checkio(u"!@#$%^&*()_+,./<>?"))
-print(checkio(u""))
-
-print(checkio(u"ĀāĒēḠḡĪīŌōŪūȲȳ"))
-print(checkio(u"ỡỠữỮ"))
-print(checkio(u"ẫẪễỄỗỖ"))
-print(checkio(u"ȃȂȇȆȋȊȏȎȗȖȓȒ"))
-print(checkio(u"ãÃẽẼĩĨñÑõÕũŨṽṼỹỸ"))
-print(checkio(u"ẵẴ"))
-print(checkio("ăĂĕĔğĞḫḪĭĬŏŎŭŬ"))
-print(checkio("ǎǍčČďĎěĚǧǦȟȞǐǏǰǩǨľĽňŇǒǑřŘšŠťŤǔǓžŽ"))
-print(checkio("âĉêĝĥîĵôŝûŵŷẑÂĈÊĜĤÎĴÔŜÛŴŶẐ"))
-print(checkio("őűŐŰ"))
-print(checkio("ớỚứỨ"))
-print(checkio("ấẤếẾốỐ"))
-print(checkio("áćéǵíḱĺḿńóṕŕśúẃýźÁĆÉǴÍḰĹḾŃÓṔŔŚÚẂÝŹ"))
-print(checkio("ȁȅȉȍȑȕȀȄȈȌȐȔ"))
-print(checkio("ờỜừỪ"))
-print(checkio("ầẦềỀồỒ"))
-print(checkio("ằẰ"))
-print(checkio("àèìǹòùẁỳÀÈÌǸÒÙẀỲ"))
-print(checkio(u"préfèrent"))  # == u"preferent"
-print(checkio(u"loài trăn lớn"))  # == u"loai tran lon")
+# print(checkio(u"ḆḇḎḏẖḴḵḺḻṈṉṞṟṮṯẔẕ"))
+# print(checkio(u"äëḧïöẗüẅẍÿÄËḦÏÖÜẄẌŸ"))
+# print(checkio(u"åÅůŮẘẙ"))
+# print(checkio(u"ȧȦḃḂċĊḋḊėĖḟḞġĠḣḢİṁṀṅṄȯȮṗṖṙṘṡṠṫṪẇẆẋẊẏẎżŻ"))
+# print(checkio(u"ẠạḄḅḌḍẸẹḤḥỊịḲḳḶḷṂṃṆṇỌọṚṛṢṣṬṭỤụṾṿẈẉỴỵẒẓ"))
+# print(checkio(u"ąĄçÇḑḐęĘģĢḩḨįĮķĶļĻņŅǫǪŗŖşŞţŢųŲ"))
+# print(checkio(u"ảẢẻẺỉỈỏỎủỦỷỶ"))
+# print(checkio(u"ẳẲ"))
+# print(checkio(u"ẩẨểỂổỔ"))
+# print(checkio(u"ởỞửỬ"))
+# print(checkio(u"ặẶ"))
+# print(checkio(u"ậẬệỆộỘ"))
+# print(checkio(u"ợỢựỰ"))
+# print(checkio(u"蟒蛇"))
+# print(checkio(u"   "))
+# print(checkio(u"!@#$%^&*()_+,./<>?"))
+# print(checkio(u""))
+#
+# print(checkio(u"ĀāĒēḠḡĪīŌōŪūȲȳ"))
+# print(checkio(u"ỡỠữỮ"))
+# print(checkio(u"ẫẪễỄỗỖ"))
+# print(checkio(u"ȃȂȇȆȋȊȏȎȗȖȓȒ"))
+# print(checkio(u"ãÃẽẼĩĨñÑõÕũŨṽṼỹỸ"))
+# print(checkio(u"ẵẴ"))
+# print(checkio("ăĂĕĔğĞḫḪĭĬŏŎŭŬ"))
+# print(checkio("ǎǍčČďĎěĚǧǦȟȞǐǏǰǩǨľĽňŇǒǑřŘšŠťŤǔǓžŽ"))
+# print(checkio("âĉêĝĥîĵôŝûŵŷẑÂĈÊĜĤÎĴÔŜÛŴŶẐ"))
+# print(checkio("őűŐŰ"))
+# print(checkio("ớỚứỨ"))
+# print(checkio("ấẤếẾốỐ"))
+# print(checkio("áćéǵíḱĺḿńóṕŕśúẃýźÁĆÉǴÍḰĹḾŃÓṔŔŚÚẂÝŹ"))
+# print(checkio("ȁȅȉȍȑȕȀȄȈȌȐȔ"))
+# print(checkio("ờỜừỪ"))
+# print(checkio("ầẦềỀồỒ"))
+# print(checkio("ằẰ"))
+# print(checkio("àèìǹòùẁỳÀÈÌǸÒÙẀỲ"))
+# print(checkio(u"préfèrent"))  # == u"preferent"
+# print(checkio(u"loài trăn lớn"))  # == u"loai tran lon")
 
 

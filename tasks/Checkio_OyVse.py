@@ -940,3 +940,47 @@ print(cheapest_flight([['A', 'C', 100],
   ['B', 'C', 50]],
  'C',
  'A'))  # == 70
+
+
+def lopata(grid, let1):
+    let2 = 'B' if let1=='W' else 'W'
+    a1, a2, a3 = let1+'.'+let1, '.'+let1+let1, let1+let1+'.'
+    b1, b2, b3 = let1+let2+let1, let2+let1+let1, let1+let1+let2
+    for n, x in enumerate(grid):
+        grid[n] = ''.join(x)
+        if grid[n].count(let1) >= (len(x) // 2) and '.' in x:
+            grid[n] = grid[n].replace('.', let2)
+        if grid[n].count(let2) >= (len(x) // 2) and '.' in x:
+            grid[n] = grid[n].replace('.', let1)
+        if '.' in grid[n]:
+            grid[n] = grid[n].replace(a1, b1).replace(a2, b2).replace(a3, b3)
+    return [x if type(x)==list else list(x) for x in grid]
+
+def unruly(grid):
+    grid = [list(x) for x in grid]
+    while any([x for x in grid if '.' in x]):
+        grid = lopata(grid, 'W')
+        grid = lopata(grid, 'B')
+        grid = lopata(list(zip(*grid)), 'W')
+        grid = lopata(grid, 'B')
+        grid = list(zip(*grid))
+    return [''.join(x) for x in grid]
+
+# print(unruly(["B..........B","..BB.B.W..B.","B........B..","....BW.W...W",".W........W.",".W...B.....B","..B..BB...W.","BW....B....."]))
+# print(unruly(["......",
+#               "..B...",
+#               "W.B.W.",
+#               "......",
+#               "W...W.",
+#               "WW..W."]))
+# print(unruly(('......',
+#         '..B...',
+#         'W.B.W.',
+#         '......',
+#         'W...W.',
+#         'WW..W.')))  # == ('BBWWBW',
+#                      #     'BWBWBW',
+#                      #     'WWBBWB',
+#                      #     'BBWWBW',
+#                      #     'WBWBWB',
+#                      #     'WWBBWB'

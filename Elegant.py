@@ -63,11 +63,10 @@ for x in sorted(heroes.items(), key=lambda pair: (pair[1], pair(0))):
 d = lambda x: 'Like' if x > 100 else ('Subscribe' if x > 0 else 'Follow')
 print(d(10))
 
-
 x = 512
-y = len(f'{x-1:b}')
+y = len(f'{x - 1:b}')
 print(y)
-print(2**y)
+print(2 ** y)
 
 print(f'{31:010b}')
 print(f'{31:015b}')
@@ -80,5 +79,17 @@ a, b = 71, 13
 print(f'*{a:0{b}b}*')
 aaa, bbb = 71, 13
 print(f'*{aaa:0{bbb}b}*--*{bbb:^20}*')
+
+matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 0]]
+
+for i in range(9)[::-1]:
+    row, col = divmod(i, 3)
+    if not matrix[row][col]:
+        matrix[row][col] = 2
+        break
+
+line = sum(matrix,[])[::-1]
+row, col = divmod(8 - line.index(0), 3)
+matrix[row][col] = 2
 
 
