@@ -984,3 +984,47 @@ def unruly(grid):
 #                      #     'BBWWBW',
 #                      #     'WBWBWB',
 #                      #     'WWBBWB'
+
+
+STEPS = [(-1, -1), (-1, 0), (-1, 1),
+         (0, -1), (0, 1),
+         (1, 1), (1, 0), (1, -1)]
+
+
+def check_colony(mp, a, b):
+    a1, a2, a3, a4 = a + STEPS[1][0], a + STEPS[3][0], a + STEPS[4][0], a + STEPS[6][0]
+    b1, b2, b3, b4 = b + STEPS[1][1], b + STEPS[3][1], b + STEPS[4][1], b + STEPS[6][1]
+    c1, c2, c3, c4 = 0 <= a1 < len(mp), 0 <= a2 < len(mp), 0 <= a3 < len(mp), 0 <= a4 < len(mp)
+    d1, d2, d3, d4 = 0 <= b1 < len(mp), 0 <= b2 < len(mp), 0 <= b3 < len(mp), 0 <= b4 < len(mp)
+    if all([c1, c2, c3, c4, d1, d2, d3, d4]):
+        if sum([mp[a1][b1], mp[a2][b2], mp[a3][b3], mp[a4][b4]]) == 4:
+            a5, a6, a7, a8 = a + STEPS[0][0], a + STEPS[2][0], a + STEPS[5][0], a + STEPS[7][0]
+            b5, b6, b7, b8 = b + STEPS[0][1], b + STEPS[2][1], b + STEPS[5][1], b + STEPS[7][1]
+            c5, c6, c7, c8 = 0 <= a1 < len(mp), 0 <= a2 < len(mp), 0 <= a3 < len(mp), 0 <= a4 < len(mp)
+            d5, d6, d7, d8 = 0 <= b1 < len(mp), 0 <= b2 < len(mp), 0 <= b3 < len(mp), 0 <= b4 < len(mp)
+            if all([c5, c6, c7, c8, d5, d6, d7, d8]):
+                if sum([mp[a5][b5], mp[a6][b6], mp[a7][b7], mp[a8][b8]]) == 4:
+                    pass
+                elif sum([mp[a5][b5], mp[a6][b6], mp[a7][b7], mp[a8][b8]]) == 0:
+                    return 5, (a, b)
+
+
+def healthy(mp):
+    res = {}
+    for a, row in mp:
+        for b, x in row:
+            if b == 1:
+                mass, coords = check_colony(mp, a, b)
+                if mass:
+                    res[mass] = coords
+    mx = max(res.keys())
+    for k, v in res.items():
+        if k == mx:
+            return v
+    return (0, 0)
+
+
+# print(healthy(((0, 1, 0),
+#                (1, 1, 1),
+#                (0, 1, 0),)))
+

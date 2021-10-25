@@ -16,7 +16,7 @@ def lopata(s2, nums=None):
         if s2.count(br[x]) != s2.count(br[x + 1]):
             if s2.count(br[x]) == 0:
                 if nums:
-                    s2, reserve_nums = yama(br[x+1], s2, nums)
+                    s2, reserve_nums = yama(br[x + 1], s2, nums)
                 else:
                     s2 = s2.replace(br[x + 1], '')
             elif s2.count(br[x + 1]) == 0:
@@ -29,9 +29,12 @@ def lopata(s2, nums=None):
 
 def bandura(s2, nums):
     while '()' in s2 or '[]' in s2 or '{}' in s2:
-        if '()' in s2: x = '()'
-        elif '[]' in s2: x = '[]'
-        elif '{}' in s2: x = '{}'
+        if '()' in s2:
+            x = '()'
+        elif '[]' in s2:
+            x = '[]'
+        elif '{}' in s2:
+            x = '{}'
         n = s2.find(x)
         del nums[n]
         del nums[n]
@@ -48,7 +51,7 @@ def remove_brackets(s: str) -> str:
 
     w = 0
     r_nums = []
-    while s2!='':
+    while s2 != '':
         s2, r_nums = lopata(s2, nums)
         reserve_nums.extend(r_nums)
         for x in reserve_nums:
@@ -56,7 +59,7 @@ def remove_brackets(s: str) -> str:
                 nums.remove(x)
         s2, nums = bandura(s2, nums)
         w += 1
-        if w>=4 and s2!='':
+        if w >= 4 and s2 != '':
             s2 = s2[1:]
             reserve_nums.append(nums[0])
             del nums[0]
@@ -99,9 +102,10 @@ def remove_brackets(s: str) -> str:
 
 def sun_angle(time):
     hour, minute = map(int, time.split(':'))
-    if hour<6 or hour>18 or hour==18 and minute>0: return "I don't see the sun!"
+    if hour < 6 or hour > 18 or hour == 18 and minute > 0: return "I don't see the sun!"
     ans = abs((hour * 15 + minute * 0.25))
     return abs(90 - ans)
+
 
 # print(sun_angle("07:00"))  # == 15
 # print(sun_angle("12:00"))
@@ -110,19 +114,11 @@ def sun_angle(time):
 # print(sun_angle("01:23"))  # == "I don't see the sun!")
 
 
-
-
-
-
-
-
-
-
-
 def checkio(data):
     """ Cargo """
-    #replace this for solution
+    # replace this for solution
     return 0
+
 
 # print(checkio([10,10]))  # == 0
 # print(checkio([10]))  # == 10
@@ -136,8 +132,9 @@ def sakura(kusok):
     res = []
     flat = []
     for k, v in kusok.items():
-        if type(v)==dict:
-            if v=={}: res.append([k, ''])
+        if type(v) == dict:
+            if v == {}:
+                res.append([k, ''])
             else:
                 flat = sakura(v)
     if flat:
@@ -145,11 +142,13 @@ def sakura(kusok):
             pass
     return res
 
+
 def flatten(dic):
     res = {}
     for k, v in dic.items():
-        if type(v)==dict:
-            if v=={}: res.setdefault(k, '')
+        if type(v) == dict:
+            if v == {}:
+                res.setdefault(k, '')
             else:
                 flat = sakura(v)
                 print('neo:', flat)
@@ -165,7 +164,7 @@ def flatten(dic):
 
 def broken_clock(st_time, wr_time=None, error=None):
     # Если на вход дали список (не ну они нормальные вообще?)
-    if wr_time==None:
+    if wr_time == None:
         st_time, wr_time, error = st_time[0], st_time[1], st_time[2]
 
     from datetime import datetime, timedelta
@@ -173,8 +172,8 @@ def broken_clock(st_time, wr_time=None, error=None):
     zeros = ['00', '00', '00']
     wr, tms1, at, each, tms2 = error.split()
     wr1, each2 = int(wr[1:]), int(each)
-    wr = str(wr1) if wr1>9 else '0' + str(wr1)
-    each = each if each2>9 else '0' + each
+    wr = str(wr1) if wr1 > 9 else '0' + str(wr1)
+    each = each if each2 > 9 else '0' + each
 
     n1 = [times.index(x) for x in times if tms1 in x][0]
     n2 = [times.index(x) for x in times if tms2 in x][0]
@@ -184,17 +183,17 @@ def broken_clock(st_time, wr_time=None, error=None):
     tmdelta = [timedelta(hours=wr1), timedelta(minutes=wr1), timedelta(seconds=wr1)][n1]
 
     # Если на вход дали ерунду, приводим ее в божеский вид
-    if each2>60:
+    if each2 > 60:
         adyn, dva = divmod(each2, 60)
-        if adyn<60:
+        if adyn < 60:
             each = f'00:{adyn}:{dva}' if tms2 in 'seconds' else f'{adyn}:{dva}:00'
         else:
-            while adyn>60:
+            while adyn > 60:
                 tri, adyn = divmod(adyn, 60)
             each = f'{tri}:{adyn}:{dva}'
 
     tm = str(datetime.strptime(wr_time, '%H:%M:%S') - datetime.strptime(st_time, '%H:%M:%S'))
-    if error[0]=='-':
+    if error[0] == '-':
         lol = str(datetime.strptime(each, '%H:%M:%S') - datetime.strptime(wr, '%H:%M:%S'))
     else:
         lol = str(datetime.strptime(each, '%H:%M:%S') + tmdelta)[-8:]
@@ -204,11 +203,11 @@ def broken_clock(st_time, wr_time=None, error=None):
     mnoj = [3600, 60, 1]
     tm_lst = tm.split(':')
     for n, x in enumerate(lol.split(':')):
-        lol_secs += int(x)*mnoj[n]
-        tm_secs += int(tm_lst[n])*mnoj[n]
-        each_secs = each2*mnoj[n] if n==n2 else each_secs
+        lol_secs += int(x) * mnoj[n]
+        tm_secs += int(tm_lst[n]) * mnoj[n]
+        each_secs = each2 * mnoj[n] if n == n2 else each_secs
 
-    secs = int((tm_secs/lol_secs)*each_secs)
+    secs = int((tm_secs / lol_secs) * each_secs)
     return str(datetime.strptime(st_time, '%H:%M:%S') + timedelta(seconds=secs))[-8:]
 
 
@@ -226,13 +225,18 @@ def broken_clock(st_time, wr_time=None, error=None):
 def caps_lock(text: str) -> str:
     up, res = False, ''
     for x in text:
-        if x=='a':
-            if up: up = False
-            else: up = True
+        if x == 'a':
+            if up:
+                up = False
+            else:
+                up = True
         else:
-            if up and x.isupper(): res += x.lower()
-            elif up and x.islower(): res += x.upper()
-            else: res += x
+            if up and x.isupper():
+                res += x.lower()
+            elif up and x.islower():
+                res += x.upper()
+            else:
+                res += x
     return res
 
 
@@ -247,22 +251,23 @@ def decode_vigenere(od, oe, nw):
         a = alf.index(oe[n]) - alf.index(x)
         word += alf[a]
 
-    if len(nw)>len(od):
+    if len(nw) > len(od):
         fr_word = {}
         for x in range(2, len(word)):
             fr_word[word[0:x]] = word.count(word[0:x])
 
         for x in fr_word.keys():
-            if x==word[len(x):(len(x))*2]:
+            if x == word[len(x):(len(x)) * 2]:
                 word = x
 
-        word = word*len(nw) if len(nw)>len(word) else word
+        word = word * len(nw) if len(nw) > len(word) else word
 
     res = ''
     for n, x in enumerate(nw):
         a = alf.index(nw[n]) - alf.index(word[n])
         res += alf[a]
     return res
+
 
 # print(decode_vigenere(u"AAAAAAAAA", u"ABABABABC", u"ABABABABC"))
 # print(decode_vigenere(u"NOBODYEXPECTSTHESPANISHINQUISITION", u"PVFQNGSZWIEDAHJLWRKVWUOMPACWUPXKYV", u"QBVGHXSTAWFOAQTPFGIWICZEPKXDCSPKXOZAKYNVNSNSSYEVWOHKKXIHKCIVSUWFSEEUQBIPRKXQHKHXKFMGRPRGVMGULEUSTMFVQKXIHGKRQCMBULSHRCAQBVVOLWQBWEYUDCUCCXLWTYIRBMGUPFNILFCIEPNIKHBPCXLKJLVGKAWPTSUDXFQMIUCQCPZXJOASYVYNNJSEVRUSLSTHFNOLFCDFCMSGKUGJKZHGYIFKKQQBRVKVQAALGIIFGHTQCQHKCIDYWB"))
@@ -278,6 +283,7 @@ def most_frequent_days(a):
     from datetime import date
     days = sorted(list(set([date(a, 1, 1).weekday(), date(a, 12, 31).weekday()])))
     return [day_name[x] for x in days]
+
 
 # print(most_frequent_days(1084))  # == ['Tuesday', 'Wednesday']
 # print(most_frequent_days(1167))  # == ['Sunday'])
@@ -303,22 +309,23 @@ COW = r'''
                 ||     ||
 '''
 
+
 def cowsay(text):
-    front = True if text[0]==' ' and len(text)>39 else False
-    text = ' '.join(text.split()) if len(text)>10 else text
+    front = True if text[0] == ' ' and len(text) > 39 else False
+    text = ' '.join(text.split()) if len(text) > 10 else text
     while '  ' in text:
         text = text.replace('  ', ' ')
     # If text contains word longer 39 chars
-    if any([x for x in text.split() if len(x)>39]):
+    if any([x for x in text.split() if len(x) > 39]):
         a = []
-        while len(text)>39:
+        while len(text) > 39:
             a.append(text[:39])
             text = text[39:]
         a.append(text)
         text = ' '.join(a)
 
     # If text is on one line only
-    if len(text)<40:
+    if len(text) < 40:
         max_line = len(text)
         res = '\n ' + '_' * (max_line + 2) + '\n'
         res += '< ' + text + ' >\n'
@@ -329,7 +336,7 @@ def cowsay(text):
         ready = False
         for word in text.split():
             line.append(word)
-            while len(' '.join(line))>39:
+            while len(' '.join(line)) > 39:
                 line2.append(line.pop())
                 ready = True
             if ready:
@@ -340,15 +347,16 @@ def cowsay(text):
         a = [' '] + a if front else a
 
         max_line = len(max(a, key=len))
-        res = '\n ' + '_' * (max_line+2) + '\n'
-        res += '/ ' + a[0] + ' '*(max_line - len(a[0])) + ' \\\n'
+        res = '\n ' + '_' * (max_line + 2) + '\n'
+        res += '/ ' + a[0] + ' ' * (max_line - len(a[0])) + ' \\\n'
         # More than 2 lines
-        if len(a)>2:
+        if len(a) > 2:
             for x in a[1:-1]:
-                res += '| ' + x + ' '*(max_line - len(x)) + ' |\n'
-        res += '\\ ' + a[-1] + ' '*(max_line - len(a[-1])) + ' /\n'
-    res += ' ' + '-'*(max_line+2) + COW
+                res += '| ' + x + ' ' * (max_line - len(x)) + ' |\n'
+        res += '\\ ' + a[-1] + ' ' * (max_line - len(a[-1])) + ' /\n'
+    res += ' ' + '-' * (max_line + 2) + COW
     return res
+
 
 # print(cowsay(" 0123456789012345678901234567890123456789 "))
 # print(cowsay("    c     "))
@@ -375,6 +383,7 @@ def cowsay(text):
                 ||     ||
 """
 
+
 def get_keys(pwr):
     sort_values = sorted(pwr.values(), reverse=True)
     keys, ks = [], list(pwr.keys())
@@ -392,23 +401,23 @@ def get_keys(pwr):
 
 def power_supply(web, pwr):
     keys, k = get_keys(pwr), 0
-    while k<len(keys):
+    while k < len(keys):
         key, x = keys[k], 0
-        while x<len(web):
+        while x < len(web):
             if key in web[x][0]:
-                if len(web[x])>1:
+                if len(web[x]) > 1:
                     sila = pwr.get(web[x][0])
-                    if sila>0:
-                        pwr.setdefault(web[x][1], sila-1)
+                    if sila > 0:
+                        pwr.setdefault(web[x][1], sila - 1)
                         del web[x]
                     else:
                         del web[x][0]
                 else:
                     del web[x]
-            elif len(web[x])>1 and key in web[x][1]:
+            elif len(web[x]) > 1 and key in web[x][1]:
                 sila = pwr.get(web[x][1])
                 if sila > 0:
-                    pwr.setdefault(web[x][0], sila-1)
+                    pwr.setdefault(web[x][0], sila - 1)
                     del web[x]
                 else:
                     del web[x][1]
@@ -432,11 +441,11 @@ def power_supply(web, pwr):
 
 # Determinant
 def checkio(m):
-    if len(m)==1: return m[0][0]
+    if len(m) == 1: return m[0][0]
     res = 0
     for a, row in enumerate(m):
-        cut_m = [x[1:] for n, x in enumerate(m) if n!=a]
-        res += m[a][0] * checkio(cut_m) * (-1)**a
+        cut_m = [x[1:] for n, x in enumerate(m) if n != a]
+        res += m[a][0] * checkio(cut_m) * (-1) ** a
     return res
 
 
@@ -451,14 +460,16 @@ def checkio(m):
 
 from typing import Iterable
 
+
 def can_balance(w: Iterable) -> int:
-    if len(w)==1: return 0
+    if len(w) == 1: return 0
     for n, x in enumerate(w[1:-1], start=1):
-        before = [x*y for y, x in enumerate(reversed(w[:n]), start=1)]
-        after = [x*y for y, x in enumerate(w[n+1:], start=1)]
-        if sum(before)==sum(after):
+        before = [x * y for y, x in enumerate(reversed(w[:n]), start=1)]
+        after = [x * y for y, x in enumerate(w[n + 1:], start=1)]
+        if sum(before) == sum(after):
             return n
     return -1
+
 
 # print(can_balance([42]))  # == 0
 # print(can_balance([6, 1, 10, 5, 4]))  # == 2
@@ -469,15 +480,16 @@ def can_balance(w: Iterable) -> int:
 def rotate(state, nums):
     bullets = [(sum(y == n for y in nums)) for n, _ in enumerate(state)]
     z, mx, res = 0, max(bullets), []
-    while z<mx:
+    while z < mx:
         step = 0
         for _ in bullets:
-            correct = not any([x for n, x in enumerate(bullets) if bullets[n]>0 and state[n]==0])
+            correct = not any([x for n, x in enumerate(bullets) if bullets[n] > 0 and state[n] == 0])
             if correct: res.append(step)
             step += 1
             state = [state[-1]] + state[:-1]
         z += 1
-    return [x for n, x in enumerate(res) if res[:n].count(x)==0]
+    return [x for n, x in enumerate(res) if res[:n].count(x) == 0]
+
 
 # print(rotate([1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 1], [0, 1]))  # == [1, 8]
 # print(rotate([1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 1], [0, 1, 2]))  # == []
@@ -485,14 +497,16 @@ def rotate(state, nums):
 # print(rotate([1, 0, 0, 0, 1, 1, 0, 1], [5, 4, 5]))  # == [0, 5])
 
 def bin_to_dec(lst):
-    return sum([y*2**n for x in lst for n, y in enumerate(x[::-1])])
+    return sum([y * 2 ** n for x in lst for n, y in enumerate(x[::-1])])
+
 
 def checkio(a, b):
     a, b = bin(a)[2:], bin(b)[2:]
-    res_and = [[int(x) & int(y)>0 for y in b] for x in a]
+    res_and = [[int(x) & int(y) > 0 for y in b] for x in a]
     res_or = [[int(x) | int(y) for y in b] for x in a]
-    res_xor = [[int(x!=y) for y in b] for x in a]
+    res_xor = [[int(x != y) for y in b] for x in a]
     return bin_to_dec(res_and) + bin_to_dec(res_or) + bin_to_dec(res_xor)
+
 
 # print(checkio(4, 6))  # == 38
 # print(checkio(2, 7))  # == 28
@@ -500,12 +514,12 @@ def checkio(a, b):
 
 
 def checkio(cells):
-    (start, end), steps, vd = [(8-int(e[1]), ord(e[0])-97) for e in cells.split('-')], 0, set()
+    (start, end), steps, vd = [(8 - int(e[1]), ord(e[0]) - 97) for e in cells.split('-')], 0, set()
     STEPS, nxt = [(1, 2), (1, -2), (-1, 2), (-1, -2), (2, 1), (2, -1), (-2, 1), (-2, -1)], {start}
     while end not in nxt:
         vd.update(nxt)
         nxt = {(x + dx, y + dy) for (x, y) in nxt
-                for dx, dy in STEPS if 8 > x + dx >= 0 and 8 > y + dy >= 0 and (x + dx, y + dy) not in vd}
+               for dx, dy in STEPS if 8 > x + dx >= 0 and 8 > y + dy >= 0 and (x + dx, y + dy) not in vd}
         steps += 1
     return steps
 
@@ -524,30 +538,34 @@ def lol(points, ys, n, u):
         del ys[u]
     return points
 
+
 def check_points(points, x, y, n, m):
     same = [point for point in points if point[m] == x]
     if len(same) > 1:
         ys_less, ys_more = [], []
         for point in same:
-            if y > point[n]: ys_less.append(point)
-            else: ys_more.append(point)
+            if y > point[n]:
+                ys_less.append(point)
+            else:
+                ys_more.append(point)
         if ys_less: points = lol(points, ys_less, n, 0)
         if ys_more: points = lol(points, ys_more, n, -1)
     return points
 
+
 def berserk_rook(hero, enemies):
-    hero, desk = [8-int(hero[1]), ord(hero[0])-97], [[0]*8 for _ in range(8)]
+    hero, desk = [8 - int(hero[1]), ord(hero[0]) - 97], [[0] * 8 for _ in range(8)]
     enemies, points, graph, nxt = list(enemies), [hero], [[hero]], [[hero]]
     ready, ready_lst = 0, []
 
     for x in enemies:
-        desk[8-int(x[1])][ord(x[0])-97] = 1
+        desk[8 - int(x[1])][ord(x[0]) - 97] = 1
 
-    while ready<len(graph):
+    while ready < len(graph):
         for m, z in enumerate(graph):
             if m in ready_lst: continue
             x, y = z[-1][0], z[-1][1]
-            points = [[x, n] for n, a in enumerate(desk[x]) if a==1 and [x, n] not in z]
+            points = [[x, n] for n, a in enumerate(desk[x]) if a == 1 and [x, n] not in z]
             points.extend([[n, y] for n, a in enumerate(list(zip(*desk))[y]) if a == 1 and [n, y] not in z])
             points = check_points(points, x, y, 1, 0)
             points = check_points(points, y, x, 0, 1)
@@ -558,14 +576,15 @@ def berserk_rook(hero, enemies):
                 for n1, w in enumerate(points):
                     if w not in nxt[m]:
                         nxt[n2].append(w)
-                        if len(points)>1 and n1!=len(points)-1:
+                        if len(points) > 1 and n1 != len(points) - 1:
                             nxt.append(path[:])
                             n2 = -1
             else:
                 ready += 1
                 ready_lst.append(m)
         graph = nxt
-    return len(max(graph, key=len))-1
+    return len(max(graph, key=len)) - 1
+
 
 # print(berserk_rook('h1', ('a5', 'b6', 'e2', 'a2', 'h5', 'e4', 'e6', 'h7')))  # == 7
 # print(berserk_rook(u'a2', {u'f6', u'f8', u'f2', u'a6', u'h6'}))  # == 4)
@@ -581,16 +600,17 @@ def berserk_rook(hero, enemies):
 
 
 def tree_walker(tree, target):
-    if type(tree)==int or tree==target:
-        return int(tree==target)
+    if type(tree) == int or tree == target:
+        return int(tree == target)
     itr = tree if isinstance(tree, (list, tuple)) else list(tree.values())
     res = 0
     for x in itr:
-        if x==target:
+        if x == target:
             res += 1
         elif isinstance(x, (list, dict, tuple)):
             res += tree_walker(x, target)
     return res
+
 
 # print(tree_walker(tree=[1, "2", 3, [[3], 1, {1: "one"}]], target=1))  # == 2                                        #example #1
 # print(tree_walker(tree={"one": 1, "two": [{1: "one", 2: "two"}, 1, "1", "one"]}, target=1))  # == 2                 #example #2
@@ -602,6 +622,7 @@ from typing import List
 
 STEPS = [(-1, -1), (-1, 0), (-1, 1), (0, 1), (1, 1), (1, 0), (1, -1), (0, -1)]
 
+
 def lam(mp, a, b, islands, rs=0):
     for y in STEPS:
         a1, b1 = a + y[0], b + y[1]
@@ -611,15 +632,17 @@ def lam(mp, a, b, islands, rs=0):
             rs, islands = lam(mp, a1, b1, islands, rs)
     return rs, islands
 
+
 def checkio(mp: List[List[int]]) -> List[int]:
     islands, res = [], []
     for a, row in enumerate(mp):
         for b, x in enumerate(row):
-            if x==1 and [a, b] not in islands:
+            if x == 1 and [a, b] not in islands:
                 islands.append([a, b])
                 rs, islands = lam(mp, a, b, islands)
-                res.append(rs+1)
+                res.append(rs + 1)
     return sorted(res)
+
 
 # print(checkio([[1, 1, 1, 1, 0, 1, 1, 1, 1]]))  # == [4, 4]
 # print(checkio([[0,0,0,0,0],[0,0,1,1,0],[0,0,0,1,0],[0,1,0,0,0],[0,0,0,0,0]]))
@@ -631,16 +654,34 @@ def digit_stack(coms):
     for x in coms:
         if 'PUSH' in x:
             stack.append(int(x.replace('PUSH ', '')))
-        elif x=='PEEK' and stack:
+        elif x == 'PEEK' and stack:
             res += stack[-1]
-        elif x=='POP' and stack:
+        elif x == 'POP' and stack:
             res += stack.pop()
     return res
+
 
 # print(digit_stack(["PUSH 3", "POP", "POP", "PUSH 4", "PEEK", "PUSH 9", "PUSH 0", "PEEK", "POP", "PUSH 1", "PEEK"]))  # == 8
 # print(digit_stack(["POP", "POP"]))  # == 0
 # print(digit_stack(["PUSH 9", "PUSH 9", "POP"]))  # == 9
 # print(digit_stack([]))  # == 0)
+
+
+def checkio(n):
+    radix = int(max(n), 36) + 1
+    for x in range(radix, 37):
+        if int(n, x) % (x - 1) == 0:
+            return x
+    return 0
+
+
+# print(checkio(u"18"))  # == 10
+# print(checkio(u"1010101011"))  # == 2
+# print(checkio(u"222"))  # == 3
+# print(checkio(u"A23B"))  # == 14
+# print(checkio(u"IDDQD"))  # == 0
+
+
 
 
 
@@ -666,8 +707,3 @@ def decode(secret_message, key):
 
 # print(encode("Fizz Buzz is x89 XX.", "checkio101"))  # == "do2y7mt22kry94y2y2"
 # print(decode("do2y7mt22kry94y2y2", "checkio101"))  # == "fizxzbuzzisx89xzxz"
-
-
-
-
-
